@@ -53,7 +53,8 @@ public class Teleop extends LinearOpMode {
 // divide by 3.3 (the max voltage) to get a value between 0 and 1
 // multiply by 360 to convert it to 0 to 360 degrees
     double position;
-    public void runOpMode(){
+
+    public void runOpMode() {
         frontLeftMotor = hardwareMap.dcMotor.get("frontLeftMotor");
         backLeftMotor = hardwareMap.dcMotor.get("backLeftMotor");
         frontRightMotor = hardwareMap.dcMotor.get("frontRightMotor");
@@ -67,26 +68,47 @@ public class Teleop extends LinearOpMode {
         backLeftMotor.setDirection(DcMotor.Direction.REVERSE);
 
         intakeservo = hardwareMap.servo.get("intakeservo");
-        intakeservo = hardwareMap.servo.get("max");
         analogInput = hardwareMap.analogInput.get("miniaxon");
         intake = (DcMotorEx) hardwareMap.dcMotor.get("intake");
 
+        bucket = hardwareMap.servo.get("bucket");
+
         SlidePID.init(slide);
         Intake.initintake(intake);
+
+        slide.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        bucket.setPosition(0.47);
+        intakeservo.setPosition(0.82);
 
         double power;
 
         waitForStart();
 
-        while(opModeIsActive()) {
+        while (opModeIsActive()) {
             //set intake linkage to height
-            intakeservo.setPosition(0.8);
+            intakeservo.setPosition(0.82);
 
             //let user change height of slides
-            if(gamepad1.right_bumper)
-                SlidePID.changeHeight(slide.getCurrentPosition() + 50);
-            else if(gamepad1.left_bumper)
-                SlidePID.changeHeight(slide.getCurrentPosition() - 50);
+            if (gamepad1.right_bumper) {
+                myGoToHeightPOS(625, 1);
+            }
+            //SlidePID.changeHeight(slide.getCurrentPosition() + 50);
+            else if (gamepad1.left_bumper) {
+                //SlidePID.changeHeight(slide.getCurrentPosition() - 50);
+                myGoToHeightPOS(0, 1);
+            }
+            else if (gamepad1.x)
+                myGoToHeightPOS(32,1);
+
+            //flip bucket
+            if (gamepad1.a) {
+                bucket.setPosition(0.47);
+            }
+            else if (gamepad1.b) {
+                bucket.setPosition(0.9);
+            }
+
 
             //sets power of intake
             power = gamepad1.right_trigger - gamepad1.left_trigger;
@@ -109,6 +131,19 @@ public class Teleop extends LinearOpMode {
             backLeftMotor.setPower(backLeftPower);
             frontRightMotor.setPower(frontRightPower);
             backRightMotor.setPower(backRightPower);
+            telemetry.addData("position", slide.getCurrentPosition());
+            telemetry.update();
+
         }
+    }
+    public void myGoToHeightPOS(int slidePOS, double motorPower) {
+        //to find slide position and motor position
+        telemetry.addData("leftSlidePOS", slide.getCurrentPosition());
+        telemetry.addData("motorPower", motorPower);
+        telemetry.update();
+        //base encoder code
+        slide.setTargetPosition(slidePOS);
+        slide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        slide.setPower(motorPower);
     }
 }
