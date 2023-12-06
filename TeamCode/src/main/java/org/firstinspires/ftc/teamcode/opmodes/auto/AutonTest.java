@@ -22,10 +22,8 @@ public class AutonTest extends LinearOpMode {
     private VisionPortal visionPortal;
 
     private DcMotor slide;
-    private DcMotor climb;
-    private DcMotor plane;
-    private Servo latch, boxWrist, intakeWrist;
-    private CRServo intake, belt; // belt is orange pass through thing
+    private DcMotor intake;
+    private Servo intakeservo, bucket;
     SampleMecanumDrive drive;
 
     @Override
@@ -41,32 +39,23 @@ public class AutonTest extends LinearOpMode {
                 .addTemporalMarker(() -> {
 
                 })
-                .back(20)
+                .forward(20)
                 .turn(Math.toRadians(45))
-                .addTemporalMarker(() -> boxWrist.setPosition(0.71))
                 .waitSeconds(2)
-                .addTemporalMarker(() ->{
-                    latch.setPosition(0.71);
-                })
                 .turn(Math.toRadians(-135))
-                .back(32)
+                .forward(32)
                 .build();
 
         TrajectorySequence middlePurple = drive.trajectorySequenceBuilder(new Pose2d(0,0,Math.toRadians(0)))
-                .back(40)
-                .addTemporalMarker(() -> boxWrist.setPosition(0.71))
+                .forward(40)
                 .waitSeconds(2)
-                .addTemporalMarker(() ->{
-                    latch.setPosition(0.71);
-                })
                 .turn(Math.toRadians(-90))
-                .back(35)
+                .forward(35)
                 .build();
 
         TrajectorySequence rightPurple = drive.trajectorySequenceBuilder(new Pose2d(0,0,Math.toRadians(0)))
                 .strafeRight(10)
-                .back(20)
-
+                .forward(20)
                 .build();
 
         while(!isStarted()){
@@ -93,16 +82,9 @@ public class AutonTest extends LinearOpMode {
 
     public void initHardware(){
         slide = hardwareMap.get(DcMotor.class, "slide");
-        climb = hardwareMap.get(DcMotor.class, "climb");
-        plane = hardwareMap.get(DcMotor.class, "plane");
-        latch = hardwareMap.get(Servo.class, "latch");
-        boxWrist = hardwareMap.get(Servo.class, "boxWrist");
-        intakeWrist = hardwareMap.get(Servo.class, "intakeWrist");
-        intake = hardwareMap.get(CRServo.class, "intake");
-        belt = hardwareMap.get(CRServo.class, "belt");
+        intake = hardwareMap.get(DcMotor.class, "intake");
         slide.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         slide.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        latch.setPosition(1);
     }
 
 
