@@ -16,6 +16,7 @@ import com.arcrobotics.ftclib.controller.PIDFController;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.qualcomm.hardware.lynx.LynxModule;
+import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -27,6 +28,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.teamcode.Blinkdin;
 import org.firstinspires.ftc.teamcode.subsystem.deposit.Deposit;
 import org.firstinspires.ftc.teamcode.subsystem.deposit.DepositSlides;
 import org.firstinspires.ftc.teamcode.subsystem.intake.ActiveIntake;
@@ -48,6 +50,8 @@ public class Teleop extends LinearOpMode {
     DcMotor backLeftMotor;
     DcMotor backRightMotor;
     DcMotorEx slide;
+
+    Blinkdin led;
 
     // get the voltage of our analog line
 // divide by 3.3 (the max voltage) to get a value between 0 and 1
@@ -81,7 +85,12 @@ public class Teleop extends LinearOpMode {
         bucket.setPosition(0.47);
         intakeservo.setPosition(0.82);
 
+        led = new Blinkdin(hardwareMap.get(RevBlinkinLedDriver.class, "led"));
+
         double power;
+
+        led.changePattern(RevBlinkinLedDriver.BlinkinPattern.WHITE);
+        led.update();
 
         waitForStart();
 
@@ -106,11 +115,30 @@ public class Teleop extends LinearOpMode {
                 myGoToHeightPOS(500,1);
 
             //flip bucket
-            if (gamepad2.a) {
+            if (gamepad2.left_bumper) {
                 bucket.setPosition(0.47);
             }
-            else if (gamepad2.b) {
+            else if (gamepad2.right_bumper) {
                 bucket.setPosition(0.84);
+            }
+
+            //change Blinkdin Color
+
+            if(gamepad2.y) {
+                led.changePattern(RevBlinkinLedDriver.BlinkinPattern.YELLOW);
+                led.update();
+            }
+            else if(gamepad2.a) {
+                led.changePattern(RevBlinkinLedDriver.BlinkinPattern.GREEN);
+                led.update();
+            }
+            else if(gamepad2.x) {
+                led.changePattern(RevBlinkinLedDriver.BlinkinPattern.BLUE_VIOLET);
+                led.update();
+            }
+            else if(gamepad2.b) {
+                led.changePattern(RevBlinkinLedDriver.BlinkinPattern.HEARTBEAT_WHITE);
+                led.update();
             }
 
 
