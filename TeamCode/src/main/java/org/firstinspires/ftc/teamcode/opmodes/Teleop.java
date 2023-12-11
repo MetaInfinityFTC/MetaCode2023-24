@@ -34,7 +34,7 @@ import org.firstinspires.ftc.teamcode.subsystem.deposit.DepositSlides;
 import org.firstinspires.ftc.teamcode.subsystem.intake.ActiveIntake;
 
 @Config
-@TeleOp(name = "\uD83D\uDC80\\")
+@TeleOp(name = "\uD83D\uDC80\\tele")
 public class Teleop extends LinearOpMode {
     //get our analog input from the hardwareMap
     AnalogInput analogInput;// = hardwareMap.get(AnalogInput.class, "miniaxon");
