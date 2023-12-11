@@ -89,7 +89,7 @@ public class Teleop extends LinearOpMode {
 
         double power;
 
-        led.changePattern(RevBlinkinLedDriver.BlinkinPattern.WHITE);
+        led.changePattern(RevBlinkinLedDriver.BlinkinPattern.RAINBOW_LAVA_PALETTE);
         led.update();
 
         waitForStart();
@@ -126,19 +126,15 @@ public class Teleop extends LinearOpMode {
 
             if(gamepad2.y) {
                 led.changePattern(RevBlinkinLedDriver.BlinkinPattern.YELLOW);
-                led.update();
             }
             else if(gamepad2.a) {
-                led.changePattern(RevBlinkinLedDriver.BlinkinPattern.GREEN);
-                led.update();
+                led.changePattern(RevBlinkinLedDriver.BlinkinPattern.LAWN_GREEN);
             }
             else if(gamepad2.x) {
-                led.changePattern(RevBlinkinLedDriver.BlinkinPattern.BLUE_VIOLET);
-                led.update();
+                led.changePattern(RevBlinkinLedDriver.BlinkinPattern.VIOLET);
             }
             else if(gamepad2.b) {
-                led.changePattern(RevBlinkinLedDriver.BlinkinPattern.HEARTBEAT_WHITE);
-                led.update();
+                led.changePattern(RevBlinkinLedDriver.BlinkinPattern.STROBE_WHITE);
             }
 
 
@@ -166,6 +162,7 @@ public class Teleop extends LinearOpMode {
             telemetry.addData("position", slide.getCurrentPosition());
             telemetry.update();
 
+            led.update();
         }
     }
     public void myGoToHeightPOS(int slidePOS, double motorPower) {

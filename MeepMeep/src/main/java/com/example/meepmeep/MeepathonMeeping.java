@@ -36,7 +36,7 @@ public class MeepathonMeeping {
                                 .waitSeconds(0.3)
                                 .strafeLeft(12)
                                 .waitSeconds(0.3)
-                                .back(10)
+                                .strafeRight(3)
                                 .splineToConstantHeading(new Vector2d(20, -12), Math.toRadians(0))
                                 .splineToConstantHeading(new Vector2d(50, -28), Math.toRadians(0))
                                 .waitSeconds(0.5)
