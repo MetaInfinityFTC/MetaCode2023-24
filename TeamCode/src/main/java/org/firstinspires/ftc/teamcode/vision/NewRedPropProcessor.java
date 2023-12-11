@@ -127,6 +127,7 @@ public class NewRedPropProcessor implements VisionProcessor {
 
         Core.bitwise_and(frame, frame, maskedInputMat, binaryMat);
 
+
         //use binary mat from here
         List<MatOfPoint> countersList = new ArrayList<>();
         Imgproc.findContours(binaryMat, countersList, new Mat(), Imgproc.RETR_LIST, Imgproc.CHAIN_APPROX_SIMPLE);
@@ -152,10 +153,10 @@ public class NewRedPropProcessor implements VisionProcessor {
         int area = (int) hat.area();
         telemetry.addData("Area: ", area);
         telemetry.addData("CenterX: ", centerX);
-        if(centerX <= 230 && area >= 3000 ){ //bottom half
+        if(centerX <= 600 && area >= 15000 ){ //bottom half
             location = Location.LEFT;
             telemetry.addData("Position:", " Left");
-        }else if(centerX <= 550 && area >= 2000){
+        }else if(centerX >= 600 && centerX <= 1200 && area >= 2000){
             location = Location.MIDDLE;
             telemetry.addData("Position:", " Mid");
         }else{

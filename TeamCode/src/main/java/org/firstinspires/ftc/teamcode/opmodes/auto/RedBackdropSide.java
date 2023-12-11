@@ -16,8 +16,9 @@ import org.firstinspires.ftc.teamcode.subsystem.intake.ActiveIntake;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 import org.firstinspires.ftc.teamcode.vision.NewRedPropProcessor;
 import org.firstinspires.ftc.vision.VisionPortal;
+import org.opencv.core.Mat;
 
-@Autonomous(name="\uD83D\uDC80\\RedBackdrop ")
+@Autonomous(name="\uD83D\uDC80\\RedBackdrop")
 public class RedBackdropSide extends LinearOpMode {
     private NewRedPropProcessor.Location location = MIDDLE;
     private NewRedPropProcessor redPropProcessor;
@@ -36,40 +37,48 @@ public class RedBackdropSide extends LinearOpMode {
         redPropProcessor = new NewRedPropProcessor(telemetry);
         visionPortal = VisionPortal.easyCreateWithDefaults(
                 hardwareMap.get(WebcamName.class, "Webcam 1"), redPropProcessor);
+        Pose2d startpose = new Pose2d(10, -58, Math.toRadians(90));
+        drive.setPoseEstimate(startpose);
+
 
         initHardware();
 
-        TrajectorySequence leftPurple = drive.trajectorySequenceBuilder(new Pose2d(10, -58, Math.toRadians(90)))
-                .splineTo(new Vector2d(10, -38), Math.toRadians(135))
+        TrajectorySequence leftPurple = drive.trajectorySequenceBuilder(startpose)
+                .lineToSplineHeading(new Pose2d(15, -43, Math.toRadians(135)))
+                .splineToConstantHeading(new Vector2d(10, -36), Math.toRadians(180))
                 .UNSTABLE_addTemporalMarkerOffset(0, () -> {
-                    Intake.Intake(intake, -0.5);
+                    Intake.Intake(intake, 0.6);
                 })
-                .waitSeconds(0.5)
-                .UNSTABLE_addTemporalMarkerOffset(1, () -> {
-                    myGoToHeightPOS(200, 1);
-                })
-                .lineToSplineHeading(new Pose2d(50,-29, Math.toRadians(180)))
+                .waitSeconds(1)
                 .UNSTABLE_addTemporalMarkerOffset(0, () -> {
-                    bucket.setPosition(0.84);
+                    Intake.Intake(intake, 0);
                 })
-                .waitSeconds(0.5)
+                .addTemporalMarker(() -> {
+                    myGoToHeightPOS(-250, 1);
+                })
+                .lineToSplineHeading(new Pose2d(56,-25, Math.toRadians(180)))
                 .UNSTABLE_addTemporalMarkerOffset(0, () -> {
+                    bucket.setPosition(0.95);
+                })
+                .waitSeconds(0.4)
+                .forward(5)
+                //.strafeRight(8)
+                .addTemporalMarker(() -> {
                     bucket.setPosition(0.47);
                 })
-                .strafeRight(5)
-                .splineToConstantHeading(new Vector2d(60, -12), Math.toRadians(0))
+                .splineToConstantHeading(new Vector2d(60, -8), Math.toRadians(0))
+                .addTemporalMarker(() -> {
+                    myGoToHeightPOS(0, 1);
+                })
+                .waitSeconds(0.5)
                 .build();
 
-        TrajectorySequence middlePurple = drive.trajectorySequenceBuilder(new Pose2d(10, -58, Math.toRadians(90)))
-                .forward(40)
-                .waitSeconds(2)
-                .turn(Math.toRadians(-90))
-                .forward(35)
+        TrajectorySequence middlePurple = drive.trajectorySequenceBuilder(startpose)
+                .forward(2)
                 .build();
 
-        TrajectorySequence rightPurple = drive.trajectorySequenceBuilder(new Pose2d(10, -58, Math.toRadians(90)))
-                .strafeRight(10)
-                .forward(20)
+        TrajectorySequence rightPurple = drive.trajectorySequenceBuilder(startpose)
+                .forward(2)
                 .build();
 
         while(!isStarted()){
@@ -91,18 +100,16 @@ public class RedBackdropSide extends LinearOpMode {
 
 
     }
-
-
-
     public void initHardware(){
         slide = hardwareMap.get(DcMotor.class, "slide");
         slide.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        slide.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         intakeservo = hardwareMap.servo.get("intakeservo");
         intake = (DcMotorEx) hardwareMap.dcMotor.get("intake");
         Intake = new ActiveIntake();
         bucket = hardwareMap.servo.get("bucket");
         double power;
+        bucket.setPosition(0.47);
+        intakeservo.setPosition(0.68);
     }
     public void myGoToHeightPOS(int slidePOS, double motorPower) {
         //to find slide position and motor position
