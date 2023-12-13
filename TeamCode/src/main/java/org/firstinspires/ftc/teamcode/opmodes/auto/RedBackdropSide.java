@@ -47,16 +47,16 @@ public class RedBackdropSide extends LinearOpMode {
                 .lineToSplineHeading(new Pose2d(15, -43, Math.toRadians(135)))
                 .splineToConstantHeading(new Vector2d(10, -36), Math.toRadians(180))
                 .UNSTABLE_addTemporalMarkerOffset(0, () -> {
-                    Intake.Intake(intake, 0.6);
+                    Intake.Intake(intake, 0.4);
                 })
-                .waitSeconds(1)
+                .waitSeconds(0.1)
                 .UNSTABLE_addTemporalMarkerOffset(0, () -> {
                     Intake.Intake(intake, 0);
                 })
                 .addTemporalMarker(() -> {
                     myGoToHeightPOS(-250, 1);
                 })
-                .lineToSplineHeading(new Pose2d(56,-25, Math.toRadians(180)))
+                .lineToSplineHeading(new Pose2d(55.5,-25, Math.toRadians(180)))
                 .UNSTABLE_addTemporalMarkerOffset(0, () -> {
                     bucket.setPosition(0.95);
                 })
@@ -74,11 +74,61 @@ public class RedBackdropSide extends LinearOpMode {
                 .build();
 
         TrajectorySequence middlePurple = drive.trajectorySequenceBuilder(startpose)
-                .forward(2)
+                .lineTo(new Vector2d(18, -32))
+                .UNSTABLE_addTemporalMarkerOffset(0, () -> {
+            Intake.Intake(intake, 0.4);
+        })
+                .waitSeconds(0.1)
+                .UNSTABLE_addTemporalMarkerOffset(0, () -> {
+                    Intake.Intake(intake, 0);
+                })
+                .addTemporalMarker(() -> {
+                    myGoToHeightPOS(-250, 1);
+                })
+                .lineToSplineHeading(new Pose2d(55.5,-32, Math.toRadians(180)))
+                .UNSTABLE_addTemporalMarkerOffset(0, () -> {
+                    bucket.setPosition(0.95);
+                })
+                .waitSeconds(0.4)
+                .forward(5)
+                //.strafeRight(8)
+                .addTemporalMarker(() -> {
+                    bucket.setPosition(0.47);
+                })
+                .splineToConstantHeading(new Vector2d(60, -8), Math.toRadians(0))
+                .addTemporalMarker(() -> {
+                    myGoToHeightPOS(0, 1);
+                })
+                .waitSeconds(0.5)
                 .build();
 
         TrajectorySequence rightPurple = drive.trajectorySequenceBuilder(startpose)
-                .forward(2)
+                .lineTo(new Vector2d(25, -45))
+                .UNSTABLE_addTemporalMarkerOffset(0, () -> {
+                    Intake.Intake(intake, 0.4);
+                })
+                .waitSeconds(0.1)
+                .UNSTABLE_addTemporalMarkerOffset(0, () -> {
+                    Intake.Intake(intake, 0);
+                })
+                .addTemporalMarker(() -> {
+                    myGoToHeightPOS(-250, 1);
+                })
+                .lineToSplineHeading(new Pose2d(55.5,-40, Math.toRadians(180)))
+                .UNSTABLE_addTemporalMarkerOffset(0, () -> {
+                    bucket.setPosition(0.95);
+                })
+                .waitSeconds(0.4)
+                .forward(5)
+                //.strafeRight(8)
+                .addTemporalMarker(() -> {
+                    bucket.setPosition(0.47);
+                })
+                .splineToConstantHeading(new Vector2d(60, -8), Math.toRadians(0))
+                .addTemporalMarker(() -> {
+                    myGoToHeightPOS(0, 1);
+                })
+                .waitSeconds(0.5)
                 .build();
 
         while(!isStarted()){
@@ -109,7 +159,7 @@ public class RedBackdropSide extends LinearOpMode {
         bucket = hardwareMap.servo.get("bucket");
         double power;
         bucket.setPosition(0.47);
-        intakeservo.setPosition(0.68);
+        intakeservo.setPosition(0.65);
     }
     public void myGoToHeightPOS(int slidePOS, double motorPower) {
         //to find slide position and motor position
