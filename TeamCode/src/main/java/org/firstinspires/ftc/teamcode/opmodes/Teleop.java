@@ -108,7 +108,7 @@ public class Teleop extends LinearOpMode {
                 myGoToHeightPOS(0, 1);
             }
             else if (gamepad1.x)
-                myGoToHeightPOS(40,1);
+                myGoToHeightPOS(50,1);
             else if (gamepad2.dpad_left)
                 myGoToHeightPOS(200,1);
             else if (gamepad2.dpad_up)
@@ -140,7 +140,7 @@ public class Teleop extends LinearOpMode {
 
             //sets power of intake
             power = gamepad1.right_trigger - gamepad1.left_trigger;
-            Intake.Intake(intake, power*0.8);
+            Intake.Intake(intake, power*0.55);
 
             double y = -gamepad1.left_stick_y; // Remember, Y stick value is reversed
             double x = gamepad1.left_stick_x * 1.1; // Counteract imperfect strafing
