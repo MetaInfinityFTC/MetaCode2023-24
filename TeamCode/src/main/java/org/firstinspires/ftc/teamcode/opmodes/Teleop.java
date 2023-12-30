@@ -96,7 +96,7 @@ public class Teleop extends LinearOpMode {
 
         while (opModeIsActive()) {
             //set intake linkage to height
-            intakeservo.setPosition(0.82);
+            intakeservo.setPosition(0.83);
 
             //let user change height of slides
             if (gamepad2.dpad_right) {
@@ -105,10 +105,10 @@ public class Teleop extends LinearOpMode {
             //SlidePID.changeHeight(slide.getCurrentPosition() + 50);
             else if (gamepad2.dpad_down) {
                 //SlidePID.changeHeight(slide.getCurrentPosition() - 50);
-                myGoToHeightPOS(0, 1);
+                myGoToHeightPOS(0, 0.4);
             }
             else if (gamepad1.x)
-                myGoToHeightPOS(50,1);
+                myGoToHeightPOS(40,1);
             else if (gamepad2.dpad_left)
                 myGoToHeightPOS(200,1);
             else if (gamepad2.dpad_up)
@@ -140,7 +140,9 @@ public class Teleop extends LinearOpMode {
 
             //sets power of intake
             power = gamepad1.right_trigger - gamepad1.left_trigger;
-            Intake.Intake(intake, power*0.55);
+            Intake.Intake(intake, power*0.7);
+            if(gamepad1.right_trigger>0.5)
+                myGoToHeightPOS(40,1);
 
             double y = -gamepad1.left_stick_y; // Remember, Y stick value is reversed
             double x = gamepad1.left_stick_x * 1.1; // Counteract imperfect strafing
