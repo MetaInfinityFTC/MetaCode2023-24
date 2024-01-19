@@ -43,7 +43,7 @@ public class RedBackdropSide extends LinearOpMode {
         initHardware();
 
         TrajectorySequence leftPurple = drive.trajectorySequenceBuilder(startpose)
-                .lineToSplineHeading(new Pose2d(17, -43, Math.toRadians(135)))
+                .lineToSplineHeading(new Pose2d(17.7, -43, Math.toRadians(135)))
                 .splineToConstantHeading(new Vector2d(10, -34), Math.toRadians(180))
                 .UNSTABLE_addTemporalMarkerOffset(0, () -> {
                     Intake.Intake(intake, 0.4);
@@ -65,7 +65,7 @@ public class RedBackdropSide extends LinearOpMode {
                 .addTemporalMarker(() -> {
                     bucket.setPosition(0.47);
                 })
-                .splineToConstantHeading(new Vector2d(60, -8), Math.toRadians(0))
+                .splineToConstantHeading(new Vector2d(58, -8), Math.toRadians(0))
                 .addTemporalMarker(() -> {
                     myGoToHeightPOS(0, 1);
                 })
@@ -94,7 +94,7 @@ public class RedBackdropSide extends LinearOpMode {
                 .addTemporalMarker(() -> {
                     bucket.setPosition(0.47);
                 })
-                .splineToConstantHeading(new Vector2d(60, -8), Math.toRadians(0))
+                .splineToConstantHeading(new Vector2d(58, -8), Math.toRadians(0))
                 .addTemporalMarker(() -> {
                     myGoToHeightPOS(0, 1);
                 })
@@ -102,7 +102,7 @@ public class RedBackdropSide extends LinearOpMode {
                 .build();
 
         TrajectorySequence rightPurple = drive.trajectorySequenceBuilder(startpose)
-                .lineTo(new Vector2d(25, -45))
+                .lineTo(new Vector2d(25, -40))
                 .UNSTABLE_addTemporalMarkerOffset(0, () -> {
                     Intake.Intake(intake, 0.4);
                 })
@@ -112,11 +112,11 @@ public class RedBackdropSide extends LinearOpMode {
                 })
                 .back(2)
                 .addTemporalMarker(() -> {
-                    myGoToHeightPOS(-250, 1);
+                    myGoToHeightPOS(-270, 1);
                 })
                 .lineToSplineHeading(new Pose2d(55.5,-40, Math.toRadians(180)))
                 .UNSTABLE_addTemporalMarkerOffset(0, () -> {
-                    bucket.setPosition(0.95);
+                    bucket.setPosition(0.90);
                 })
                 .waitSeconds(0.4)
                 .forward(5)
@@ -124,7 +124,7 @@ public class RedBackdropSide extends LinearOpMode {
                 .addTemporalMarker(() -> {
                     bucket.setPosition(0.47);
                 })
-                .splineToConstantHeading(new Vector2d(60, -8), Math.toRadians(0))
+                .splineToConstantHeading(new Vector2d(58, -8), Math.toRadians(0))
                 .addTemporalMarker(() -> {
                     myGoToHeightPOS(0, 1);
                 })

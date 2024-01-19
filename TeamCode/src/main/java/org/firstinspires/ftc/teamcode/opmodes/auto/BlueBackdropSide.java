@@ -37,24 +37,24 @@ public class BlueBackdropSide extends LinearOpMode {
         bluePropProcessor = new NewBluePropProcessor(telemetry);
         visionPortal = VisionPortal.easyCreateWithDefaults(
                 hardwareMap.get(WebcamName.class, "Webcam 1"), bluePropProcessor);
-        Pose2d startpose = new Pose2d(19.625, 58, Math.toRadians(-90));
+        Pose2d startpose = new Pose2d(19.625, 58.75, Math.toRadians(-90));
         drive.setPoseEstimate(startpose);
 
         initHardware();
 
         TrajectorySequence leftPurple = drive.trajectorySequenceBuilder(startpose)
-                .lineTo(new Vector2d(25, 45))
+                .lineTo(new Vector2d(26, 40))
                 .UNSTABLE_addTemporalMarkerOffset(0, () -> {
                     Intake.Intake(intake, 0.4);
                 })
-                .waitSeconds(0.1)
+                .waitSeconds(0.5)
                 .UNSTABLE_addTemporalMarkerOffset(0, () -> {
                     Intake.Intake(intake, 0);
                 })
                 .addTemporalMarker(() -> {
                     myGoToHeightPOS(-250, 1);
                 })
-                .lineToSplineHeading(new Pose2d(55.5,40, Math.toRadians(-180)))
+                .lineToSplineHeading(new Pose2d(55.5,40.5, Math.toRadians(-180)))
                 .UNSTABLE_addTemporalMarkerOffset(0, () -> {
                     bucket.setPosition(0.95);
                 })
@@ -102,7 +102,7 @@ public class BlueBackdropSide extends LinearOpMode {
 
         TrajectorySequence rightPurple = drive.trajectorySequenceBuilder(startpose)
                 .lineToSplineHeading(new Pose2d(17, 43, Math.toRadians(-135)))
-                .splineToConstantHeading(new Vector2d(10, 36), Math.toRadians(-180))
+                .splineToConstantHeading(new Vector2d(10, 39), Math.toRadians(-180))
                 .UNSTABLE_addTemporalMarkerOffset(0, () -> {
                     Intake.Intake(intake, 0.4);
                 })
@@ -113,7 +113,7 @@ public class BlueBackdropSide extends LinearOpMode {
                 .addTemporalMarker(() -> {
                     myGoToHeightPOS(-250, 1);
                 })
-                .lineToSplineHeading(new Pose2d(55.5,25, Math.toRadians(-180)))
+                .lineToSplineHeading(new Pose2d(57,28, Math.toRadians(-180)))
                 .UNSTABLE_addTemporalMarkerOffset(0, () -> {
                     bucket.setPosition(0.95);
                 })

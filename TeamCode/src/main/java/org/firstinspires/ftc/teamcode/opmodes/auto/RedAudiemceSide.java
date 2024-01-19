@@ -8,6 +8,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.NormalizedColorSensor;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
@@ -27,6 +28,8 @@ public class RedAudiemceSide extends LinearOpMode {
     private DcMotorEx intake;
     private Servo intakeservo, bucket;
 
+    NormalizedColorSensor colorSensor;
+
     private ActiveIntake Intake;
     SampleMecanumDrive drive;
 
@@ -36,13 +39,13 @@ public class RedAudiemceSide extends LinearOpMode {
         redPropProcessor = new NewRedPropProcessor(telemetry);
         visionPortal = VisionPortal.easyCreateWithDefaults(
                 hardwareMap.get(WebcamName.class, "Webcam 1"), redPropProcessor);
-        Pose2d startpose = new Pose2d(-38, -58, Math.toRadians(90));
+        Pose2d startpose = new Pose2d(-38, -58.75, Math.toRadians(90));
         drive.setPoseEstimate(startpose);
 
         initHardware();
 
         TrajectorySequence leftPurple = drive.trajectorySequenceBuilder(startpose)
-                .lineTo(new Vector2d(-47, -45))
+                .lineTo(new Vector2d(-48.5, -42))
                 .UNSTABLE_addTemporalMarkerOffset(0, () -> {
                     Intake.Intake(intake, 0.4);
                 })
@@ -50,15 +53,15 @@ public class RedAudiemceSide extends LinearOpMode {
                 .UNSTABLE_addTemporalMarkerOffset(0, () -> {
                     Intake.Intake(intake, 0);
                 })
-                .strafeRight(12)
+                .strafeRight(8)
                 .lineToSplineHeading(new Pose2d(-43, -6, Math.toRadians(180)))
-                .back(30)
+                .back(40)
                 .waitSeconds(5)
                 .back(24)
                 .UNSTABLE_addTemporalMarkerOffset(1, () -> {
-                    myGoToHeightPOS(-250, 1);
+                    myGoToHeightPOS(-270, 1);
                 })
-                .lineToSplineHeading(new Pose2d(55,-25, Math.toRadians(180)))
+                .lineToSplineHeading(new Pose2d(55.5,-23.5, Math.toRadians(180)))
                 .UNSTABLE_addTemporalMarkerOffset(0, () -> {
                     bucket.setPosition(0.95);
                 })
@@ -86,13 +89,13 @@ public class RedAudiemceSide extends LinearOpMode {
                 })
                 .strafeLeft(24)
                 .lineToSplineHeading(new Pose2d(-43, -6, Math.toRadians(180)))
-                .back(30)
-                .waitSeconds(5)
+                .back(40)
+                .waitSeconds(10)
                 .back(24)
                 .UNSTABLE_addTemporalMarkerOffset(1, () -> {
-                    myGoToHeightPOS(-250, 1);
+                    myGoToHeightPOS(-270, 1);
                 })
-                .lineToSplineHeading(new Pose2d(55,-34, Math.toRadians(180)))
+                .lineToSplineHeading(new Pose2d(55.5,-34, Math.toRadians(180)))
                 .UNSTABLE_addTemporalMarkerOffset(0, () -> {
                     bucket.setPosition(0.95);
                 })
@@ -111,7 +114,7 @@ public class RedAudiemceSide extends LinearOpMode {
 
         TrajectorySequence rightPurple = drive.trajectorySequenceBuilder(startpose)
                 .lineToSplineHeading(new Pose2d(-35, -43, Math.toRadians(45)))
-                .splineToConstantHeading(new Vector2d(-30, -35), Math.toRadians(180))
+                .splineToConstantHeading(new Vector2d(-30, -39), Math.toRadians(180))
                 .UNSTABLE_addTemporalMarkerOffset(0, () -> {
                     Intake.Intake(intake, 0.4);
                 })
@@ -121,18 +124,18 @@ public class RedAudiemceSide extends LinearOpMode {
                 })
                 .back(2)
                 .lineToSplineHeading(new Pose2d(-43, -6, Math.toRadians(180)))
-                .back(30)
+                .back(40)
                 .waitSeconds(5)
                 .back(24)
                 .UNSTABLE_addTemporalMarkerOffset(1, () -> {
-                    myGoToHeightPOS(-250, 1);
+                    myGoToHeightPOS(-270, 1);
                 })
-                .lineToSplineHeading(new Pose2d(55,-38.5, Math.toRadians(180)))
+                .lineToSplineHeading(new Pose2d(55.5,-37, Math.toRadians(180)))
                 .UNSTABLE_addTemporalMarkerOffset(0, () -> {
                     bucket.setPosition(0.95);
                 })
                 .waitSeconds(0.4)
-                .forward(5)
+                .forward(7)
                 //.strafeRight(8)
                 .addTemporalMarker(() -> {
                     bucket.setPosition(0.47);
