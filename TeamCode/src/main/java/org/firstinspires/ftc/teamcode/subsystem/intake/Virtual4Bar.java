@@ -1,4 +1,60 @@
 package org.firstinspires.ftc.teamcode.subsystem.intake;
 
+import com.acmerobotics.dashboard.config.Config;
+import com.qualcomm.robotcore.hardware.DigitalChannel;
+import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.Servo;
+
+@Config
 public class Virtual4Bar {
+
+    private Servo left, right, claw;
+    private DigitalChannel breakBeam;
+
+    //TODO: Tune
+    //Can be accessed from outside the class for easy setting without a big enum/easy tuning
+    public static double clawOpen = 0, clawClose = 0;
+    public static double v4bGround = 0, v4bTransfer = 0, v4bStackHigh = 0, v4bStackMid = 0;
+    //too many vars for a fancy enum lmao
+
+    //TODO: Set string names to config names
+    public Virtual4Bar(HardwareMap hardwareMap) {
+        left = hardwareMap.servo.get("leftv4b");
+        right = hardwareMap.servo.get("rightv4b");
+        claw = hardwareMap.servo.get("claw");
+        left.setDirection(Servo.Direction.REVERSE);
+        breakBeam = hardwareMap.digitalChannel.get("breakbeam");
+    }
+
+    //functions for manual override just in case
+    public void setClaw(double pos) {
+        claw.setPosition(pos);
+    }
+
+    public void setV4b(double pos) {
+        left.setPosition(pos);
+        right.setPosition(pos);
+    }
+
+    /**
+     * runs to the transfer ready position
+     */
+    public void transfer() {
+        setClaw(clawClose);
+        setV4b(v4bTransfer);
+    }
+
+    /**
+     * runs to a position that is ready to intake
+     * @param v4bPosition the position you want to intake from
+     */
+    public void intake(double v4bPosition) {
+        setClaw(clawOpen);
+        setV4b(v4bPosition);
+    }
+
+    public boolean doWeHaveAPixel() {
+        return breakBeam.getState();
+    }
+
 }
