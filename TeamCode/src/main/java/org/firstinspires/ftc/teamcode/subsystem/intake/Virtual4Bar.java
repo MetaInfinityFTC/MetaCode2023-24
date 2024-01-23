@@ -8,7 +8,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 @Config
 public class Virtual4Bar {
 
-    private Servo left, right, claw;
+    private Servo v4b, claw;
     private DigitalChannel breakBeam;
 
     //TODO: Tune
@@ -19,10 +19,9 @@ public class Virtual4Bar {
 
     //TODO: Set string names to config names
     public Virtual4Bar(HardwareMap hardwareMap) {
-        left = hardwareMap.servo.get("leftv4b");
-        right = hardwareMap.servo.get("rightv4b");
+        v4b = hardwareMap.servo.get("v4b");
         claw = hardwareMap.servo.get("claw");
-        left.setDirection(Servo.Direction.REVERSE);
+        v4b.setDirection(Servo.Direction.REVERSE);
         breakBeam = hardwareMap.digitalChannel.get("breakbeam");
     }
 
@@ -32,8 +31,7 @@ public class Virtual4Bar {
     }
 
     public void setV4b(double pos) {
-        left.setPosition(pos);
-        right.setPosition(pos);
+        v4b.setPosition(pos);
     }
 
     /**

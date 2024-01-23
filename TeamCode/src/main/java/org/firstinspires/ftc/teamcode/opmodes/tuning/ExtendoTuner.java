@@ -12,6 +12,8 @@ import org.firstinspires.ftc.teamcode.subsystem.extendo.Extendo;
 Use this to tune the extendo PID
  */
 
+//TODO: lemme know if this doesnt work, cause i can make a version that doesnt access the subsystem directly
+
 @TeleOp
 @Config
 public class ExtendoTuner extends OpMode {
