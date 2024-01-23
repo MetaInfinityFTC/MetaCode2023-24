@@ -9,12 +9,6 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 @Config
 public class Slides {
 
-    public enum Side {
-        red, blue
-    }
-
-    Side side = Side.blue;
-
     public static double p = 0, i = 0, d = 0, f = 0;
     PIDFController controller;
 
@@ -22,7 +16,7 @@ public class Slides {
 
     public double upperLimit = 0, lowerLimit = 0;
 
-    public Slides(HardwareMap hardwareMap, Side side) {
+    public Slides(HardwareMap hardwareMap) {
         left = hardwareMap.dcMotor.get("lSlide");
         right = hardwareMap.dcMotor.get("rSlide");
         left.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -31,7 +25,6 @@ public class Slides {
         left.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         right.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         controller = new PIDFController(p, i, d, f);
-        this.side = side;
     }
 
     private double pidTarget = 0;
