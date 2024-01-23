@@ -20,6 +20,8 @@ public class Slides {
 
     private DcMotor left, right;
 
+    public double upperLimit = 0, lowerLimit = 0;
+
     public Slides(HardwareMap hardwareMap, Side side) {
         left = hardwareMap.dcMotor.get("lSlide");
         right = hardwareMap.dcMotor.get("rSlide");
@@ -34,6 +36,10 @@ public class Slides {
 
     private double pidTarget = 0;
 
+    public void setPidTarget(double pidTarget) {
+        this.pidTarget = pidTarget;
+    }
+
     public void updatePID() {
         double cmd = controller.calculate(left.getCurrentPosition(), pidTarget);
         setPower(cmd);
@@ -41,8 +47,12 @@ public class Slides {
         controller.setPIDF(p, i, d, f);
     }
 
-    public void manual() {
-        //TODO: Vikram do this cause idk what yall want me to do
+    public void manual(double inputPower) {
+        if ((left.getCurrentPosition() > lowerLimit && inputPower < 0) || (left.getCurrentPosition() < upperLimit && inputPower > 0)) {
+            setPidTarget(inputPower);
+        } else {
+            setPower(f);
+        }
     }
 
     public void setPower(double power) {
