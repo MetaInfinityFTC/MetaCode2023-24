@@ -13,16 +13,16 @@ public class Virtual4Bar {
 
     //TODO: Tune
     //Can be accessed from outside the class for easy setting without a big enum/easy tuning
-    public static double clawOpen = 0, clawClose = 0;
-    public static double v4bGround = 0, v4bTransfer = 0, v4bStackHigh = 0, v4bStackMid = 0;
+    public static double clawOpen = 0.5, clawClose = 0.7;
+    public static double v4bGround = 1.0, v4bTransfer = 0.5, v4bStackHigh = 0.95, v4bStackMid = 0.97;
     //too many vars for a fancy enum lmao
 
     //TODO: Set string names to config names
     public Virtual4Bar(HardwareMap hardwareMap) {
         v4b = hardwareMap.servo.get("v4b");
         claw = hardwareMap.servo.get("claw");
-        v4b.setDirection(Servo.Direction.REVERSE);
-        breakBeam = hardwareMap.digitalChannel.get("breakbeam");
+        //v4b.setDirection(Servo.Direction.REVERSE);
+        //breakBeam = hardwareMap.digitalChannel.get("breakbeam");
     }
 
     //functions for manual override just in case

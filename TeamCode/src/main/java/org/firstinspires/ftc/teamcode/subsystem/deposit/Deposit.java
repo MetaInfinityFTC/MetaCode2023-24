@@ -10,15 +10,13 @@ public class Deposit {
     private Servo lArm, rArm, wrist, finger;
 
     //Arm Positions
-    public static double armTransfer = 0, armDeposit = 0;
+    public static double armTransfer = 0.2, armDeposit = 0.8;
 
     //Wrist Position
-    public static double wristTranfer = 0, wristDeposit = 0;
+    public static double wrist30degree = 0.82, wristDeposit = 0.2, wrist90degree = 0.63;
 
     //Finger Position
-    public static double bothPixels = 0, onePixel = 0, retracted = 0;
-
-    //TODO: I really dont know how you want pixel amount selection to work, or how you want this controlled in tele
+    public static double bothPixels = 0, onePixel = 0.5, retracted = 0.55;
 
     public Deposit(HardwareMap hardwareMap) {
         lArm = hardwareMap.servo.get("lArm");

@@ -2,46 +2,28 @@ package org.firstinspires.ftc.teamcode.opmodes;
 
 import static org.firstinspires.ftc.robotcore.external.navigation.AngleUnit.normalizeRadians;
 
-import android.transition.Slide;
-
-import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
-import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
-import com.arcrobotics.ftclib.command.CommandOpMode;
-import com.arcrobotics.ftclib.command.CommandScheduler;
-import com.arcrobotics.ftclib.command.InstantCommand;
-import com.arcrobotics.ftclib.command.SequentialCommandGroup;
-import com.arcrobotics.ftclib.command.WaitCommand;
-import com.arcrobotics.ftclib.controller.PIDFController;
-import com.arcrobotics.ftclib.gamepad.GamepadEx;
-import com.arcrobotics.ftclib.gamepad.GamepadKeys;
-import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
-import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.AnalogInput;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
-import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.Servo;
-import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.Blinkdin;
-import org.firstinspires.ftc.teamcode.subsystem.deposit.Deposit;
-import org.firstinspires.ftc.teamcode.subsystem.deposit.DepositSlides;
 import org.firstinspires.ftc.teamcode.subsystem.intake.ActiveIntake;
 
 @Config
+@Disabled
 @TeleOp(name = "\uD83D\uDC80\\tele")
-public class Teleop extends LinearOpMode {
+public class AntiquatedTeleOp extends LinearOpMode {
     //get our analog input from the hardwareMap
     AnalogInput analogInput;// = hardwareMap.get(AnalogInput.class, "miniaxon");
     DcMotorEx intake;
     Servo intakeservo;
     Servo bucket;
-    DepositSlides SlidePID;
 
     ActiveIntake Intake;
 
@@ -65,7 +47,6 @@ public class Teleop extends LinearOpMode {
         backRightMotor = hardwareMap.dcMotor.get("backRightMotor");
         slide = (DcMotorEx) hardwareMap.dcMotor.get("slide");
 
-        SlidePID = new DepositSlides();
         Intake = new ActiveIntake();
 
         frontLeftMotor.setDirection(DcMotor.Direction.REVERSE);
@@ -77,7 +58,6 @@ public class Teleop extends LinearOpMode {
 
         bucket = hardwareMap.servo.get("bucket");
 
-        SlidePID.init(slide);
         Intake.initintake(intake);
 
         slide.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
