@@ -10,7 +10,7 @@ public class Deposit {
     private Servo lArm, rArm, wrist, finger;
 
     //Arm Positions
-    public static double armTransfer = 0.2, armDeposit = 0.8;
+    public static double armTransfer = 0.69, armDeposit90 = 0.18, armDeposit30 = 0.35;
 
     //Wrist Position
     public static double wrist30degree = 0.82, wristDeposit = 0.2, wrist90degree = 0.63;
