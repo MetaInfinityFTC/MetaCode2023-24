@@ -58,22 +58,22 @@ public class NewBluePropProcessor implements VisionProcessor {
      * min and max values here for now, meaning
      * that all pixels will be shown.
      */
-    public static int lowY = 30;
-    public static int lowCr = 50;
-    public static int lowCb = 50;
-    public static int highY = 70;
-    public static int highCr = 120;
-    public static int highCb = 250;
-    public Scalar lower = new Scalar(lowY,lowCr,lowCb);
-    public Scalar upper = new Scalar(highY,highCr,highCb);
+    public static int lowL = 0;
+    public static int lowA = -128;
+    public static int lowB = -128;
+    public static int highL = 100;
+    public static int highA = -20;
+    public static int highB = -20;
+    public Scalar lower = new Scalar(lowL,lowA,lowB);
+    public Scalar upper = new Scalar(highL,highA,highB);
 
     /**
      * This will allow us to choose the color
      * space we want to use on the live field
      * tuner instead of hardcoding it
      */
-    public ColorSpace colorSpace = ColorSpace.YCrCb;
-    private Mat ycrcbMat       = new Mat();
+    public ColorSpace colorSpace = ColorSpace.Lab;
+    private Mat labMat       = new Mat();
     private Mat binaryMat      = new Mat();
     private Mat maskedInputMat = new Mat();
 
@@ -115,13 +115,13 @@ public class NewBluePropProcessor implements VisionProcessor {
     @Override
     public Object processFrame(Mat frame, long captureTimeNanos) {
 
-        Scalar lower = new Scalar(lowY,lowCr,lowCb);
-        Scalar upper = new Scalar(highY,highCr,highCb);
+        Scalar lower = new Scalar(lowL,lowA,lowB);
+        Scalar upper = new Scalar(highL,highA,highB);
 
 
-        Imgproc.cvtColor(frame, ycrcbMat, colorSpace.cvtCode);
+        Imgproc.cvtColor(frame, labMat, colorSpace.cvtCode);
 
-        Core.inRange(ycrcbMat, lower, upper, binaryMat);
+        Core.inRange(labMat, lower, upper, binaryMat);
 
         maskedInputMat.release();
 
