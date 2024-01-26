@@ -9,7 +9,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 @Config
 public class Slides {
 
-    public static double p = 0, i = 0, d = 0, f = 0;
+    public static double p = 0.045, i = 0, d = 0, f = 0.001;
     PIDFController controller;
 
     private DcMotor left, right;
@@ -37,7 +37,6 @@ public class Slides {
         double cmd = controller.calculate(left.getCurrentPosition(), pidTarget);
         setPower(cmd);
         //TODO: remove when done tuning
-        controller.setPIDF(p, i, d, f);
     }
 
     public void manual(double inputPower) {
@@ -51,6 +50,9 @@ public class Slides {
     public void setPower(double power) {
         left.setPower(power);
         right.setPower(power);
+    }
+    public double getPos() {
+        return right.getCurrentPosition();
     }
 
 }

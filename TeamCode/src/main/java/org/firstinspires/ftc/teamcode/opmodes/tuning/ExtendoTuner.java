@@ -6,6 +6,7 @@ import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
+import org.firstinspires.ftc.teamcode.subsystem.deposit.Slides;
 import org.firstinspires.ftc.teamcode.subsystem.extendo.Extendo;
 
 /*
@@ -18,22 +19,22 @@ Use this to tune the extendo PID
 @Config
 public class ExtendoTuner extends OpMode {
 
-    Extendo extendo;
+    Slides slides;
 
-    public static Extendo.Extension_States states = Extendo.Extension_States.first;
+    public static double TargetPos = 0.0;
 
     @Override
     public void init() {
-        extendo = new Extendo(hardwareMap);
+        slides = new Slides(hardwareMap);
         telemetry = new MultipleTelemetry(FtcDashboard.getInstance().getTelemetry());
     }
 
     @Override
     public void loop() {
-        extendo.setState(states);
-        extendo.update();
-        telemetry.addData("extendoPos", extendo.getPos());
-        telemetry.addData("targetPos", states.getNumVal());
+        slides.setPidTarget(TargetPos);
+        slides.updatePID();
+        telemetry.addData("extendoPos", slides.getPos());
+        telemetry.addData("targetPos", TargetPos);
         telemetry.update();
     }
 }

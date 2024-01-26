@@ -10,13 +10,13 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 public class Extendo {
 
     private DcMotor left, right;
-    public static double p = 0, i = 0, d = 0, f = 0;
+    public static double p = 0.02, i = 0, d = 0, f = 0.0005;
     PIDFController controller = new PIDFController(p, i, d, f);
 
     //TODO: tune extension vals
     //enum to house states with better names
     public enum Extension_States {
-        retracted(0.0), first(0.0), second(0.0), extended(0.0);
+        retracted(0.0), first(500), second(800), extended(1050);
         private double numVal;
         Extension_States(double numVal) { this.numVal = numVal;}
         public double getNumVal() { return numVal; }
@@ -37,7 +37,6 @@ public class Extendo {
         double output = controller.calculate(right.getCurrentPosition(), state.getNumVal());
         left.setPower(output); right.setPower(output);
         //TODO: Remove controller reset when tuning is done
-        controller.setPIDF(p, i, d, f);
     }
 
     public void setState(Extension_States state) {

@@ -1,6 +1,6 @@
 package org.firstinspires.ftc.teamcode.opmodes;
 
-import static org.firstinspires.ftc.teamcode.subsystem.deposit.Deposit.armDeposit;
+import static org.firstinspires.ftc.teamcode.subsystem.deposit.Deposit.armDeposit30;
 import static org.firstinspires.ftc.teamcode.subsystem.deposit.Deposit.armTransfer;
 import static org.firstinspires.ftc.teamcode.subsystem.deposit.Deposit.bothPixels;
 import static org.firstinspires.ftc.teamcode.subsystem.deposit.Deposit.onePixel;
