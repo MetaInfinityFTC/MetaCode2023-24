@@ -1,15 +1,25 @@
 package org.firstinspires.ftc.teamcode.opmodes;
 
 import static org.firstinspires.ftc.teamcode.subsystem.deposit.Deposit.armDeposit30;
+import static org.firstinspires.ftc.teamcode.subsystem.deposit.Deposit.armDeposit90;
+import static org.firstinspires.ftc.teamcode.subsystem.deposit.Deposit.armPreTransfer;
 import static org.firstinspires.ftc.teamcode.subsystem.deposit.Deposit.armTransfer;
 import static org.firstinspires.ftc.teamcode.subsystem.deposit.Deposit.bothPixels;
 import static org.firstinspires.ftc.teamcode.subsystem.deposit.Deposit.onePixel;
-import static org.firstinspires.ftc.teamcode.subsystem.deposit.Deposit.retracted;
-import static org.firstinspires.ftc.teamcode.subsystem.deposit.Deposit.wristDeposit;
+import static org.firstinspires.ftc.teamcode.subsystem.deposit.Deposit.wristTransfer;
+import static org.firstinspires.ftc.teamcode.subsystem.deposit.Deposit.zeroPixel;
+import static org.firstinspires.ftc.teamcode.subsystem.deposit.Deposit.wristTransfer;
 import static org.firstinspires.ftc.teamcode.subsystem.deposit.Deposit.wrist30degree;
 import static org.firstinspires.ftc.teamcode.subsystem.deposit.Deposit.wrist90degree;
+import static org.firstinspires.ftc.teamcode.subsystem.deposit.Slides.pidTarget;
+import static org.firstinspires.ftc.teamcode.subsystem.extendo.Extendo.Extension_States.extended;
+import static org.firstinspires.ftc.teamcode.subsystem.extendo.Extendo.Extension_States.first;
+import static org.firstinspires.ftc.teamcode.subsystem.extendo.Extendo.Extension_States.retracted;
+import static org.firstinspires.ftc.teamcode.subsystem.extendo.Extendo.Extension_States.second;
 import static org.firstinspires.ftc.teamcode.subsystem.intake.Virtual4Bar.clawClose;
+import static org.firstinspires.ftc.teamcode.subsystem.intake.Virtual4Bar.clawOpen;
 import static org.firstinspires.ftc.teamcode.subsystem.intake.Virtual4Bar.v4bGround;
+import static org.firstinspires.ftc.teamcode.subsystem.intake.Virtual4Bar.v4bPreTransfer;
 import static org.firstinspires.ftc.teamcode.subsystem.intake.Virtual4Bar.v4bStackHigh;
 import static org.firstinspires.ftc.teamcode.subsystem.intake.Virtual4Bar.v4bStackMid;
 import static org.firstinspires.ftc.teamcode.subsystem.intake.Virtual4Bar.v4bTransfer;
@@ -20,6 +30,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.subsystem.deposit.Deposit;
 import org.firstinspires.ftc.teamcode.subsystem.deposit.Slides;
@@ -39,7 +50,9 @@ public class DaTele extends LinearOpMode {
     DcMotor backRightMotor;
     Servo LeftHang;
     Servo RightHang;
-    Servo Drone;
+    Servo drone;
+
+    ElapsedTime timer;
 
     public static double clawpos = 0.5;
     public static double v4bpos = 1.0;
@@ -60,12 +73,19 @@ public class DaTele extends LinearOpMode {
 
         LeftHang = hardwareMap.servo.get("LeftHang");
         RightHang = hardwareMap.servo.get("RightHang");
-        Drone = hardwareMap.servo.get("Drone");
+        drone = hardwareMap.servo.get("drone");
 
         extendo = new Extendo(hardwareMap);
         slides = new Slides(hardwareMap);
         deposit = new Deposit(hardwareMap);
         virtual4Bar = new Virtual4Bar(hardwareMap);
+
+        timer = new ElapsedTime();
+
+        LeftHang.setPosition(0);
+        RightHang.setPosition(1);
+
+        drone.setPosition(0);
 
         waitForStart();
 
@@ -94,30 +114,82 @@ public class DaTele extends LinearOpMode {
             virtual4Bar.setClaw(clawpos);
             virtual4Bar.setV4b(v4bpos);
 
-            /*if(gamepad2.left_bumper)
-                deposit.setArm(armTransfer);
-                //deposit.setWrist(wristTransfer);
-            if(gamepad2.right_bumper)
-                deposit.setArm(armDeposit);
-                //deposit.setWrist(wristDeposit);
-            if(gamepad2.a)
-                deposit.setFinger(retracted);
-            if(gamepad2.b)
-                deposit.setFinger(bothPixels);
-            if(gamepad2.x)
-                deposit.setFinger(onePixel);
+            //update PID loop for Extendo and Outtake Slides
+            extendo.update();
+            slides.updatePID();
 
-            if(gamepad2.dpad_left)
-                virtual4Bar.setV4b(v4bGround);
-            if(gamepad2.dpad_right)
-                virtual4Bar.setV4b(v4bTransfer);
-            if(gamepad2.dpad_up)
-                virtual4Bar.setV4b(v4bStackHigh);
+            //extendo control
+            if(gamepad1.dpad_up)
+                extendo.setState(extended);
+            if(gamepad1.dpad_right)
+                extendo.setState(second);
+            if(gamepad1.dpad_left)
+                extendo.setState(first);
+            if(gamepad1.dpad_down)
+                extendo.setState(retracted);
+
+            //outtake slides control
+            slides.setPidTarget(pidTarget+gamepad2.left_stick_x*10);
             if(gamepad2.dpad_down)
-                virtual4Bar.setV4b(v4bStackMid);
+                slides.setPidTarget(0);
 
-            if(gamepad2.y)
-                virtual4Bar.setClaw(clawClose);*/
+            //TODO Changing things with multiple commands to finite state machine tonight/tomorrow
+            //intake v4b+claw control
+            // open claw
+            if(gamepad2.a)
+                virtual4Bar.setClaw(clawOpen);
+            //grab, bring slides back, claw up, and ready for transfer
+            if(gamepad2.b) {
+                virtual4Bar.setClaw(clawClose);
+                extendo.setState(retracted);
+                deposit.setWrist(wristTransfer);
+                deposit.setArm(armPreTransfer);
+                virtual4Bar.setV4b(v4bTransfer);
+            }
+            //transfer
+            if(gamepad2.x) {
+                deposit.setFinger(bothPixels);
+                deposit.setArm(armTransfer);
+            }
+            //get claw ready to grab
+            if(gamepad2.y){
+                deposit.setArm(armPreTransfer);
+                virtual4Bar.setV4b(v4bGround);
+                virtual4Bar.setClaw(clawOpen);
+            }
+
+            //deposit control
+            //after deposit, use this
+            if(gamepad2.left_bumper){
+                deposit.setWrist(wristTransfer);
+                deposit.setArm(armTransfer);
+            }
+            //use this to go to low deposit position, rare
+            if(gamepad2.start){
+                deposit.setWrist(wrist90degree);
+                deposit.setArm(armDeposit90);
+            }
+            //use this to go to high deposit position, more common
+            if(gamepad2.left_bumper){
+                deposit.setWrist(wrist30degree);
+                deposit.setArm(armDeposit30);
+            }
+            //drop one pixel
+            if(gamepad2.dpad_left)
+                deposit.setFinger(onePixel);
+            //drop two pixel
+            if(gamepad2.dpad_left)
+                deposit.setFinger(zeroPixel);
+
+            //hang
+            if(gamepad1.x){
+                LeftHang.setPosition(0.5);
+                RightHang.setPosition(0.5);
+            }
+
+            //drone
+            if(gamepad1.a)
+                drone.setPosition(0.3);
 
         }
     }

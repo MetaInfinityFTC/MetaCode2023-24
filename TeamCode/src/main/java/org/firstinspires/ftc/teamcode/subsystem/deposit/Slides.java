@@ -14,7 +14,7 @@ public class Slides {
 
     private DcMotor left, right;
 
-    public double upperLimit = 0, lowerLimit = 0;
+    public double upperLimit = 400, lowerLimit = 0;
 
     public Slides(HardwareMap hardwareMap) {
         left = hardwareMap.dcMotor.get("lSlide");
@@ -27,16 +27,20 @@ public class Slides {
         controller = new PIDFController(p, i, d, f);
     }
 
-    private double pidTarget = 0;
+    public static double pidTarget = 0;
 
     public void setPidTarget(double pidTarget) {
+    if (pidTarget < lowerLimit)
+        this.pidTarget = lowerLimit;
+    else if(pidTarget > upperLimit)
+        this.pidTarget = upperLimit;
+    else
         this.pidTarget = pidTarget;
     }
 
     public void updatePID() {
         double cmd = controller.calculate(left.getCurrentPosition(), pidTarget);
         setPower(cmd);
-        //TODO: remove when done tuning
     }
 
     public void manual(double inputPower) {
