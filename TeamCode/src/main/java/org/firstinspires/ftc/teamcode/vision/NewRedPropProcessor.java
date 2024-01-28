@@ -59,11 +59,11 @@ public class NewRedPropProcessor implements VisionProcessor {
      * that all pixels will be shown.
      */
     public static int lowL = 0;
-    public static int lowA = 128;
-    public static int lowB = 128;
+    public static int lowA = 50;
+    public static int lowB = 50;
     public static int highL = 100;
-    public static int highA = 50;
-    public static int highB = 50;
+    public static int highA = 128;
+    public static int highB = 128;
     public Scalar lower = new Scalar(lowL,lowA,lowB);
     public Scalar upper = new Scalar(highL,highA,highB);
 

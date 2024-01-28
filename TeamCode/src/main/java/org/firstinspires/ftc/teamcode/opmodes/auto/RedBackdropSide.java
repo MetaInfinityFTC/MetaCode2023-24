@@ -76,7 +76,7 @@ public class RedBackdropSide extends LinearOpMode {
         virtual4Bar.setV4b(v4bTransfer);
 
         LeftHang.setPosition(0.2);
-        RightHang.setPosition(0.9);
+        RightHang.setPosition(0.8);
 
         drone.setPosition(0);
 

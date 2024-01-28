@@ -87,7 +87,6 @@ public class DaTele extends LinearOpMode {
                     deposit.setArm(armPreTransfer);
                 })
                 .transition(() -> gamepad2.a)
-
                 .state(States.INTAKE)
                 .onEnter(() -> {
                     deposit.setArm(armPreTransfer);
