@@ -33,12 +33,10 @@ public class AbstractedMachine {
                     deposit.setWrist(wristTransfer);
                     deposit.setArm(armPreTransfer);
                 })
-                .transitionTimed(0.2) //0.2 seconds to move everything before bringing v4b back
+                .transition(extendo::isAtTarget) //0.2 seconds to move everything before bringing v4b back
                 .onExit(() -> {
                     virtual4Bar.setV4b(v4bTransfer);
                 })
-
-                .waitState(.5)
 
                 .state(Transfer.TRANSFER)
                 .onEnter(() -> {

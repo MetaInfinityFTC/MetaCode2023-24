@@ -43,4 +43,8 @@ public class Extendo {
     public double getPos() {
         return right.getCurrentPosition();
     }
+
+    public boolean isAtTarget() {
+        return controller.atSetPoint();
+    }
 }

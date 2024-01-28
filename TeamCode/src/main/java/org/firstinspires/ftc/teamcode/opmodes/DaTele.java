@@ -69,8 +69,6 @@ public class DaTele extends LinearOpMode {
         deposit = new Deposit(hardwareMap);
         virtual4Bar = new Virtual4Bar(hardwareMap);
 
-
-
         timer = new ElapsedTime();
 
         LeftHang.setPosition(0.2);

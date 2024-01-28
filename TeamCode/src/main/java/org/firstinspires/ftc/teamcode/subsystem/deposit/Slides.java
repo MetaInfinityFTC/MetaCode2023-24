@@ -59,4 +59,8 @@ public class Slides {
         return right.getCurrentPosition();
     }
 
+    public boolean isAtTarget() {
+        return controller.atSetPoint();
+    }
+
 }
