@@ -149,7 +149,8 @@ public class DaTele extends LinearOpMode {
             driveControl.update(gamepad1, gamepad2);
             globalMachine.update();
 
-
+            telemetry.addData("State: ", globalMachine.getState());
+            telemetry.update();
             //update PID loop for Extendo and Outtake Slides
             extendo.update();
             slides.updatePID();

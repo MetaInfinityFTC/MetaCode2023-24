@@ -37,7 +37,7 @@ public class AbstractedMachine {
                 .onExit(() -> {
                     virtual4Bar.setV4b(v4bTransfer);
                 })
-
+                .waitState(1)
                 .state(Transfer.TRANSFER)
                 .onEnter(() -> {
                     deposit.setFinger(bothPixels);
