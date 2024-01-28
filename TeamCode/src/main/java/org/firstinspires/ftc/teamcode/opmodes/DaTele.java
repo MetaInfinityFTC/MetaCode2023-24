@@ -37,7 +37,7 @@ import org.firstinspires.ftc.teamcode.subsystem.intake.Virtual4Bar;
 import org.firstinspires.ftc.teamcode.telecontrol.DriveControl;
 
 @Config
-@TeleOp(name = "TeleOp")
+@TeleOp(name = "DaTele")
 public class DaTele extends LinearOpMode {
     Deposit deposit;
     Slides slides;

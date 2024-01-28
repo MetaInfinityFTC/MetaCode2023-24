@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.opmodes.auto;
 import static org.firstinspires.ftc.teamcode.subsystem.deposit.Deposit.armDeposit90;
 import static org.firstinspires.ftc.teamcode.subsystem.deposit.Deposit.armPreTransfer;
 import static org.firstinspires.ftc.teamcode.subsystem.deposit.Deposit.armTransfer;
+import static org.firstinspires.ftc.teamcode.subsystem.deposit.Deposit.bothPixels;
 import static org.firstinspires.ftc.teamcode.subsystem.deposit.Deposit.wrist90degree;
 import static org.firstinspires.ftc.teamcode.subsystem.deposit.Deposit.wristTransfer;
 import static org.firstinspires.ftc.teamcode.subsystem.deposit.Deposit.zeroPixel;
@@ -36,7 +37,7 @@ import org.firstinspires.ftc.teamcode.vision.NewRedPropProcessor;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.opencv.core.Mat;
 
-@Autonomous(name="\uD83D\uDC80\\RedBackdrop")
+@Autonomous(name="\uD83D\uDC80\\RedBackdrop", preselectTeleOp = "DaTele")
 public class RedBackdropSide extends LinearOpMode {
     private NewRedPropProcessor.Location location = LEFT;
     private NewRedPropProcessor redPropProcessor;
@@ -47,7 +48,9 @@ public class RedBackdropSide extends LinearOpMode {
     Extendo extendo;
     Virtual4Bar virtual4Bar;
 
-
+    Servo LeftHang;
+    Servo RightHang;
+    Servo drone;
     SampleMecanumDrive drive;
 
     @Override
@@ -57,10 +60,25 @@ public class RedBackdropSide extends LinearOpMode {
         visionPortal = VisionPortal.easyCreateWithDefaults(
                 hardwareMap.get(WebcamName.class, "Webcam 1"), redPropProcessor);
 
+        LeftHang = hardwareMap.servo.get("LeftHang");
+        RightHang = hardwareMap.servo.get("RightHang");
+        drone = hardwareMap.servo.get("drone");
+
         extendo = new Extendo(hardwareMap);
         slides = new Slides(hardwareMap);
         deposit = new Deposit(hardwareMap);
         virtual4Bar = new Virtual4Bar(hardwareMap);
+
+        deposit.setArm(armPreTransfer);
+        deposit.setFinger(bothPixels);
+        deposit.setWrist(wristTransfer);
+        virtual4Bar.setClaw(clawClose);
+        virtual4Bar.setV4b(v4bTransfer);
+
+        LeftHang.setPosition(0.2);
+        RightHang.setPosition(0.9);
+
+        drone.setPosition(0);
 
         Pose2d startpose = new Pose2d(14.75, -61.5, Math.toRadians(-90));
         drive.setPoseEstimate(startpose);
@@ -156,8 +174,10 @@ public class RedBackdropSide extends LinearOpMode {
                 drive.followTrajectorySequenceAsync(rightPurple);
                 break;
         }
-
-
+        while(opModeIsActive()){
+            drive.update();
+            extendo.update();
+        }
     }
 }
 
