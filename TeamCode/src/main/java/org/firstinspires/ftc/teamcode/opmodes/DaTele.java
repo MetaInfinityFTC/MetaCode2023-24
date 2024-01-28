@@ -50,11 +50,10 @@ public class DaTele extends LinearOpMode {
     ElapsedTime timer;
 
     enum States {
-        NEUTRAL, INTAKE, PRE_TRANSFER, DEPOSIT30, TRANSFER, GRAB, DROP_ONE_PIXEL, DROP_TWO_PIXEL, TILL_TRANSFER, TILL_DEPO, DEPOSIT90
+        NEUTRAL, INTAKE, PRE_INTAKE, DEPOSIT30, TRANSFER, GRAB, DROP_ONE_PIXEL, DROP_TWO_PIXEL, TILL_TRANSFER, TILL_DEPO, DEPOSIT90
     }
 
     public void runOpMode() {
-
 
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
 
@@ -87,7 +86,7 @@ public class DaTele extends LinearOpMode {
                     deposit.setArm(armPreTransfer);
                 })
                 .transition(() -> gamepad2.a)
-                .state(States.PRE_TRANSFER)
+                .state(States.PRE_INTAKE)
                 .onEnter(() -> {
                     deposit.setArm(armPreTransfer);
                 })
@@ -110,6 +109,8 @@ public class DaTele extends LinearOpMode {
 
                 .state(States.TILL_DEPO)
                 .transition(() -> gamepad2.x) //press x to go to deposit
+                .transition(() -> gamepad2.a, States.PRE_INTAKE)
+                .transition(() -> gamepad2.left_bumper, States.NEUTRAL)
 
                 .state(States.DEPOSIT90)
                 .onEnter(() -> {
@@ -119,6 +120,9 @@ public class DaTele extends LinearOpMode {
                 .transition(() -> gamepad2.right_bumper, States.DEPOSIT30)
                 .transition(() -> gamepad2.y, States.DROP_TWO_PIXEL)
                 .transition(() -> gamepad2.start, States.DROP_ONE_PIXEL)
+                .transition(() -> gamepad2.a, States.PRE_INTAKE)
+                .transition(() -> gamepad2.left_bumper, States.NEUTRAL)
+                .transition(() -> gamepad2.b, States.TRANSFER)
 
                 .state(States.DEPOSIT30)
                 .onEnter(() -> {
@@ -128,6 +132,9 @@ public class DaTele extends LinearOpMode {
                 .transition(() -> gamepad2.x, States.DEPOSIT90) // x to go back to deposit 90 position
                 .transition(() -> gamepad2.y, States.DROP_TWO_PIXEL) // y to drop both pixel/the remaining pixel
                 .transition(() -> gamepad2.start, States.DROP_ONE_PIXEL) //start to just drop one pixel
+                .transition(() -> gamepad2.a, States.PRE_INTAKE)
+                .transition(() -> gamepad2.left_bumper, States.NEUTRAL)
+                .transition(() -> gamepad2.b, States.TRANSFER)
 
                 .state(States.DROP_ONE_PIXEL)
                 .onEnter(() -> {
