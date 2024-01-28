@@ -25,6 +25,7 @@ public class Slides {
         left.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         right.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         controller = new PIDFController(p, i, d, f);
+        controller.setTolerance(3);
     }
 
     public static double pidTarget = 0;
