@@ -54,14 +54,6 @@ public class DaTele extends LinearOpMode {
 
     ElapsedTime timer;
 
-    public static double clawpos = 0.5;
-    public static double v4bpos = 1.0;
-    public static double armpos = 0.5;
-    public static double wristpos = 0.5;
-    public static double fingerpos = 0.5;
-
-
-
     public void runOpMode() {
         frontLeftMotor = hardwareMap.dcMotor.get("frontLeftMotor");
         backLeftMotor = hardwareMap.dcMotor.get("backLeftMotor");
@@ -107,12 +99,6 @@ public class DaTele extends LinearOpMode {
             backLeftMotor.setPower(backLeftPower);
             frontRightMotor.setPower(frontRightPower);
             backRightMotor.setPower(backRightPower);
-
-            deposit.setWrist(wristpos);
-            deposit.setArm(armpos);
-            deposit.setFinger(fingerpos);
-            virtual4Bar.setClaw(clawpos);
-            virtual4Bar.setV4b(v4bpos);
 
             //update PID loop for Extendo and Outtake Slides
             extendo.update();
