@@ -1,5 +1,19 @@
 package org.firstinspires.ftc.teamcode.opmodes.auto;
 
+import static org.firstinspires.ftc.teamcode.subsystem.deposit.Deposit.armDeposit90;
+import static org.firstinspires.ftc.teamcode.subsystem.deposit.Deposit.armPreTransfer;
+import static org.firstinspires.ftc.teamcode.subsystem.deposit.Deposit.armTransfer;
+import static org.firstinspires.ftc.teamcode.subsystem.deposit.Deposit.wrist90degree;
+import static org.firstinspires.ftc.teamcode.subsystem.deposit.Deposit.wristTransfer;
+import static org.firstinspires.ftc.teamcode.subsystem.deposit.Deposit.zeroPixel;
+import static org.firstinspires.ftc.teamcode.subsystem.extendo.Extendo.Extension_States.closespike;
+import static org.firstinspires.ftc.teamcode.subsystem.extendo.Extendo.Extension_States.farspike;
+import static org.firstinspires.ftc.teamcode.subsystem.extendo.Extendo.Extension_States.midspike;
+import static org.firstinspires.ftc.teamcode.subsystem.extendo.Extendo.Extension_States.retracted;
+import static org.firstinspires.ftc.teamcode.subsystem.intake.Virtual4Bar.clawClose;
+import static org.firstinspires.ftc.teamcode.subsystem.intake.Virtual4Bar.clawOpen;
+import static org.firstinspires.ftc.teamcode.subsystem.intake.Virtual4Bar.v4bTransfer;
+import static org.firstinspires.ftc.teamcode.vision.NewRedPropProcessor.Location.LEFT;
 import static org.firstinspires.ftc.teamcode.vision.NewRedPropProcessor.Location.MIDDLE;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
@@ -12,7 +26,11 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
+import org.firstinspires.ftc.teamcode.subsystem.deposit.Deposit;
+import org.firstinspires.ftc.teamcode.subsystem.deposit.Slides;
+import org.firstinspires.ftc.teamcode.subsystem.extendo.Extendo;
 import org.firstinspires.ftc.teamcode.subsystem.intake.ActiveIntake;
+import org.firstinspires.ftc.teamcode.subsystem.intake.Virtual4Bar;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 import org.firstinspires.ftc.teamcode.vision.NewRedPropProcessor;
 import org.firstinspires.ftc.vision.VisionPortal;
@@ -20,15 +38,16 @@ import org.opencv.core.Mat;
 
 @Autonomous(name="\uD83D\uDC80\\RedBackdrop")
 public class RedBackdropSide extends LinearOpMode {
-    private NewRedPropProcessor.Location location = MIDDLE;
+    private NewRedPropProcessor.Location location = LEFT;
     private NewRedPropProcessor redPropProcessor;
     private VisionPortal visionPortal;
 
-    private DcMotor slide;
-    private DcMotorEx intake;
-    private Servo intakeservo, bucket;
+    Deposit deposit;
+    Slides slides;
+    Extendo extendo;
+    Virtual4Bar virtual4Bar;
 
-    private ActiveIntake Intake;
+
     SampleMecanumDrive drive;
 
     @Override
@@ -37,98 +56,88 @@ public class RedBackdropSide extends LinearOpMode {
         redPropProcessor = new NewRedPropProcessor(telemetry);
         visionPortal = VisionPortal.easyCreateWithDefaults(
                 hardwareMap.get(WebcamName.class, "Webcam 1"), redPropProcessor);
-        Pose2d startpose = new Pose2d(10, -58, Math.toRadians(90));
+
+        extendo = new Extendo(hardwareMap);
+        slides = new Slides(hardwareMap);
+        deposit = new Deposit(hardwareMap);
+        virtual4Bar = new Virtual4Bar(hardwareMap);
+
+        Pose2d startpose = new Pose2d(14.75, -61.5, Math.toRadians(-90));
         drive.setPoseEstimate(startpose);
 
-        initHardware();
-
         TrajectorySequence leftPurple = drive.trajectorySequenceBuilder(startpose)
-                .lineToSplineHeading(new Pose2d(17, -43, Math.toRadians(135)))
-                .splineToConstantHeading(new Vector2d(10, -34), Math.toRadians(180))
-                .UNSTABLE_addTemporalMarkerOffset(0, () -> {
-                    Intake.Intake(intake, 0.4);
+                .UNSTABLE_addTemporalMarkerOffset(1,() -> {
+                    deposit.setWrist(wrist90degree);
+                    deposit.setArm(armDeposit90);
                 })
+                .lineToSplineHeading(new Pose2d(45, -30, Math.toRadians(-180)))
+                .addTemporalMarker(() -> deposit.setFinger(zeroPixel))
+                .waitSeconds(0.2)
+                .UNSTABLE_addTemporalMarkerOffset(-0.2, () -> {
+                    virtual4Bar.setV4b(0.9);
+                    extendo.setState(farspike);
+                    deposit.setWrist(wristTransfer);
+                    deposit.setArm(armPreTransfer);
+                })
+                .waitSeconds(2)
+                .addTemporalMarker(() -> virtual4Bar.setClaw(clawOpen))
                 .waitSeconds(0.1)
-                .UNSTABLE_addTemporalMarkerOffset(0, () -> {
-                    Intake.Intake(intake, 0);
+                .UNSTABLE_addTemporalMarkerOffset(0.2, () -> {
+                    virtual4Bar.setClaw(clawClose);
+                    virtual4Bar.setV4b(v4bTransfer);
+                    extendo.setState(retracted);
                 })
-                .addTemporalMarker(() -> {
-                    myGoToHeightPOS(-250, 1);
-                })
-                .lineToSplineHeading(new Pose2d(55.5,-25, Math.toRadians(180)))
-                .UNSTABLE_addTemporalMarkerOffset(0, () -> {
-                    bucket.setPosition(0.95);
-                })
-                .waitSeconds(0.4)
-                .forward(5)
-                //.strafeRight(8)
-                .addTemporalMarker(() -> {
-                    bucket.setPosition(0.47);
-                })
-                .splineToConstantHeading(new Vector2d(60, -8), Math.toRadians(0))
-                .addTemporalMarker(() -> {
-                    myGoToHeightPOS(0, 1);
-                })
-                .waitSeconds(1)
+                .strafeLeft(30)
                 .build();
 
         TrajectorySequence middlePurple = drive.trajectorySequenceBuilder(startpose)
-                .lineTo(new Vector2d(18, -32))
-                .UNSTABLE_addTemporalMarkerOffset(0, () -> {
-                Intake.Intake(intake, 0.4);
+                .UNSTABLE_addTemporalMarkerOffset(1,() -> {
+                    deposit.setWrist(wrist90degree);
+                    deposit.setArm(armDeposit90);
                 })
+                .lineToSplineHeading(new Pose2d(45, -34.5, Math.toRadians(-180)))
+                .addTemporalMarker(() -> deposit.setFinger(zeroPixel))
+                .waitSeconds(0.2)
+                .UNSTABLE_addTemporalMarkerOffset(-0.2, () -> {
+                    virtual4Bar.setV4b(0.9);
+                    extendo.setState(midspike);
+                    deposit.setWrist(wristTransfer);
+                    deposit.setArm(armPreTransfer);
+                })
+                .strafeRight(8)
+                .addTemporalMarker(() -> virtual4Bar.setClaw(clawOpen))
                 .waitSeconds(0.1)
-                .UNSTABLE_addTemporalMarkerOffset(0, () -> {
-                    Intake.Intake(intake, 0);
+                .UNSTABLE_addTemporalMarkerOffset(0.2, () -> {
+                    virtual4Bar.setClaw(clawClose);
+                    virtual4Bar.setV4b(v4bTransfer);
+                    extendo.setState(retracted);
                 })
-                .addTemporalMarker(() -> {
-                    myGoToHeightPOS(-250, 1);
-                })
-                .lineToSplineHeading(new Pose2d(55.5,-33, Math.toRadians(180)))
-                .UNSTABLE_addTemporalMarkerOffset(0, () -> {
-                    bucket.setPosition(0.95);
-                })
-                .waitSeconds(0.4)
-                .forward(5)
-                //.strafeRight(8)
-                .addTemporalMarker(() -> {
-                    bucket.setPosition(0.47);
-                })
-                .splineToConstantHeading(new Vector2d(60, -8), Math.toRadians(0))
-                .addTemporalMarker(() -> {
-                    myGoToHeightPOS(0, 1);
-                })
-                .waitSeconds(1)
+                .strafeLeft(30)
                 .build();
 
         TrajectorySequence rightPurple = drive.trajectorySequenceBuilder(startpose)
-                .lineTo(new Vector2d(25, -45))
-                .UNSTABLE_addTemporalMarkerOffset(0, () -> {
-                    Intake.Intake(intake, 0.4);
+                .UNSTABLE_addTemporalMarkerOffset(1,() -> {
+                    deposit.setWrist(wrist90degree);
+                    deposit.setArm(armDeposit90);
                 })
+                .lineToSplineHeading(new Pose2d(45, -42.5, Math.toRadians(-180)))
+                .addTemporalMarker(() -> deposit.setFinger(zeroPixel))
+                .waitSeconds(0.2)
+                .UNSTABLE_addTemporalMarkerOffset(-0.2, () -> {
+                    virtual4Bar.setV4b(0.9);
+                    extendo.setState(closespike);
+                    deposit.setWrist(wristTransfer);
+                    deposit.setArm(armPreTransfer);
+                })
+                .strafeRight(12)
+                .addTemporalMarker(() -> virtual4Bar.setClaw(clawOpen))
                 .waitSeconds(0.1)
-                .UNSTABLE_addTemporalMarkerOffset(0, () -> {
-                    Intake.Intake(intake, 0);
+                .UNSTABLE_addTemporalMarkerOffset(0.2, () -> {
+                    virtual4Bar.setClaw(clawClose);
+                    virtual4Bar.setV4b(v4bTransfer);
+                    extendo.setState(retracted);
                 })
-                .back(2)
-                .addTemporalMarker(() -> {
-                    myGoToHeightPOS(-250, 1);
-                })
-                .lineToSplineHeading(new Pose2d(55.5,-40, Math.toRadians(180)))
-                .UNSTABLE_addTemporalMarkerOffset(0, () -> {
-                    bucket.setPosition(0.95);
-                })
-                .waitSeconds(0.4)
-                .forward(5)
-                //.strafeRight(8)
-                .addTemporalMarker(() -> {
-                    bucket.setPosition(0.47);
-                })
-                .splineToConstantHeading(new Vector2d(60, -8), Math.toRadians(0))
-                .addTemporalMarker(() -> {
-                    myGoToHeightPOS(0, 1);
-                })
-                .waitSeconds(1)
+                .strafeLeft(30)
                 .build();
 
         while(!isStarted()){
@@ -138,40 +147,17 @@ public class RedBackdropSide extends LinearOpMode {
         waitForStart();
         switch(location){
             case LEFT:
-                drive.followTrajectorySequence(leftPurple);
+                drive.followTrajectorySequenceAsync(leftPurple);
                 break;
             case MIDDLE:
-                drive.followTrajectorySequence(middlePurple);
+                drive.followTrajectorySequenceAsync(middlePurple);
                 break;
             case RIGHT:
-                drive.followTrajectorySequence(rightPurple);
+                drive.followTrajectorySequenceAsync(rightPurple);
                 break;
         }
 
 
     }
-    public void initHardware(){
-        slide = hardwareMap.get(DcMotor.class, "slide");
-        slide.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        intakeservo = hardwareMap.servo.get("intakeservo");
-        intake = (DcMotorEx) hardwareMap.dcMotor.get("intake");
-        Intake = new ActiveIntake();
-        bucket = hardwareMap.servo.get("bucket");
-        double power;
-        bucket.setPosition(0.47);
-        intakeservo.setPosition(0.65);
-    }
-    public void myGoToHeightPOS(int slidePOS, double motorPower) {
-        //to find slide position and motor position
-        telemetry.addData("leftSlidePOS", slide.getCurrentPosition());
-        telemetry.addData("motorPower", motorPower);
-        telemetry.update();
-        //base encoder code
-        slide.setTargetPosition(slidePOS);
-        slide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        slide.setPower(motorPower);
-    }
-
-
-
 }
+

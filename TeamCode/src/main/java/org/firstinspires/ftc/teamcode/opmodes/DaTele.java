@@ -73,8 +73,8 @@ public class DaTele extends LinearOpMode {
 
         timer = new ElapsedTime();
 
-        LeftHang.setPosition(0);
-        RightHang.setPosition(1);
+        LeftHang.setPosition(0.2);
+        RightHang.setPosition(0.8);
 
         drone.setPosition(0);
 
@@ -181,65 +181,6 @@ public class DaTele extends LinearOpMode {
             slides.setPidTarget(pidTarget+gamepad2.left_stick_x*10);
             if(gamepad2.dpad_down)
                 slides.setPidTarget(0);
-
-            //TODO Changing things with multiple commands to finite state machine tonight/tomorrow
-            //intake v4b+claw control
-            // open claw
-            if(gamepad2.a)
-                virtual4Bar.setClaw(clawOpen);
-            //grab, bring slides back, claw up, and ready for transfer
-            if(gamepad2.b) {
-                virtual4Bar.setClaw(clawClose);
-                extendo.setState(retracted);
-                deposit.setWrist(wristTransfer);
-                deposit.setArm(armPreTransfer);
-                virtual4Bar.setV4b(v4bTransfer);
-            }
-            //transfer
-            if(gamepad2.x) {
-                deposit.setFinger(bothPixels);
-                deposit.setArm(armTransfer);
-            }
-            //get claw ready to grab
-            if(gamepad2.y){
-                deposit.setArm(armPreTransfer);
-                virtual4Bar.setV4b(v4bGround);
-                virtual4Bar.setClaw(clawOpen);
-            }
-
-            //deposit control
-            //after deposit, use this
-            if(gamepad2.left_bumper){
-                deposit.setWrist(wristTransfer);
-                deposit.setArm(armTransfer);
-            }
-            //use this to go to low deposit position, rare
-            if(gamepad2.start){
-                deposit.setWrist(wrist90degree);
-                deposit.setArm(armDeposit90);
-            }
-            //use this to go to high deposit position, more common
-            if(gamepad2.left_bumper){
-                deposit.setWrist(wrist30degree);
-                deposit.setArm(armDeposit30);
-            }
-            //drop one pixel
-            if(gamepad2.dpad_left)
-                deposit.setFinger(onePixel);
-            //drop two pixel
-            if(gamepad2.dpad_left)
-                deposit.setFinger(zeroPixel);
-
-            //hang
-            if(gamepad1.x){
-                LeftHang.setPosition(0.5);
-                RightHang.setPosition(0.5);
-            }
-
-            //drone
-            if(gamepad1.a)
-                drone.setPosition(0.3);
-
         }
     }
 }
