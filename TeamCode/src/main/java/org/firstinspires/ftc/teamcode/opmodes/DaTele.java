@@ -87,17 +87,17 @@ public class DaTele extends LinearOpMode {
                     deposit.setArm(armPreTransfer);
                 })
                 .transition(() -> gamepad2.a)
-                .state(States.INTAKE)
+                .state(States.PRE_TRANSFER)
                 .onEnter(() -> {
                     deposit.setArm(armPreTransfer);
                 })
                 .transitionTimed(.2) // putting deposit out before v4b
-                .onExit(() -> {
+                .state(States.INTAKE)
+                .onEnter(() -> {
                     virtual4Bar.setV4b(v4bGround);
                     virtual4Bar.setClaw(clawOpen);
                 })
                 .transition(() -> gamepad2.b)
-
                 // abstracted transfer machine
                 .state(States.TRANSFER)
                 .onEnter(transferMachine::start)
