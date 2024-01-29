@@ -50,7 +50,7 @@ public class DaTele extends LinearOpMode {
     ElapsedTime timer;
 
     enum States {
-        NEUTRAL, INTAKE, PRE_INTAKE, DEPOSIT30, TRANSFER, GRAB, DROP_ONE_PIXEL, DROP_TWO_PIXEL, TILL_TRANSFER, TILL_DEPO, DEPOSIT90
+        NEUTRAL, INTAKE, PRE_INTAKE, DEPOSIT30, TRANSFER, GRAB, DROP_ONE_PIXEL, DROP_TWO_PIXEL, TILL_TRANSFER, TILL_DEPO, CLAW_OPEN, WRIST90, DEPOSIT90
     }
 
     public void runOpMode() {
@@ -94,6 +94,10 @@ public class DaTele extends LinearOpMode {
                 .state(States.INTAKE)
                 .onEnter(() -> {
                     virtual4Bar.setV4b(v4bGround);
+                })
+                .transitionTimed(0.4)
+                .state(States.CLAW_OPEN)
+                .onEnter(() -> {
                     virtual4Bar.setClaw(clawOpen);
                 })
                 .transition(() -> gamepad2.b)
@@ -114,8 +118,12 @@ public class DaTele extends LinearOpMode {
 
                 .state(States.DEPOSIT90)
                 .onEnter(() -> {
-                    deposit.setWrist(wrist90degree);
                     deposit.setArm(armDeposit90);
+                })
+                .transitionTimed(0.4)
+                .state(States.WRIST90)
+                .onEnter(() -> {
+                    deposit.setWrist(wrist90degree);
                 })
                 .transition(() -> gamepad2.right_bumper, States.DEPOSIT30)
                 .transition(() -> gamepad2.y, States.DROP_TWO_PIXEL)
@@ -126,6 +134,7 @@ public class DaTele extends LinearOpMode {
 
                 .state(States.DEPOSIT30)
                 .onEnter(() -> {
+                    virtual4Bar.setClaw(clawClose);
                     deposit.setWrist(wrist30degree);
                     deposit.setArm(armDeposit30);
                 })

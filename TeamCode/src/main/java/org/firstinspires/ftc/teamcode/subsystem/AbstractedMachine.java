@@ -11,6 +11,7 @@ import static org.firstinspires.ftc.teamcode.subsystem.deposit.Deposit.*;
 import static org.firstinspires.ftc.teamcode.subsystem.deposit.Deposit.armTransfer;
 import static org.firstinspires.ftc.teamcode.subsystem.extendo.Extendo.Extension_States.retracted;
 import static org.firstinspires.ftc.teamcode.subsystem.intake.Virtual4Bar.clawClose;
+import static org.firstinspires.ftc.teamcode.subsystem.intake.Virtual4Bar.v4bPreTransfer;
 import static org.firstinspires.ftc.teamcode.subsystem.intake.Virtual4Bar.v4bTransfer;
 
 public class AbstractedMachine {
@@ -35,17 +36,18 @@ public class AbstractedMachine {
                 })
                 .transition(extendo::isAtTarget) //0.2 seconds to move everything before bringing v4b back
                 .onExit(() -> {
-                    virtual4Bar.setV4b(v4bTransfer);
+                    virtual4Bar.setV4b(v4bPreTransfer);
                 })
                 .waitState(1)
                 .state(Transfer.TRANSFER)
                 .onEnter(() -> {
+                    virtual4Bar.setV4b(v4bTransfer);
                     deposit.setFinger(bothPixels);
                     deposit.setArm(armTransfer);
                 })
                 .transitionTimed(0.2) //wait before going to Depo Pos
                 .onExit(() -> {
-                    virtual4Bar.setClaw(0.34); //open slightly so pixels can come out
+                    virtual4Bar.setClaw(0.4); //open slightly so pixels can come out
                 })
 
                 .state(Transfer.FINISHED) // end state
