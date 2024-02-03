@@ -15,7 +15,7 @@ public class Extendo {
 
     //enum to house states with better names
     public enum Extension_States {
-        retracted(0), first(500), second(800), extended(1050), closespike(200), midspike(400), farspike(600);
+        retracted(0), first(500), second(800), extended(1050), closespike(200), midspike(400), farspike(900);
         private double numVal;
         Extension_States(double numVal) { this.numVal = numVal;}
         public double getNumVal() { return numVal; }

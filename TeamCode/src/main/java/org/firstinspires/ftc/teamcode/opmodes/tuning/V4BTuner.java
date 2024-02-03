@@ -10,6 +10,8 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.subsystem.deposit.Deposit;
+import org.firstinspires.ftc.teamcode.subsystem.deposit.Slides;
+import org.firstinspires.ftc.teamcode.subsystem.extendo.Extendo;
 import org.firstinspires.ftc.teamcode.subsystem.intake.Virtual4Bar;
 
 /*
@@ -22,17 +24,16 @@ public class V4BTuner extends OpMode {
 
     Virtual4Bar v4b;
     Deposit deposit;
-    public static double clawPos = 0, v4bPos = 0, wristPos = 0.2, fingerPos = bothPixels, armPos = armTransfer;
+    public static double clawPos = 0, v4bPos = 0, wristPos = 0.2, fingerPos = bothPixels, armPos = 0.5;
 
     @Override
     public void init() {
         v4b = new Virtual4Bar(hardwareMap);
+        deposit = new Deposit(hardwareMap);
     }
 
     @Override
     public void loop() {
-        v4b.setClaw(clawPos);
-        v4b.setV4b(v4bPos);
         deposit.setWrist(wristPos);
         deposit.setArm(armPos);
         deposit.setFinger(fingerPos);

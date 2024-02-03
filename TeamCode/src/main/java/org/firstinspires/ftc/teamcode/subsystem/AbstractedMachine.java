@@ -17,7 +17,7 @@ import static org.firstinspires.ftc.teamcode.subsystem.intake.Virtual4Bar.v4bTra
 public class AbstractedMachine {
 
     public enum Transfer {
-        GRAB, TRANSFER, FINISHED, PRE_TRANSFER
+        GRAB, TRANSFER, FINISHED, CLAW_OPEN, TRANSFER2, ARMDOWN, PRE_TRANSFER
 
     }
 
@@ -29,7 +29,7 @@ public class AbstractedMachine {
 
                 .state(Transfer.PRE_TRANSFER)
                 .onEnter(() -> {
-                    virtual4Bar.setV4b(0.9); //raise off ground
+                    virtual4Bar.setV4b(0.8); //raise off ground
                     extendo.setState(retracted);
                     deposit.setWrist(wristTransfer);
                     deposit.setArm(armPreTransfer);
@@ -42,14 +42,25 @@ public class AbstractedMachine {
                 .state(Transfer.TRANSFER)
                 .onEnter(() -> {
                     virtual4Bar.setV4b(v4bTransfer);
-                    deposit.setFinger(bothPixels);
+                })
+                .transitionTimed(1)
+                .state(Transfer.TRANSFER2)
+                .onEnter(() -> {
+                    deposit.setFinger(zeroPixel);
                     deposit.setArm(armTransfer);
                 })
-                .transitionTimed(0.2) //wait before going to Depo Pos
-                .onExit(() -> {
-                    virtual4Bar.setClaw(0.4); //open slightly so pixels can come out
+                .transitionTimed(1)
+                .state(Transfer.CLAW_OPEN)
+                .onEnter(()-> {
+                    deposit.setFinger(bothPixels);
+                    deposit.setArm(0.88);
                 })
-
+                .transitionTimed(0.2)
+                .state(Transfer.ARMDOWN)
+                .onEnter(() -> {
+                    virtual4Bar.setClaw(0.5); //open slightly so pixels can come out
+                    deposit.setArm(0.88);
+                })
                 .state(Transfer.FINISHED) // end state
 
                 .build();

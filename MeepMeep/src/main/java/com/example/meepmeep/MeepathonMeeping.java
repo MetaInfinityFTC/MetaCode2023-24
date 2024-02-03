@@ -16,13 +16,19 @@ public class MeepathonMeeping {
                 // Set bot constraints: maxVel, maxAccel, maxAngVel, maxAngAccel, track width
                 .setConstraints(60, 60, Math.toRadians(214.78926857142858), Math.toRadians(214.78926857142858), 15)
                 .followTrajectorySequence(drive ->
-                        drive.trajectorySequenceBuilder(new Pose2d(14.75, -61.9, Math.toRadians(-90)))
-                                //.back(5)
-                                //.splineTo(new Vector2d(45,-38.5), Math.toRadians(0))
-                                .lineToSplineHeading(new Pose2d(45, -38.5, Math.toRadians(-180)))
-                                .waitSeconds(0.2)
-                                .strafeRight(8)
-                                .strafeLeft(30)
+                        drive.trajectorySequenceBuilder(new Pose2d(-33, -58, Math.toRadians(-90)))
+                                .lineToSplineHeading(new Pose2d(-33, -12, Math.toRadians(-90)))
+                                //claw goes out here
+                                .turn(Math.toRadians(25))
+                                //add claw drop
+                                .lineToSplineHeading(new Pose2d(-20, -12, Math.toRadians(-180)))
+                                //claw in
+                                //.waitSeconds(20) -> timer for other team to finish auto
+                                .lineTo(new Vector2d(20, -12))
+                                //depo arm out now
+                                .splineTo(new Vector2d(45, -30), Math.toRadians(0))
+                                //place yellow pixel, depo arm in, etc.
+                                .strafeRight(15)
                                 .build());
                 ;
 

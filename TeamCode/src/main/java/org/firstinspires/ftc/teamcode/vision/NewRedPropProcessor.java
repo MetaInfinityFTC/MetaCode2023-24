@@ -58,22 +58,22 @@ public class NewRedPropProcessor implements VisionProcessor {
      * min and max values here for now, meaning
      * that all pixels will be shown.
      */
-    public static int lowL = 0;
-    public static int lowA = 50;
-    public static int lowB = 50;
-    public static int highL = 100;
-    public static int highA = 128;
-    public static int highB = 128;
-    public Scalar lower = new Scalar(lowL,lowA,lowB);
-    public Scalar upper = new Scalar(highL,highA,highB);
+    public static int lowY = 40;
+    public static int lowCr = 140;
+    public static int lowCb = 100;
+    public static int highY = 70;
+    public static int highCr = 200;
+    public static int highCb = 200;
+    public Scalar lower = new Scalar(lowY,lowCr,lowCb);
+    public Scalar upper = new Scalar(highY,highCr,highCb);
 
     /**
      * This will allow us to choose the color
      * space we want to use on the live field
      * tuner instead of hardcoding it
      */
-    public ColorSpace colorSpace = ColorSpace.Lab;
-    private Mat labMat       = new Mat();
+    public ColorSpace colorSpace = ColorSpace.YCrCb;
+    private Mat ycrcbMat       = new Mat();
     private Mat binaryMat      = new Mat();
     private Mat maskedInputMat = new Mat();
 
@@ -115,13 +115,13 @@ public class NewRedPropProcessor implements VisionProcessor {
     @Override
     public Object processFrame(Mat frame, long captureTimeNanos) {
 
-        Scalar lower = new Scalar(lowL,lowA,lowB);
-        Scalar upper = new Scalar(highL,highA,highB);
+        Scalar lower = new Scalar(lowY,lowCr,lowCb);
+        Scalar upper = new Scalar(highY,highCr,highCb);
 
 
-        Imgproc.cvtColor(frame, labMat, colorSpace.cvtCode);
+        Imgproc.cvtColor(frame, ycrcbMat, colorSpace.cvtCode);
 
-        Core.inRange(labMat, lower, upper, binaryMat);
+        Core.inRange(ycrcbMat, lower, upper, binaryMat);
 
         maskedInputMat.release();
 
@@ -153,10 +153,10 @@ public class NewRedPropProcessor implements VisionProcessor {
         int area = (int) hat.area();
         telemetry.addData("Area: ", area);
         telemetry.addData("CenterX: ", centerX);
-        if(centerX <= 500 && area >= 2000 ){ //bottom half
+        if(centerX <= 375 && area >= 300 ){ //bottom half
             location = Location.MIDDLE;
             telemetry.addData("Position:", " MIDDLE");
-        }else if(centerX >= 500 && centerX <= 1200  && area >= 2000){
+        }else if(centerX >= 375 && centerX <= 1200  && area >= 300){
             location = Location.RIGHT;
             telemetry.addData("Position:", " RIGHT");
         }else{
