@@ -135,7 +135,7 @@ public class BlueBackdropSide extends LinearOpMode {
                     deposit.setWrist(wrist90degree);
                     deposit.setArm(armDeposit90);
                 })
-                .lineToSplineHeading(new Pose2d(46.5, 24, Math.toRadians(180)))
+                .lineToSplineHeading(new Pose2d(46.5, 26, Math.toRadians(180)))
                 .addTemporalMarker(() -> deposit.setFinger(zeroPixel))
                 .waitSeconds(1)
                 .UNSTABLE_addTemporalMarkerOffset(-0.2, () -> {
@@ -153,7 +153,7 @@ public class BlueBackdropSide extends LinearOpMode {
                     virtual4Bar.setV4b(v4bTransfer);
                     extendo.setState(retracted);
                 })
-                .strafeRight(32)
+                .strafeRight(30)
                 .build();
 
         while(!isStarted()){

@@ -74,7 +74,7 @@ public class BlueAudiemceSide extends LinearOpMode {
 
         drone.setPosition(0);
 
-        Pose2d startpose = new Pose2d(-33, 58, Math.toRadians(90));
+        Pose2d startpose = new Pose2d(-33-8.25, 58, Math.toRadians(90));
         drive.setPoseEstimate(startpose);
 
         TrajectorySequence leftPurple = drive.trajectorySequenceBuilder(startpose)

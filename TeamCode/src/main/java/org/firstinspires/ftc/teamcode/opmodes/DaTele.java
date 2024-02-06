@@ -13,6 +13,7 @@ import static org.firstinspires.ftc.teamcode.subsystem.deposit.Deposit.wrist90de
 import static org.firstinspires.ftc.teamcode.subsystem.deposit.Slides.pidTarget;
 import static org.firstinspires.ftc.teamcode.subsystem.extendo.Extendo.Extension_States.extended;
 import static org.firstinspires.ftc.teamcode.subsystem.extendo.Extendo.Extension_States.first;
+import static org.firstinspires.ftc.teamcode.subsystem.extendo.Extendo.Extension_States.hung;
 import static org.firstinspires.ftc.teamcode.subsystem.extendo.Extendo.Extension_States.retracted;
 import static org.firstinspires.ftc.teamcode.subsystem.extendo.Extendo.Extension_States.second;
 import static org.firstinspires.ftc.teamcode.subsystem.intake.Virtual4Bar.clawClose;
@@ -224,7 +225,7 @@ public class DaTele extends LinearOpMode {
 
             //hang
             if(gamepad1.x){
-                LeftHang.setPosition(0.5);
+                LeftHang.setPosition(0.8);
                 RightHang.setPosition(0.5);
             }
 
@@ -246,6 +247,11 @@ public class DaTele extends LinearOpMode {
             slides.setPidTarget(pidTarget+gamepad2.left_stick_x*10);
             if(gamepad2.dpad_down)
                 slides.setPidTarget(0);
+
+            if(gamepad1.y){
+                virtual4Bar.setV4b(0.7);
+                extendo.setState(hung);
+            }
         }
     }
 }

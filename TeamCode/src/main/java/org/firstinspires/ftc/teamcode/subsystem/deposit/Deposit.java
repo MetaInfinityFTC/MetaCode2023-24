@@ -10,13 +10,13 @@ public class Deposit {
     private Servo lArm, rArm, wrist, finger;
 
     //Arm Positions
-    public static double armTransfer = 0.88, armDeposit90 = 0.62, armDeposit30 = 0.67, armPreTransfer = 0.75;
+    public static double armTransfer = 0.88, armDeposit90 = 0.60, armDeposit30 = 0.67, armPreTransfer = 0.75;
 
     //Wrist Position
-    public static double wrist30degree = 0.79, wristTransfer = 0.195, wrist90degree = 0.65;
+    public static double wrist30degree = 0.79, wristTransfer = 0.18, wrist90degree = 0.65;
 
     //Finger Position
-    public static double bothPixels = 0, onePixel = 0.5, zeroPixel = 0.63;
+    public static double bothPixels = 0.5, onePixel = 0.5, zeroPixel = 0;
 
     public Deposit(HardwareMap hardwareMap) {
         lArm = hardwareMap.servo.get("lArm");
