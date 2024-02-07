@@ -170,7 +170,7 @@ public class DaTele extends LinearOpMode {
 
                 .state(States.DROP_TWO_PIXEL)
                 .onEnter(() -> deposit.setFinger(zeroPixel))
-                .transitionTimed(.3, States.SETWRIST) // going back to neutral state
+                .transitionTimed(0.7, States.SETWRIST) // going back to neutral state
 
                 .state(States.SETWRIST)
                 .onEnter(() -> deposit.setWrist(wristTransfer))

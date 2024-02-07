@@ -49,7 +49,7 @@ public class AbstractedMachine {
                     deposit.setFinger(zeroPixel);
                     deposit.setArm(0.8);
                 })
-                .transitionTimed(1)
+                .transitionTimed(0.5)
                 .state(Transfer.CLAW_OPEN)
                 .onEnter(()-> {
                     deposit.setArm(armTransfer);
