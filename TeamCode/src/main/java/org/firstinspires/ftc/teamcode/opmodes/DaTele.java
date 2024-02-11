@@ -22,6 +22,7 @@ import static org.firstinspires.ftc.teamcode.subsystem.intake.Virtual4Bar.v4bGro
 import static org.firstinspires.ftc.teamcode.subsystem.intake.Virtual4Bar.v4bTransfer;
 
 import com.acmerobotics.dashboard.config.Config;
+import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -30,6 +31,8 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import com.sfdev.assembly.state.StateMachine;
 import com.sfdev.assembly.state.StateMachineBuilder;
+
+import org.firstinspires.ftc.teamcode.Blinkdin;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.subsystem.AbstractedMachine;
 import org.firstinspires.ftc.teamcode.subsystem.deposit.Deposit;
@@ -54,6 +57,8 @@ public class DaTele extends LinearOpMode {
     DcMotor backRightMotor;
     ElapsedTime timer;
 
+    Blinkdin led;
+
     enum States {
         NEUTRAL, INTAKE, PRE_INTAKE, DEPOSIT30, TRANSFER, GRAB, DROP_ONE_PIXEL, DROP_TWO_PIXEL, TILL_TRANSFER, TILL_DEPO, CLAW_OPEN, WRIST90, CLAWINITIAL_OPEN, PRE_PRE_INTAKE, SECONDPIXEL, SETWRIST, EXTEND, DEPOSIT90
     }
@@ -76,9 +81,14 @@ public class DaTele extends LinearOpMode {
         deposit = new Deposit(hardwareMap);
         virtual4Bar = new Virtual4Bar(hardwareMap);
 
+        led = new Blinkdin(hardwareMap.get(RevBlinkinLedDriver.class, "led"));
+
+        led.changePattern(RevBlinkinLedDriver.BlinkinPattern.LAWN_GREEN);
+        led.update();
+
         timer = new ElapsedTime();
 
-        LeftHang.setPosition(0.2);
+        LeftHang.setPosition(0.25);
         RightHang.setPosition(0.9);
 
         drone.setPosition(0);
@@ -107,11 +117,12 @@ public class DaTele extends LinearOpMode {
                 .transitionTimed(.5) // putting deposit out before v4b
                 .state(States.PRE_PRE_INTAKE)
                 .onEnter(() -> {
-                    virtual4Bar.setV4b(v4bGround);
+                    virtual4Bar.setV4b(0.9);
                 })
                 .transitionTimed(1)
                 .state(States.CLAWINITIAL_OPEN)
                 .onEnter(() -> {
+                    virtual4Bar.setV4b(v4bGround);
                     virtual4Bar.setClaw(clawOpen);
                 })
                 .transition(() -> gamepad2.b)
@@ -135,7 +146,7 @@ public class DaTele extends LinearOpMode {
                     deposit.setFinger(bothPixels);
                     deposit.setArm(armDeposit90);
                 })
-                .transitionTimed(0.7)
+                .transitionTimed(1)
                 .state(States.WRIST90)
                 .onEnter(() -> {
                     virtual4Bar.setClaw(clawClose);
@@ -231,7 +242,7 @@ public class DaTele extends LinearOpMode {
 
             //drone
             if(gamepad1.a)
-                drone.setPosition(0.3);
+                drone.setPosition(0.5);
 
             //extendo control
             if(gamepad1.dpad_up)
@@ -244,7 +255,7 @@ public class DaTele extends LinearOpMode {
                 extendo.setState(retracted);
 
             //outtake slides control
-            slides.setPidTarget(pidTarget+gamepad2.left_stick_x*10);
+            slides.setPidTarget(pidTarget+(-gamepad2.left_stick_x*10));
             if(gamepad2.dpad_down)
                 slides.setPidTarget(0);
 

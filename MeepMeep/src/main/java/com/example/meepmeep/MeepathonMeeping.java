@@ -17,13 +17,12 @@ public class MeepathonMeeping {
                 .setConstraints(60, 60, Math.toRadians(214.78926857142858), Math.toRadians(214.78926857142858), 15)
                 .followTrajectorySequence(drive ->
                         drive.trajectorySequenceBuilder(new Pose2d(-33, -58, Math.toRadians(-90)))
-                                .lineToSplineHeading(new Pose2d(-33, -12, Math.toRadians(-90)))
+                                .lineToSplineHeading(new Pose2d(-45, -12, Math.toRadians(-90)))
                                 //claw goes out here
-                                .turn(Math.toRadians(25))
                                 //add claw drop
                                 .lineToSplineHeading(new Pose2d(-20, -12, Math.toRadians(-180)))
                                 //claw in
-                                //.waitSeconds(20) -> timer for other team to finish auto
+                                .waitSeconds(1)
                                 .lineTo(new Vector2d(20, -12))
                                 //depo arm out now
                                 .splineTo(new Vector2d(45, -30), Math.toRadians(0))

@@ -62,7 +62,7 @@ public class AbstractedMachine {
                 .transitionTimed(1)
                 .state(Transfer.ARMDOWN)
                 .onEnter(() -> {
-                    virtual4Bar.setClaw(0.5); //open slightly so pixels can come out
+                    virtual4Bar.setClaw(0.4); //open slightly so pixels can come out
                     deposit.setArm(0.88);
                 })
                 .state(Transfer.FINISHED) // end state

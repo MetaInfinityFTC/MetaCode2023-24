@@ -9,12 +9,12 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 @Config
 public class Slides {
 
-    public static double p = 0.045, i = 0, d = 0, f = 0.001;
+    public static double p = 0.01, i = 0, d = 0, f = 0.01;
     PIDFController controller;
 
     private DcMotor left, right;
 
-    public double upperLimit = 400, lowerLimit = 0;
+    public double upperLimit = 450, lowerLimit = 0;
 
     public Slides(HardwareMap hardwareMap) {
         left = hardwareMap.dcMotor.get("lSlide");
@@ -40,8 +40,8 @@ public class Slides {
     }
 
     public void updatePID() {
-        double cmd = controller.calculate(left.getCurrentPosition(), pidTarget);
-        setPower(cmd);
+        double output = controller.calculate(right.getCurrentPosition(), pidTarget);
+        left.setPower(output); right.setPower(output);
     }
 
     public void manual(double inputPower) {

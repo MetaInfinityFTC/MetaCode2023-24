@@ -8,6 +8,7 @@ import static org.firstinspires.ftc.teamcode.subsystem.deposit.Deposit.wrist90de
 import static org.firstinspires.ftc.teamcode.subsystem.deposit.Deposit.wristTransfer;
 import static org.firstinspires.ftc.teamcode.subsystem.deposit.Deposit.zeroPixel;
 import static org.firstinspires.ftc.teamcode.subsystem.extendo.Extendo.Extension_States.closespike;
+import static org.firstinspires.ftc.teamcode.subsystem.extendo.Extendo.Extension_States.extended;
 import static org.firstinspires.ftc.teamcode.subsystem.extendo.Extendo.Extension_States.farspike;
 import static org.firstinspires.ftc.teamcode.subsystem.extendo.Extendo.Extension_States.midspike;
 import static org.firstinspires.ftc.teamcode.subsystem.extendo.Extendo.Extension_States.retracted;
@@ -76,7 +77,7 @@ public class RedBackdropSide extends LinearOpMode {
         virtual4Bar.setClaw(clawClose);
         virtual4Bar.setV4b(v4bPreTransfer);
 
-        LeftHang.setPosition(0.2);
+        LeftHang.setPosition(0.25);
         RightHang.setPosition(0.9);
 
         drone.setPosition(0);
@@ -85,31 +86,40 @@ public class RedBackdropSide extends LinearOpMode {
         drive.setPoseEstimate(startpose);
 
         TrajectorySequence leftPurple = drive.trajectorySequenceBuilder(startpose)
-                .UNSTABLE_addTemporalMarkerOffset(1,() -> {
+                .UNSTABLE_addTemporalMarkerOffset(0.7,() -> {
                     deposit.setWrist(wrist90degree);
                     deposit.setArm(armDeposit90);
+                    slides.pidTarget=-20;
+                    extendo.setState(farspike);
+                    virtual4Bar.setV4b(0.92);
                 })
-                .lineToSplineHeading(new Pose2d(45, -24, Math.toRadians(-180)))
+                .lineToSplineHeading(new Pose2d(43, -26, Math.toRadians(-180)))
                 .addTemporalMarker(() -> {
                     deposit.setFinger(zeroPixel);
-                    virtual4Bar.setV4b(0.97);
+                    virtual4Bar.setClaw(clawOpen);
                 })
-                .waitSeconds(1)
-                .UNSTABLE_addTemporalMarkerOffset(-0.2, () -> {
-                    virtual4Bar.setV4b(0.97);
-                    extendo.setState(farspike);
+                .waitSeconds(0.5)
+                .addTemporalMarker(() -> {
                     deposit.setWrist(wristTransfer);
                     deposit.setArm(armPreTransfer);
+                    extendo.setState(retracted);
+                    virtual4Bar.setClaw(clawClose);
+                    virtual4Bar.setV4b(v4bTransfer);
+                    slides.pidTarget=0;
                 })
-                .waitSeconds(2)
-                .strafeLeft(2)
-                .addTemporalMarker(() -> virtual4Bar.setClaw(clawOpen))
-                .waitSeconds(1)
-                .UNSTABLE_addTemporalMarkerOffset(0.2, () -> {
+                /*.waitSeconds(0.2)
+                .splineTo(new Vector2d(20, -7), Math.toRadians(180))
+                .UNSTABLE_addTemporalMarkerOffset(-0.1,() -> {
+                    extendo.setState(extended);
+                    virtual4Bar.setV4b(0.94);
+                })
+                .forward(40)
+                .UNSTABLE_addTemporalMarkerOffset(0, () -> {
                     virtual4Bar.setClaw(clawClose);
                     virtual4Bar.setV4b(v4bTransfer);
                     extendo.setState(retracted);
                 })
+                .waitSeconds(2)*/
                 .strafeLeft(32)
                 .build();
 
@@ -117,25 +127,26 @@ public class RedBackdropSide extends LinearOpMode {
                 .UNSTABLE_addTemporalMarkerOffset(1,() -> {
                     deposit.setWrist(wrist90degree);
                     deposit.setArm(armDeposit90);
+                    slides.pidTarget=-20;
+                    extendo.setState(midspike);
                 })
-                .lineToSplineHeading(new Pose2d(45, -32, Math.toRadians(-180)))
+                .lineToSplineHeading(new Pose2d(43, -31, Math.toRadians(-180)))
                 .addTemporalMarker(() -> {
                     deposit.setFinger(zeroPixel);
-                    virtual4Bar.setV4b(0.97);
-                })                .waitSeconds(1)
-                .UNSTABLE_addTemporalMarkerOffset(0, () -> {
-                    virtual4Bar.setV4b(0.97);
-                    extendo.setState(midspike);
-                    deposit.setWrist(wristTransfer);
-                    deposit.setArm(armPreTransfer);
+                    virtual4Bar.setV4b(0.92);
                 })
-                .strafeRight(11)
-                .addTemporalMarker(() -> virtual4Bar.setClaw(clawOpen))
                 .waitSeconds(1)
+                .strafeRight(11)
+                .addTemporalMarker(() -> {
+                    virtual4Bar.setClaw(clawOpen);
+                })
+                .waitSeconds(0.5)
                 .UNSTABLE_addTemporalMarkerOffset(0.2, () -> {
                     virtual4Bar.setClaw(clawClose);
                     virtual4Bar.setV4b(v4bTransfer);
                     extendo.setState(retracted);
+                    deposit.setWrist(wristTransfer);
+                    deposit.setArm(armPreTransfer);
                 })
                 .strafeLeft(35)
                 .build();
@@ -144,25 +155,26 @@ public class RedBackdropSide extends LinearOpMode {
                 .UNSTABLE_addTemporalMarkerOffset(1,() -> {
                     deposit.setWrist(wrist90degree);
                     deposit.setArm(armDeposit90);
+                    slides.pidTarget=-20;
+                    extendo.setState(closespike);
                 })
-                .lineToSplineHeading(new Pose2d(45, -40, Math.toRadians(-180)))
+                .lineToSplineHeading(new Pose2d(43, -38, Math.toRadians(-180)))
                 .addTemporalMarker(() -> {
                     deposit.setFinger(zeroPixel);
-                    virtual4Bar.setV4b(0.97);
-                })                .waitSeconds(1)
-                .UNSTABLE_addTemporalMarkerOffset(-0.2, () -> {
-                    virtual4Bar.setV4b(0.97);
-                    extendo.setState(closespike);
-                    deposit.setWrist(wristTransfer);
-                    deposit.setArm(armPreTransfer);
+                    virtual4Bar.setV4b(0.92);
                 })
-                .strafeRight(10)
-                .addTemporalMarker(() -> virtual4Bar.setClaw(clawOpen))
                 .waitSeconds(1)
+                .strafeRight(10)
+                .addTemporalMarker(() -> {
+                    virtual4Bar.setClaw(clawOpen);
+                })
+                .waitSeconds(0.5)
                 .UNSTABLE_addTemporalMarkerOffset(0.2, () -> {
                     virtual4Bar.setClaw(clawClose);
                     virtual4Bar.setV4b(v4bTransfer);
                     extendo.setState(retracted);
+                    deposit.setWrist(wristTransfer);
+                    deposit.setArm(armPreTransfer);
                 })
                 .strafeLeft(25)
                 .build();
@@ -186,6 +198,7 @@ public class RedBackdropSide extends LinearOpMode {
         while(opModeIsActive()){
             drive.update();
             extendo.update();
+            slides.updatePID();
         }
     }
 }
