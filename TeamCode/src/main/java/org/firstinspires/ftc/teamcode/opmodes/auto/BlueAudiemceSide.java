@@ -82,9 +82,9 @@ public class BlueAudiemceSide extends LinearOpMode {
                 .UNSTABLE_addTemporalMarkerOffset(0.5, () -> {
                     virtual4Bar.setV4b(0.92);
                 })
-                .lineToSplineHeading(new Pose2d(-48, 11, Math.toRadians(90)))
+                .lineToSplineHeading(new Pose2d(-44, 11, Math.toRadians(90)))
                 //claw goes out here
-                .strafeRight(5)
+                .strafeRight(2)
                 .turn(Math.toRadians(-45))
                 //add claw drop
                 .UNSTABLE_addTemporalMarkerOffset(0, () -> {
@@ -99,7 +99,8 @@ public class BlueAudiemceSide extends LinearOpMode {
                 .UNSTABLE_addTemporalMarkerOffset(0.2, () -> {
                     deposit.setArm(0.85);
                 })
-                .back(10)
+                .waitSeconds(12)
+                .back(5)
                 .lineToSplineHeading(new Pose2d(-20, 4, Math.toRadians(-180)))
                 //.waitSeconds(20) -> timer for other team to finish auto
                 .lineTo(new Vector2d(20, 12))
@@ -107,13 +108,15 @@ public class BlueAudiemceSide extends LinearOpMode {
                 .UNSTABLE_addTemporalMarkerOffset(0.5, () -> {
                     deposit.setArm(armDeposit90);
                     deposit.setWrist(wrist90degree);
-                    slides.pidTarget = -20;
+                    slides.setPidTarget(-20);
                 })
-                .splineTo(new Vector2d(44, 26), Math.toRadians(0))
+                .splineTo(new Vector2d(45, 42), Math.toRadians(0))
+                .waitSeconds(1)
                 .UNSTABLE_addTemporalMarkerOffset(0, () -> {
                     deposit.setFinger(zeroPixel);
                 })
-                .waitSeconds(0.5)
+                .waitSeconds(1)
+                .forward(2)
                 //place yellow pixel, depo arm in, etc.
                 .addTemporalMarker(() -> {
                     deposit.setWrist(wristTransfer);
@@ -121,7 +124,7 @@ public class BlueAudiemceSide extends LinearOpMode {
                     extendo.setState(retracted);
                     virtual4Bar.setClaw(clawClose);
                     virtual4Bar.setV4b(v4bTransfer);
-                    slides.pidTarget=0;
+                    slides.setPidTarget(0);
                 })
                 .forward(2)
                 .lineTo(new Vector2d(42, 3))
@@ -149,6 +152,7 @@ public class BlueAudiemceSide extends LinearOpMode {
                 .UNSTABLE_addTemporalMarkerOffset(0.2, () -> {
                     deposit.setArm(0.85);
                 })
+                .waitSeconds(12)
                 //.waitSeconds(20) -> timer for other team to finish auto
                 .lineTo(new Vector2d(10, 12))
                 .lineToSplineHeading(new Pose2d(20, 12, Math.toRadians(180)))
@@ -156,13 +160,15 @@ public class BlueAudiemceSide extends LinearOpMode {
                 .UNSTABLE_addTemporalMarkerOffset(0.5, () -> {
                     deposit.setArm(armDeposit90);
                     deposit.setWrist(wrist90degree);
-                    slides.pidTarget = -20;
+                    slides.setPidTarget(-20);
                 })
-                .splineTo(new Vector2d(43, 31), Math.toRadians(0))
+                .splineTo(new Vector2d(45, 31), Math.toRadians(0))
+                .waitSeconds(1)
                 .UNSTABLE_addTemporalMarkerOffset(0, () -> {
                     deposit.setFinger(zeroPixel);
                 })
                 .waitSeconds(0.5)
+                .forward(2)
                 //place yellow pixel, depo arm in, etc.
                 .addTemporalMarker(() -> {
                     deposit.setWrist(wristTransfer);
@@ -170,7 +176,7 @@ public class BlueAudiemceSide extends LinearOpMode {
                     extendo.setState(retracted);
                     virtual4Bar.setClaw(clawClose);
                     virtual4Bar.setV4b(v4bTransfer);
-                    slides.pidTarget=0;
+                    slides.setPidTarget(0);
                 })
                 .lineTo(new Vector2d(42, 3))
                 .build();
@@ -179,7 +185,7 @@ public class BlueAudiemceSide extends LinearOpMode {
                 .UNSTABLE_addTemporalMarkerOffset(0.3, () -> {
                     virtual4Bar.setV4b(0.92);
                 })
-                .lineToSplineHeading(new Pose2d(-34, 10, Math.toRadians(90)))
+                .lineToSplineHeading(new Pose2d(-37, 10, Math.toRadians(90)))
                 .turn(Math.toRadians(45))
                 //add claw drop
                 .UNSTABLE_addTemporalMarkerOffset(0, () -> {
@@ -196,26 +202,29 @@ public class BlueAudiemceSide extends LinearOpMode {
                 .UNSTABLE_addTemporalMarkerOffset(-0.5, () -> {
                     deposit.setArm(0.85);
                 })
+                .waitSeconds(12)
                 //.waitSeconds(20) -> timer for other team to finish auto
                 .lineTo(new Vector2d(20, 4))
                 //depo arm out now
                 .UNSTABLE_addTemporalMarkerOffset(0, () -> {
                     deposit.setArm(armDeposit90);
                     deposit.setWrist(wrist90degree);
-                    slides.pidTarget = -20;
+                    slides.setPidTarget(-20);
                 })
-                .splineTo(new Vector2d(42.5, 38), Math.toRadians(0))
+                .splineTo(new Vector2d(45, 24), Math.toRadians(0))
+                .waitSeconds(1)
                 .UNSTABLE_addTemporalMarkerOffset(0, () -> {
                     deposit.setFinger(zeroPixel);
                 })
                 .waitSeconds(0.5)
+                .forward(2)
                 .addTemporalMarker(() -> {
                     deposit.setWrist(wristTransfer);
                     deposit.setArm(armPreTransfer);
                     extendo.setState(retracted);
                     virtual4Bar.setClaw(clawClose);
                     virtual4Bar.setV4b(v4bTransfer);
-                    slides.pidTarget=0;
+                    slides.setPidTarget(0);
                 })
                 .lineTo(new Vector2d(42, 3))
                 .build();

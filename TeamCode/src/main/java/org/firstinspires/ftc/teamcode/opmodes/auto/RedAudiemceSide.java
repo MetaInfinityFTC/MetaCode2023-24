@@ -108,26 +108,26 @@ public class RedAudiemceSide extends LinearOpMode {
                 .UNSTABLE_addTemporalMarkerOffset(-0.5, () -> {
                     deposit.setArm(0.85);
                 })
+                .waitSeconds(12)
                 //.waitSeconds(20) -> timer for other team to finish auto
                 .lineTo(new Vector2d(20, -4))
                 //depo arm out now
                 .UNSTABLE_addTemporalMarkerOffset(0, () -> {
                     deposit.setArm(armDeposit90);
                     deposit.setWrist(wrist90degree);
-                    slides.pidTarget = -20;
                 })
                 .splineTo(new Vector2d(43, -26), Math.toRadians(0))
                 .UNSTABLE_addTemporalMarkerOffset(0, () -> {
                     deposit.setFinger(zeroPixel);
                 })
-                .waitSeconds(0.5)
+                .waitSeconds(1)
+                .forward(3)
                 .addTemporalMarker(() -> {
                     deposit.setWrist(wristTransfer);
                     deposit.setArm(armPreTransfer);
                     extendo.setState(retracted);
                     virtual4Bar.setClaw(clawClose);
                     virtual4Bar.setV4b(v4bTransfer);
-                    slides.pidTarget=0;
                 })
                 .lineTo(new Vector2d(42, -3))
                 .build();
@@ -136,7 +136,7 @@ public class RedAudiemceSide extends LinearOpMode {
                 .UNSTABLE_addTemporalMarkerOffset(0.7, () -> {
                     virtual4Bar.setV4b(0.92);
                 })
-                .lineToSplineHeading(new Pose2d(-66, -19, Math.toRadians(-90)))                //claw goes out here
+                .lineToSplineHeading(new Pose2d(-67, -19, Math.toRadians(-90)))                //claw goes out here
                 .turn(Math.toRadians(90))
                 //add claw drop
                 .UNSTABLE_addTemporalMarkerOffset(0, () -> {
@@ -154,6 +154,8 @@ public class RedAudiemceSide extends LinearOpMode {
                 .UNSTABLE_addTemporalMarkerOffset(0.2, () -> {
                     deposit.setArm(0.85);
                 })
+                .waitSeconds(12)
+
                 //.waitSeconds(20) -> timer for other team to finish auto
                 .lineTo(new Vector2d(10, -12))
                 .lineToSplineHeading(new Pose2d(20, -12, Math.toRadians(180)))
@@ -161,13 +163,13 @@ public class RedAudiemceSide extends LinearOpMode {
                 .UNSTABLE_addTemporalMarkerOffset(0.5, () -> {
                     deposit.setArm(armDeposit90);
                     deposit.setWrist(wrist90degree);
-                    slides.pidTarget = -20;
                 })
-                .splineTo(new Vector2d(44, -31), Math.toRadians(0))
+                .splineTo(new Vector2d(43, -31), Math.toRadians(0))
                 .UNSTABLE_addTemporalMarkerOffset(0, () -> {
                     deposit.setFinger(zeroPixel);
                 })
-                .waitSeconds(0.2)
+                .waitSeconds(1)
+                .forward(2)
                 //place yellow pixel, depo arm in, etc.
                 .addTemporalMarker(() -> {
                     deposit.setWrist(wristTransfer);
@@ -175,7 +177,6 @@ public class RedAudiemceSide extends LinearOpMode {
                     extendo.setState(retracted);
                     virtual4Bar.setClaw(clawClose);
                     virtual4Bar.setV4b(v4bTransfer);
-                    slides.pidTarget=0;
                 })
                 .lineTo(new Vector2d(42, -3))
                 .build();
@@ -202,6 +203,7 @@ public class RedAudiemceSide extends LinearOpMode {
                     deposit.setArm(0.85);
                 })
                 .back(10)
+                .waitSeconds(12)
                 .lineToSplineHeading(new Pose2d(-20, -4, Math.toRadians(-180)))
                 //.waitSeconds(20) -> timer for other team to finish auto
                 .lineTo(new Vector2d(20, -12))
@@ -209,13 +211,13 @@ public class RedAudiemceSide extends LinearOpMode {
                 .UNSTABLE_addTemporalMarkerOffset(0.5, () -> {
                     deposit.setArm(armDeposit90);
                     deposit.setWrist(wrist90degree);
-                    slides.pidTarget = -20;
                 })
-                .splineTo(new Vector2d(44, -38), Math.toRadians(0))
+                .splineTo(new Vector2d(43, -37), Math.toRadians(0))
                 .UNSTABLE_addTemporalMarkerOffset(0, () -> {
                     deposit.setFinger(zeroPixel);
                 })
-                .waitSeconds(0.5)
+                .waitSeconds(1)
+                .forward(2)
                 //place yellow pixel, depo arm in, etc.
                 .addTemporalMarker(() -> {
                     deposit.setWrist(wristTransfer);
@@ -223,7 +225,6 @@ public class RedAudiemceSide extends LinearOpMode {
                     extendo.setState(retracted);
                     virtual4Bar.setClaw(clawClose);
                     virtual4Bar.setV4b(v4bTransfer);
-                    slides.pidTarget=0;
                 })
                 .forward(2)
                 .lineTo(new Vector2d(42, -3))

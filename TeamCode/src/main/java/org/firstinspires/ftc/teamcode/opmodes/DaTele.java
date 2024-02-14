@@ -111,6 +111,7 @@ public class DaTele extends LinearOpMode {
 
                 .state(States.PRE_INTAKE)
                 .onEnter(() -> {
+                    deposit.setFinger(zeroPixel);
                     deposit.setArm(armPreTransfer);
                     virtual4Bar.setClaw(clawClose);
                 })
@@ -258,6 +259,12 @@ public class DaTele extends LinearOpMode {
             slides.setPidTarget(pidTarget+(-gamepad2.left_stick_x*10));
             if(gamepad2.dpad_down)
                 slides.setPidTarget(0);
+            if(gamepad2.dpad_up)
+                slides.setPidTarget(-200);
+            if(gamepad2.dpad_left)
+                slides.setPidTarget(-100);
+            if(gamepad2.dpad_right)
+                slides.setPidTarget(-300);
 
             if(gamepad1.y){
                 virtual4Bar.setV4b(0.7);

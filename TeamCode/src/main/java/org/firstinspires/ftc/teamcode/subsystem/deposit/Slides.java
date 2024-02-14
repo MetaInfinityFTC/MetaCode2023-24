@@ -9,7 +9,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 @Config
 public class Slides {
 
-    public static double p = 0.01, i = 0, d = 0, f = 0.01;
+    public static double p = 0.03, i = 0, d = 0, f = 0.01;
     PIDFController controller;
 
     private DcMotor left, right;
@@ -31,11 +31,6 @@ public class Slides {
     public static double pidTarget = 0;
 
     public void setPidTarget(double pidTarget) {
-    if (pidTarget < lowerLimit)
-        this.pidTarget = lowerLimit;
-    else if(pidTarget > upperLimit)
-        this.pidTarget = upperLimit;
-    else
         this.pidTarget = pidTarget;
     }
 
