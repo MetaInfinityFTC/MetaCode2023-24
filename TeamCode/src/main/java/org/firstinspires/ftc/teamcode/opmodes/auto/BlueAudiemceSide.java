@@ -108,7 +108,7 @@ public class BlueAudiemceSide extends LinearOpMode {
                 .UNSTABLE_addTemporalMarkerOffset(0.5, () -> {
                     deposit.setArm(armDeposit90);
                     deposit.setWrist(wrist90degree);
-                    slides.setPidTarget(-20);
+                    slides.setPidTarget(-20, 0.5);
                 })
                 .splineTo(new Vector2d(45, 42), Math.toRadians(0))
                 .waitSeconds(1)
@@ -124,7 +124,7 @@ public class BlueAudiemceSide extends LinearOpMode {
                     extendo.setState(retracted);
                     virtual4Bar.setClaw(clawClose);
                     virtual4Bar.setV4b(v4bTransfer);
-                    slides.setPidTarget(0);
+                    slides.setPidTarget(0, 0.5);
                 })
                 .forward(2)
                 .lineTo(new Vector2d(42, 3))
@@ -160,7 +160,7 @@ public class BlueAudiemceSide extends LinearOpMode {
                 .UNSTABLE_addTemporalMarkerOffset(0.5, () -> {
                     deposit.setArm(armDeposit90);
                     deposit.setWrist(wrist90degree);
-                    slides.setPidTarget(-20);
+                    slides.setPidTarget(-20, 0.5);
                 })
                 .splineTo(new Vector2d(45, 31), Math.toRadians(0))
                 .waitSeconds(1)
@@ -176,7 +176,7 @@ public class BlueAudiemceSide extends LinearOpMode {
                     extendo.setState(retracted);
                     virtual4Bar.setClaw(clawClose);
                     virtual4Bar.setV4b(v4bTransfer);
-                    slides.setPidTarget(0);
+                    slides.setPidTarget(0, 0.5);
                 })
                 .lineTo(new Vector2d(42, 3))
                 .build();
@@ -209,7 +209,7 @@ public class BlueAudiemceSide extends LinearOpMode {
                 .UNSTABLE_addTemporalMarkerOffset(0, () -> {
                     deposit.setArm(armDeposit90);
                     deposit.setWrist(wrist90degree);
-                    slides.setPidTarget(-20);
+                    slides.setPidTarget(-20, 0.5);
                 })
                 .splineTo(new Vector2d(45, 24), Math.toRadians(0))
                 .waitSeconds(1)
@@ -224,7 +224,7 @@ public class BlueAudiemceSide extends LinearOpMode {
                     extendo.setState(retracted);
                     virtual4Bar.setClaw(clawClose);
                     virtual4Bar.setV4b(v4bTransfer);
-                    slides.setPidTarget(0);
+                    slides.setPidTarget(0, 0.5);
                 })
                 .lineTo(new Vector2d(42, 3))
                 .build();
@@ -248,7 +248,6 @@ public class BlueAudiemceSide extends LinearOpMode {
         while(opModeIsActive()){
             drive.update();
             extendo.update();
-            slides.updatePID();
         }
 
     }

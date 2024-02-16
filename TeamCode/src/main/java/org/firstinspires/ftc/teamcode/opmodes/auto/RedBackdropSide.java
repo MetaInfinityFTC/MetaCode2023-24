@@ -25,6 +25,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
@@ -55,6 +56,9 @@ public class RedBackdropSide extends LinearOpMode {
     Servo drone;
     SampleMecanumDrive drive;
 
+    DcMotor left;
+    DcMotor right;
+
     @Override
     public void runOpMode(){
         drive = new SampleMecanumDrive(hardwareMap);
@@ -65,6 +69,12 @@ public class RedBackdropSide extends LinearOpMode {
         LeftHang = hardwareMap.servo.get("LeftHang");
         RightHang = hardwareMap.servo.get("RightHang");
         drone = hardwareMap.servo.get("drone");
+
+        left = hardwareMap.dcMotor.get("lSlide");
+        right = hardwareMap.dcMotor.get("rSlide");
+        left.setDirection(DcMotorSimple.Direction.REVERSE);
+        left.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        right.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
         extendo = new Extendo(hardwareMap);
         slides = new Slides(hardwareMap);
@@ -89,7 +99,7 @@ public class RedBackdropSide extends LinearOpMode {
                 .UNSTABLE_addTemporalMarkerOffset(0.7,() -> {
                     deposit.setWrist(wrist90degree);
                     deposit.setArm(armDeposit90);
-                    slides.pidTarget=-20;
+                    setPidTarget(-100, 0.5);
                     extendo.setState(farspike);
                     virtual4Bar.setV4b(0.92);
                 })
@@ -99,27 +109,15 @@ public class RedBackdropSide extends LinearOpMode {
                     virtual4Bar.setClaw(clawOpen);
                 })
                 .waitSeconds(0.5)
+                .forward(2)
                 .addTemporalMarker(() -> {
                     deposit.setWrist(wristTransfer);
                     deposit.setArm(armPreTransfer);
                     extendo.setState(retracted);
                     virtual4Bar.setClaw(clawClose);
                     virtual4Bar.setV4b(v4bTransfer);
-                    slides.pidTarget=0;
+                    setPidTarget(0, 0.5);
                 })
-                /*.waitSeconds(0.2)
-                .splineTo(new Vector2d(20, -7), Math.toRadians(180))
-                .UNSTABLE_addTemporalMarkerOffset(-0.1,() -> {
-                    extendo.setState(extended);
-                    virtual4Bar.setV4b(0.94);
-                })
-                .forward(40)
-                .UNSTABLE_addTemporalMarkerOffset(0, () -> {
-                    virtual4Bar.setClaw(clawClose);
-                    virtual4Bar.setV4b(v4bTransfer);
-                    extendo.setState(retracted);
-                })
-                .waitSeconds(2)*/
                 .strafeLeft(32)
                 .build();
 
@@ -127,21 +125,23 @@ public class RedBackdropSide extends LinearOpMode {
                 .UNSTABLE_addTemporalMarkerOffset(1,() -> {
                     deposit.setWrist(wrist90degree);
                     deposit.setArm(armDeposit90);
-                    slides.pidTarget=-20;
+                    setPidTarget(-100, 0.5);
                     extendo.setState(midspike);
                 })
-                .lineToSplineHeading(new Pose2d(43, -31, Math.toRadians(-180)))
+                .lineToSplineHeading(new Pose2d(43, -29.5, Math.toRadians(-180)))
                 .addTemporalMarker(() -> {
                     deposit.setFinger(zeroPixel);
                     virtual4Bar.setV4b(0.92);
                 })
                 .waitSeconds(1)
-                .strafeRight(11)
+                .forward(2)
+                .strafeRight(8)
                 .addTemporalMarker(() -> {
                     virtual4Bar.setClaw(clawOpen);
                 })
                 .waitSeconds(0.5)
                 .UNSTABLE_addTemporalMarkerOffset(0.2, () -> {
+                    setPidTarget(0, 0.5);
                     virtual4Bar.setClaw(clawClose);
                     virtual4Bar.setV4b(v4bTransfer);
                     extendo.setState(retracted);
@@ -155,7 +155,7 @@ public class RedBackdropSide extends LinearOpMode {
                 .UNSTABLE_addTemporalMarkerOffset(1,() -> {
                     deposit.setWrist(wrist90degree);
                     deposit.setArm(armDeposit90);
-                    slides.pidTarget=-20;
+                    setPidTarget(-100, 0.5);
                     extendo.setState(closespike);
                 })
                 .lineToSplineHeading(new Pose2d(43, -38, Math.toRadians(-180)))
@@ -164,12 +164,14 @@ public class RedBackdropSide extends LinearOpMode {
                     virtual4Bar.setV4b(0.92);
                 })
                 .waitSeconds(1)
+                .forward(2)
                 .strafeRight(10)
                 .addTemporalMarker(() -> {
                     virtual4Bar.setClaw(clawOpen);
                 })
                 .waitSeconds(0.5)
                 .UNSTABLE_addTemporalMarkerOffset(0.2, () -> {
+                    setPidTarget(0, 0.5);
                     virtual4Bar.setClaw(clawClose);
                     virtual4Bar.setV4b(v4bTransfer);
                     extendo.setState(retracted);
@@ -198,8 +200,16 @@ public class RedBackdropSide extends LinearOpMode {
         while(opModeIsActive()){
             drive.update();
             extendo.update();
-            slides.updatePID();
         }
+    }
+    public void setPidTarget(int slidePOS, double motorPower) {
+        //base encoder code
+        left.setTargetPosition(slidePOS);
+        right.setTargetPosition(slidePOS);
+        left.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        right.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        left.setPower(motorPower);
+        right.setPower(motorPower);
     }
 }
 

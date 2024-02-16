@@ -10,7 +10,6 @@ import static org.firstinspires.ftc.teamcode.subsystem.deposit.Deposit.wristTran
 import static org.firstinspires.ftc.teamcode.subsystem.deposit.Deposit.zeroPixel;
 import static org.firstinspires.ftc.teamcode.subsystem.deposit.Deposit.wrist30degree;
 import static org.firstinspires.ftc.teamcode.subsystem.deposit.Deposit.wrist90degree;
-import static org.firstinspires.ftc.teamcode.subsystem.deposit.Slides.pidTarget;
 import static org.firstinspires.ftc.teamcode.subsystem.extendo.Extendo.Extension_States.extended;
 import static org.firstinspires.ftc.teamcode.subsystem.extendo.Extendo.Extension_States.first;
 import static org.firstinspires.ftc.teamcode.subsystem.extendo.Extendo.Extension_States.hung;
@@ -26,6 +25,7 @@ import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -55,6 +55,9 @@ public class DaTele extends LinearOpMode {
     DcMotor frontRightMotor;
     DcMotor backLeftMotor;
     DcMotor backRightMotor;
+
+    DcMotor left;
+    DcMotor right;
     ElapsedTime timer;
 
     Blinkdin led;
@@ -68,6 +71,12 @@ public class DaTele extends LinearOpMode {
         backLeftMotor = hardwareMap.dcMotor.get("backLeftMotor");
         frontRightMotor = hardwareMap.dcMotor.get("frontRightMotor");
         backRightMotor = hardwareMap.dcMotor.get("backRightMotor");
+
+        left = hardwareMap.dcMotor.get("lSlide");
+        right = hardwareMap.dcMotor.get("rSlide");
+        left.setDirection(DcMotorSimple.Direction.REVERSE);
+        left.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        right.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
         frontLeftMotor.setDirection(DcMotor.Direction.REVERSE);
         backLeftMotor.setDirection(DcMotor.Direction.REVERSE);
@@ -100,7 +109,7 @@ public class DaTele extends LinearOpMode {
                 .loop(() -> {
                     virtual4Bar.setV4b(v4bTransfer);
                     virtual4Bar.setClaw(clawClose);
-                    slides.setPidTarget(0);
+                    setPidTarget(0, 0.5);
                     extendo.setState(retracted);
                     deposit.setArm(armTransfer);
                     deposit.setWrist(wristTransfer);
@@ -182,11 +191,11 @@ public class DaTele extends LinearOpMode {
 
                 .state(States.DROP_TWO_PIXEL)
                 .onEnter(() -> deposit.setFinger(zeroPixel))
-                .transitionTimed(0.7, States.SETWRIST) // going back to neutral state
+                .transitionTimed(1, States.SETWRIST) // going back to neutral state
 
                 .state(States.SETWRIST)
                 .onEnter(() -> deposit.setWrist(wristTransfer))
-                .transitionTimed(0.5, States.NEUTRAL)
+                .transitionTimed(0.3, States.NEUTRAL)
 
                 .state(States.SECONDPIXEL)
                 .onEnter(() -> {
@@ -233,7 +242,6 @@ public class DaTele extends LinearOpMode {
             telemetry.update();
             //update PID loop for Extendo and Outtake Slides
             extendo.update();
-            slides.updatePID();
 
             //hang
             if(gamepad1.x){
@@ -256,20 +264,29 @@ public class DaTele extends LinearOpMode {
                 extendo.setState(retracted);
 
             //outtake slides control
-            slides.setPidTarget(pidTarget+(-gamepad2.left_stick_x*10));
+            //slides.setPidTarget((int) (left.getCurrentPosition()+(-gamepad2.left_stick_x*10)), 0.5);
             if(gamepad2.dpad_down)
-                slides.setPidTarget(0);
+                setPidTarget(0, 0.7);
             if(gamepad2.dpad_up)
-                slides.setPidTarget(-200);
+                setPidTarget(-275, 1);
             if(gamepad2.dpad_left)
-                slides.setPidTarget(-100);
+                setPidTarget(-100, 1);
             if(gamepad2.dpad_right)
-                slides.setPidTarget(-300);
+                setPidTarget(-450, 1);
 
             if(gamepad1.y){
                 virtual4Bar.setV4b(0.7);
                 extendo.setState(hung);
             }
         }
+    }
+    public void setPidTarget(int slidePOS, double motorPower) {
+        //base encoder code
+        left.setTargetPosition(slidePOS);
+        right.setTargetPosition(slidePOS);
+        left.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        right.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        left.setPower(motorPower);
+        right.setPower(motorPower);
     }
 }

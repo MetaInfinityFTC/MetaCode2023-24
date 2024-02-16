@@ -22,19 +22,21 @@ public class Slides {
         left.setDirection(DcMotorSimple.Direction.REVERSE);
         left.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         right.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        left.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        right.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         controller = new PIDFController(p, i, d, f);
         controller.setTolerance(3);
     }
 
-    public static double pidTarget = 0;
-
-    public void setPidTarget(double pidTarget) {
-        this.pidTarget = pidTarget;
+    public void setPidTarget(int slidePOS, double motorPower) {
+        //base encoder code
+        left.setTargetPosition(slidePOS);
+        right.setTargetPosition(slidePOS);
+        left.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        right.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        left.setPower(motorPower);
+        right.setPower(motorPower);
     }
 
-    public void updatePID() {
+    /*public void updatePID() {
         double output = controller.calculate(right.getCurrentPosition(), pidTarget);
         left.setPower(output); right.setPower(output);
     }
@@ -45,7 +47,7 @@ public class Slides {
         } else {
             setPower(f);
         }
-    }
+    }*/
 
     public void setPower(double power) {
         left.setPower(power);

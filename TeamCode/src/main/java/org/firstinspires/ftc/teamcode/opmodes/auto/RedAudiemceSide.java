@@ -248,7 +248,6 @@ public class RedAudiemceSide extends LinearOpMode {
         }
         while(opModeIsActive()){
             drive.update();
-            slides.updatePID();
             extendo.update();
         }
 

@@ -41,8 +41,6 @@ public class ExtendoTuner extends OpMode {
     @Override
     public void loop() {
         v4b.setV4b(v4bPreTransfer);
-        slides.setPidTarget(TargetPos);
-        slides.updatePID();
         telemetry.addData("extendoPos", slides.getPos());
         telemetry.addData("targetPos", TargetPos);
         telemetry.update();
