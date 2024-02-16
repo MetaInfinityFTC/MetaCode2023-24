@@ -96,19 +96,23 @@ public class RedBackdropSide extends LinearOpMode {
         drive.setPoseEstimate(startpose);
 
         TrajectorySequence leftPurple = drive.trajectorySequenceBuilder(startpose)
-                .UNSTABLE_addTemporalMarkerOffset(0.7,() -> {
+                .UNSTABLE_addTemporalMarkerOffset(0.8,() -> {
                     deposit.setWrist(wrist90degree);
                     deposit.setArm(armDeposit90);
                     setPidTarget(-100, 0.5);
                     extendo.setState(farspike);
                     virtual4Bar.setV4b(0.92);
                 })
-                .lineToSplineHeading(new Pose2d(43, -26, Math.toRadians(-180)))
+                .lineToSplineHeading(new Pose2d(43, -30, Math.toRadians(-180)))
+                .waitSeconds(0.2)
                 .addTemporalMarker(() -> {
-                    deposit.setFinger(zeroPixel);
                     virtual4Bar.setClaw(clawOpen);
                 })
                 .waitSeconds(0.5)
+                .lineToSplineHeading(new Pose2d(43, -27, Math.toRadians(-180)))
+                .addTemporalMarker(() -> {
+                    deposit.setFinger(zeroPixel);
+                })
                 .forward(2)
                 .addTemporalMarker(() -> {
                     deposit.setWrist(wristTransfer);
@@ -158,14 +162,14 @@ public class RedBackdropSide extends LinearOpMode {
                     setPidTarget(-100, 0.5);
                     extendo.setState(closespike);
                 })
-                .lineToSplineHeading(new Pose2d(43, -38, Math.toRadians(-180)))
+                .lineToSplineHeading(new Pose2d(43, -36, Math.toRadians(-180)))
                 .addTemporalMarker(() -> {
                     deposit.setFinger(zeroPixel);
                     virtual4Bar.setV4b(0.92);
                 })
                 .waitSeconds(1)
                 .forward(2)
-                .strafeRight(10)
+                .strafeRight(8)
                 .addTemporalMarker(() -> {
                     virtual4Bar.setClaw(clawOpen);
                 })

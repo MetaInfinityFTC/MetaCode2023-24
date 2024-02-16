@@ -97,7 +97,7 @@ public class BlueBackdropSide extends LinearOpMode {
                     slides.setPidTarget(-100, 0.5);
                     extendo.setState(closespike);
                 })
-                .lineToSplineHeading(new Pose2d(42, 38, Math.toRadians(-180)))
+                .lineToSplineHeading(new Pose2d(44.5, 38, Math.toRadians(-180)))
                 .addTemporalMarker(() -> {
                     deposit.setFinger(zeroPixel);
                     virtual4Bar.setV4b(0.92);
@@ -131,7 +131,7 @@ public class BlueBackdropSide extends LinearOpMode {
                     slides.setPidTarget(-100, 0.5);
                     extendo.setState(midspike);
                 })
-                .lineToSplineHeading(new Pose2d(42, 31, Math.toRadians(-180)))
+                .lineToSplineHeading(new Pose2d(44.5, 29.5, Math.toRadians(-180)))
                 .addTemporalMarker(() -> {
                     deposit.setFinger(zeroPixel);
                     virtual4Bar.setV4b(0.92);
@@ -170,12 +170,11 @@ public class BlueBackdropSide extends LinearOpMode {
                 .UNSTABLE_addTemporalMarkerOffset(1.1, () -> {
                     extendo.setState(farspike);
                 })
-                .lineToSplineHeading(new Pose2d(42, 24, Math.toRadians(-180)))
-                .waitSeconds(0.2)
+                .lineToSplineHeading(new Pose2d(44.5, 24, Math.toRadians(-180)))
+                .waitSeconds(0.3)
                 .addTemporalMarker(() -> {
-                    deposit.setFinger(zeroPixel);
                     virtual4Bar.setClaw(clawOpen);
-                    virtual4Bar.setV4b(v4bTransfer);
+                    deposit.setFinger(zeroPixel);
                 })
                 .waitSeconds(0.5)
                 .forward(2)
@@ -184,6 +183,7 @@ public class BlueBackdropSide extends LinearOpMode {
                     deposit.setArm(armPreTransfer);
                     extendo.setState(retracted);
                     virtual4Bar.setClaw(clawClose);
+                    virtual4Bar.setV4b(v4bTransfer);
                     slides.setPidTarget(0, 0.5);
                 })
                 .strafeRight(32)
