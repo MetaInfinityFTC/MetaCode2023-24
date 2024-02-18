@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.opmodes.auto;
 
 import static org.firstinspires.ftc.teamcode.subsystem.deposit.Deposit.armDeposit90;
 import static org.firstinspires.ftc.teamcode.subsystem.deposit.Deposit.armPreTransfer;
+import static org.firstinspires.ftc.teamcode.subsystem.deposit.Deposit.armTransfer;
 import static org.firstinspires.ftc.teamcode.subsystem.deposit.Deposit.bothPixels;
 import static org.firstinspires.ftc.teamcode.subsystem.deposit.Deposit.wrist90degree;
 import static org.firstinspires.ftc.teamcode.subsystem.deposit.Deposit.wristTransfer;
@@ -19,6 +20,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
@@ -48,6 +50,8 @@ public class BlueAudiemceSide extends LinearOpMode {
     Servo LeftHang;
     Servo RightHang;
     Servo drone;
+    DcMotor left;
+    DcMotor right;
 
     @Override
     public void runOpMode(){
@@ -63,6 +67,12 @@ public class BlueAudiemceSide extends LinearOpMode {
         slides = new Slides(hardwareMap);
         deposit = new Deposit(hardwareMap);
         virtual4Bar = new Virtual4Bar(hardwareMap);
+
+        left = hardwareMap.dcMotor.get("lSlide");
+        right = hardwareMap.dcMotor.get("rSlide");
+        left.setDirection(DcMotorSimple.Direction.REVERSE);
+        left.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        right.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
         deposit.setArm(armPreTransfer);
         deposit.setFinger(bothPixels);
@@ -82,7 +92,7 @@ public class BlueAudiemceSide extends LinearOpMode {
                 .UNSTABLE_addTemporalMarkerOffset(0.5, () -> {
                     virtual4Bar.setV4b(0.92);
                 })
-                .lineToSplineHeading(new Pose2d(-44, 11, Math.toRadians(90)))
+                .lineToSplineHeading(new Pose2d(-42.5, 11, Math.toRadians(90)))
                 //claw goes out here
                 .strafeRight(2)
                 .turn(Math.toRadians(-45))
@@ -99,18 +109,18 @@ public class BlueAudiemceSide extends LinearOpMode {
                 .UNSTABLE_addTemporalMarkerOffset(0.2, () -> {
                     deposit.setArm(0.85);
                 })
-                .waitSeconds(12)
                 .back(5)
                 .lineToSplineHeading(new Pose2d(-20, 4, Math.toRadians(-180)))
+                .waitSeconds(12)
                 //.waitSeconds(20) -> timer for other team to finish auto
                 .lineTo(new Vector2d(20, 12))
                 //depo arm out now
                 .UNSTABLE_addTemporalMarkerOffset(0.5, () -> {
                     deposit.setArm(armDeposit90);
                     deposit.setWrist(wrist90degree);
-                    slides.setPidTarget(-20, 0.5);
+                    setPidTarget(-100, 1);
                 })
-                .splineTo(new Vector2d(45, 42), Math.toRadians(0))
+                .splineTo(new Vector2d(43, 39.7), Math.toRadians(0))
                 .waitSeconds(1)
                 .UNSTABLE_addTemporalMarkerOffset(0, () -> {
                     deposit.setFinger(zeroPixel);
@@ -124,9 +134,9 @@ public class BlueAudiemceSide extends LinearOpMode {
                     extendo.setState(retracted);
                     virtual4Bar.setClaw(clawClose);
                     virtual4Bar.setV4b(v4bTransfer);
-                    slides.setPidTarget(0, 0.5);
+                    setPidTarget(0, 0.5);
                 })
-                .forward(2)
+                .forward(4)
                 .lineTo(new Vector2d(42, 3))
                 .build();
 
@@ -134,7 +144,7 @@ public class BlueAudiemceSide extends LinearOpMode {
                 .UNSTABLE_addTemporalMarkerOffset(0.7, () -> {
                     virtual4Bar.setV4b(0.92);
                 })
-                .lineToSplineHeading(new Pose2d(-64, 19, Math.toRadians(90)))                //claw goes out here
+                .lineToSplineHeading(new Pose2d(-64, 20, Math.toRadians(90)))                //claw goes out here
                 .turn(Math.toRadians(-90))
                 //add claw drop
                 .UNSTABLE_addTemporalMarkerOffset(0, () -> {
@@ -145,7 +155,7 @@ public class BlueAudiemceSide extends LinearOpMode {
                     virtual4Bar.setClaw(clawClose);
                     virtual4Bar.setV4b(v4bTransfer);
                 })
-                .lineTo(new Vector2d(-55,4))
+                .lineTo(new Vector2d(-55,2))
                 .lineToSplineHeading(new Pose2d(-20, 2, Math.toRadians(180)))
                 //claw in
                 .waitSeconds(0.5)
@@ -154,21 +164,21 @@ public class BlueAudiemceSide extends LinearOpMode {
                 })
                 .waitSeconds(12)
                 //.waitSeconds(20) -> timer for other team to finish auto
-                .lineTo(new Vector2d(10, 12))
-                .lineToSplineHeading(new Pose2d(20, 12, Math.toRadians(180)))
+                .lineTo(new Vector2d(10, 8))
+                .lineToSplineHeading(new Pose2d(20, 8, Math.toRadians(180)))
                 //depo arm out now
                 .UNSTABLE_addTemporalMarkerOffset(0.5, () -> {
                     deposit.setArm(armDeposit90);
                     deposit.setWrist(wrist90degree);
-                    slides.setPidTarget(-20, 0.5);
+                    setPidTarget(-50, 1);
                 })
-                .splineTo(new Vector2d(45, 31), Math.toRadians(0))
+                .splineTo(new Vector2d(43, 30), Math.toRadians(0))
                 .waitSeconds(1)
                 .UNSTABLE_addTemporalMarkerOffset(0, () -> {
                     deposit.setFinger(zeroPixel);
                 })
                 .waitSeconds(0.5)
-                .forward(2)
+                .forward(4)
                 //place yellow pixel, depo arm in, etc.
                 .addTemporalMarker(() -> {
                     deposit.setWrist(wristTransfer);
@@ -176,7 +186,7 @@ public class BlueAudiemceSide extends LinearOpMode {
                     extendo.setState(retracted);
                     virtual4Bar.setClaw(clawClose);
                     virtual4Bar.setV4b(v4bTransfer);
-                    slides.setPidTarget(0, 0.5);
+                    setPidTarget(0, 0.5);
                 })
                 .lineTo(new Vector2d(42, 3))
                 .build();
@@ -209,22 +219,22 @@ public class BlueAudiemceSide extends LinearOpMode {
                 .UNSTABLE_addTemporalMarkerOffset(0, () -> {
                     deposit.setArm(armDeposit90);
                     deposit.setWrist(wrist90degree);
-                    slides.setPidTarget(-20, 0.5);
+                    setPidTarget(-100, 1);
                 })
-                .splineTo(new Vector2d(45, 24), Math.toRadians(0))
+                .splineTo(new Vector2d(43, 24), Math.toRadians(0))
                 .waitSeconds(1)
                 .UNSTABLE_addTemporalMarkerOffset(0, () -> {
                     deposit.setFinger(zeroPixel);
                 })
                 .waitSeconds(0.5)
-                .forward(2)
+                .forward(4)
                 .addTemporalMarker(() -> {
                     deposit.setWrist(wristTransfer);
                     deposit.setArm(armPreTransfer);
                     extendo.setState(retracted);
                     virtual4Bar.setClaw(clawClose);
                     virtual4Bar.setV4b(v4bTransfer);
-                    slides.setPidTarget(0, 0.5);
+                    setPidTarget(0, 0.5);
                 })
                 .lineTo(new Vector2d(42, 3))
                 .build();
@@ -249,6 +259,14 @@ public class BlueAudiemceSide extends LinearOpMode {
             drive.update();
             extendo.update();
         }
-
+    }
+    public void setPidTarget(int slidePOS, double motorPower) {
+        //base encoder code
+        left.setTargetPosition(slidePOS);
+        right.setTargetPosition(slidePOS);
+        left.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        right.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        left.setPower(motorPower);
+        right.setPower(motorPower);
     }
 }

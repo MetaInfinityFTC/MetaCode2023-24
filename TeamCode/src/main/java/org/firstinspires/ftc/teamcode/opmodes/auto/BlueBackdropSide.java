@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.opmodes.auto;
 
 import static org.firstinspires.ftc.teamcode.subsystem.deposit.Deposit.armDeposit90;
 import static org.firstinspires.ftc.teamcode.subsystem.deposit.Deposit.armPreTransfer;
+import static org.firstinspires.ftc.teamcode.subsystem.deposit.Deposit.armTransfer;
 import static org.firstinspires.ftc.teamcode.subsystem.deposit.Deposit.bothPixels;
 import static org.firstinspires.ftc.teamcode.subsystem.deposit.Deposit.wrist90degree;
 import static org.firstinspires.ftc.teamcode.subsystem.deposit.Deposit.wristTransfer;
@@ -97,7 +98,7 @@ public class BlueBackdropSide extends LinearOpMode {
                     slides.setPidTarget(-100, 0.5);
                     extendo.setState(closespike);
                 })
-                .lineToSplineHeading(new Pose2d(44.5, 38, Math.toRadians(-180)))
+                .lineToSplineHeading(new Pose2d(45, 38, Math.toRadians(-180)))
                 .addTemporalMarker(() -> {
                     deposit.setFinger(zeroPixel);
                     virtual4Bar.setV4b(0.92);
@@ -131,7 +132,7 @@ public class BlueBackdropSide extends LinearOpMode {
                     slides.setPidTarget(-100, 0.5);
                     extendo.setState(midspike);
                 })
-                .lineToSplineHeading(new Pose2d(44.5, 29.5, Math.toRadians(-180)))
+                .lineToSplineHeading(new Pose2d(45, 29.5, Math.toRadians(-180)))
                 .addTemporalMarker(() -> {
                     deposit.setFinger(zeroPixel);
                     virtual4Bar.setV4b(0.92);
@@ -170,7 +171,7 @@ public class BlueBackdropSide extends LinearOpMode {
                 .UNSTABLE_addTemporalMarkerOffset(1.1, () -> {
                     extendo.setState(farspike);
                 })
-                .lineToSplineHeading(new Pose2d(44.5, 24, Math.toRadians(-180)))
+                .lineToSplineHeading(new Pose2d(45, 24, Math.toRadians(-180)))
                 .waitSeconds(0.3)
                 .addTemporalMarker(() -> {
                     virtual4Bar.setClaw(clawOpen);

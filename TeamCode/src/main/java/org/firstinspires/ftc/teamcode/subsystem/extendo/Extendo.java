@@ -12,7 +12,8 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 public class Extendo {
 
     private DcMotor left, right;
-    public static double p = 0.022, i = 0, d = 0, f = 0.001;
+    public static double p = 0.02, i = 0, d = 0.0005, f = 0.0008;
+
     PIDFController controller = new PIDFController(p, i, d, f);
 
     //enum to house states with better names
@@ -31,10 +32,11 @@ public class Extendo {
         left.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER); right.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         left.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER); right.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         left.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE); right.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        controller.setTolerance(3);
+        controller.setTolerance(7);
     }
 
     public void update() {
+        controller.setPIDF(p,i,d,f);
         double output = controller.calculate(right.getCurrentPosition(), state.getNumVal());
         left.setPower(output); right.setPower(output);
     }

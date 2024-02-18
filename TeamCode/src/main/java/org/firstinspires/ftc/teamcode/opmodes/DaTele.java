@@ -18,6 +18,8 @@ import static org.firstinspires.ftc.teamcode.subsystem.extendo.Extendo.Extension
 import static org.firstinspires.ftc.teamcode.subsystem.intake.Virtual4Bar.clawClose;
 import static org.firstinspires.ftc.teamcode.subsystem.intake.Virtual4Bar.clawOpen;
 import static org.firstinspires.ftc.teamcode.subsystem.intake.Virtual4Bar.v4bGround;
+import static org.firstinspires.ftc.teamcode.subsystem.intake.Virtual4Bar.v4bStackHigh;
+import static org.firstinspires.ftc.teamcode.subsystem.intake.Virtual4Bar.v4bStackMid;
 import static org.firstinspires.ftc.teamcode.subsystem.intake.Virtual4Bar.v4bTransfer;
 
 import com.acmerobotics.dashboard.config.Config;
@@ -63,7 +65,7 @@ public class DaTele extends LinearOpMode {
     Blinkdin led;
 
     enum States {
-        NEUTRAL, INTAKE, PRE_INTAKE, DEPOSIT30, TRANSFER, GRAB, DROP_ONE_PIXEL, DROP_TWO_PIXEL, TILL_TRANSFER, TILL_DEPO, CLAW_OPEN, WRIST90, CLAWINITIAL_OPEN, PRE_PRE_INTAKE, SECONDPIXEL, SETWRIST, EXTEND, DEPOSIT90
+        NEUTRAL, INTAKE, PRE_INTAKE, DEPOSIT30, TRANSFER, GRAB, DROP_ONE_PIXEL, DROP_TWO_PIXEL, TILL_TRANSFER, TILL_DEPO, CLAW_OPEN, WRIST90, CLAWINITIAL_OPEN, PRE_PRE_INTAKE, SECONDPIXEL, SETWRIST, EXTEND, REARANGE, HIGHSTACK, MIDSTACK, DEPOSIT90
     }
 
     public void runOpMode() {
@@ -117,6 +119,17 @@ public class DaTele extends LinearOpMode {
                 })
                 .transition(() -> gamepad2.a, States.PRE_INTAKE)
                 .transition(() -> gamepad2.b, States.SECONDPIXEL)
+                .transition(() -> gamepad1.b, States.REARANGE)
+
+                .state(States.REARANGE)
+                .onEnter(() -> {
+                    deposit.setArm(armDeposit90);
+                    deposit.setWrist(wrist90degree);
+                    deposit.setFinger(zeroPixel);
+                })
+                .transition(() -> gamepad2.a, States.PRE_INTAKE)
+                .transition(() -> gamepad2.left_bumper, States.NEUTRAL)
+                .transition(() -> gamepad2.b, States.TRANSFER)
 
                 .state(States.PRE_INTAKE)
                 .onEnter(() -> {
@@ -135,7 +148,28 @@ public class DaTele extends LinearOpMode {
                     virtual4Bar.setV4b(v4bGround);
                     virtual4Bar.setClaw(clawOpen);
                 })
-                .transition(() -> gamepad2.b)
+                .transition(() -> gamepad2.b, States.TRANSFER)
+                .transition(() -> gamepad1.left_bumper,  States.MIDSTACK)
+                .transition(() -> gamepad1.right_bumper,  States.HIGHSTACK)
+
+                .state(States.MIDSTACK)
+                .onEnter(() -> {
+                    virtual4Bar.setV4b(v4bStackMid);
+                    virtual4Bar.setClaw(clawOpen);
+                })
+                .transition(() -> gamepad2.b, States.TRANSFER)
+                .transition(() -> gamepad1.left_bumper,  States.MIDSTACK)
+                .transition(() -> gamepad1.right_bumper,  States.HIGHSTACK)
+
+                .state(States.HIGHSTACK)
+                .onEnter(() -> {
+                    virtual4Bar.setV4b(v4bStackHigh);
+                    virtual4Bar.setClaw(clawOpen);
+                })
+                .transition(() -> gamepad2.b, States.TRANSFER)
+                .transition(() -> gamepad1.left_bumper,  States.MIDSTACK)
+                .transition(() -> gamepad1.right_bumper,  States.HIGHSTACK)
+
                 // abstracted transfer machine
                 .state(States.TRANSFER)
                 .onEnter(transferMachine::start)
@@ -195,7 +229,7 @@ public class DaTele extends LinearOpMode {
 
                 .state(States.SETWRIST)
                 .onEnter(() -> deposit.setWrist(wristTransfer))
-                .transitionTimed(0.3, States.NEUTRAL)
+                .transitionTimed(0.55, States.NEUTRAL)
 
                 .state(States.SECONDPIXEL)
                 .onEnter(() -> {
@@ -268,9 +302,9 @@ public class DaTele extends LinearOpMode {
             if(gamepad2.dpad_down)
                 setPidTarget(0, 0.7);
             if(gamepad2.dpad_up)
-                setPidTarget(-275, 1);
+                setPidTarget(-300, 1);
             if(gamepad2.dpad_left)
-                setPidTarget(-100, 1);
+                setPidTarget(-150, 1);
             if(gamepad2.dpad_right)
                 setPidTarget(-450, 1);
 

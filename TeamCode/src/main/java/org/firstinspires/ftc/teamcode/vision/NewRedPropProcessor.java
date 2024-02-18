@@ -153,10 +153,10 @@ public class NewRedPropProcessor implements VisionProcessor {
         int area = (int) hat.area();
         telemetry.addData("Area: ", area);
         telemetry.addData("CenterX: ", centerX);
-        if(centerX <= 375 && area >= 300 ){ //bottom half
+        if(centerX <= 375 && area >= 200 ){ //bottom half
             location = Location.MIDDLE;
             telemetry.addData("Position:", " MIDDLE");
-        }else if(centerX >= 375 && centerX <= 1200  && area >= 300){
+        }else if(centerX >= 375 && centerX <= 1200  && area >= 200){
             location = Location.RIGHT;
             telemetry.addData("Position:", " RIGHT");
         }else{

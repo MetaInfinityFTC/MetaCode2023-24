@@ -113,7 +113,7 @@ public class RedBackdropSide extends LinearOpMode {
                 .addTemporalMarker(() -> {
                     deposit.setFinger(zeroPixel);
                 })
-                .forward(2)
+                .forward(4)
                 .addTemporalMarker(() -> {
                     deposit.setWrist(wristTransfer);
                     deposit.setArm(armPreTransfer);
@@ -138,7 +138,7 @@ public class RedBackdropSide extends LinearOpMode {
                     virtual4Bar.setV4b(0.92);
                 })
                 .waitSeconds(1)
-                .forward(2)
+                .forward(4)
                 .strafeRight(8)
                 .addTemporalMarker(() -> {
                     virtual4Bar.setClaw(clawOpen);
@@ -168,7 +168,7 @@ public class RedBackdropSide extends LinearOpMode {
                     virtual4Bar.setV4b(0.92);
                 })
                 .waitSeconds(1)
-                .forward(2)
+                .forward(4)
                 .strafeRight(8)
                 .addTemporalMarker(() -> {
                     virtual4Bar.setClaw(clawOpen);
