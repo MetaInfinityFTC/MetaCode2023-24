@@ -24,7 +24,7 @@ public class V4BTuner extends OpMode {
 
     Virtual4Bar v4b;
     Deposit deposit;
-    public static double clawPos = 0.2, v4bPos = 0.6, wristPos = 0.2, fingerPos = bothPixels, armPos = 0.7;
+    public static double clawPos = 0.2, v4bPos = 0.6, wristPos = 0.2, fingerPos = 0, armPos = 0.7;
 
     @Override
     public void init() {

@@ -95,7 +95,7 @@ public class BlueBackdropSide extends LinearOpMode {
                 .UNSTABLE_addTemporalMarkerOffset(1,() -> {
                     deposit.setWrist(wrist90degree);
                     deposit.setArm(armDeposit90);
-                    slides.setPidTarget(-100, 0.5);
+                    slides.setPidTarget(-100);
                     extendo.setState(closespike);
                 })
                 .lineToSplineHeading(new Pose2d(45, 38, Math.toRadians(-180)))
@@ -115,7 +115,7 @@ public class BlueBackdropSide extends LinearOpMode {
                 })
                 .waitSeconds(0.3)
                 .UNSTABLE_addTemporalMarkerOffset(0.2, () -> {
-                    slides.setPidTarget(0, 0.5);
+                    slides.setPidTarget(0);
                     virtual4Bar.setClaw(clawClose);
                     virtual4Bar.setV4b(v4bTransfer);
                     extendo.setState(retracted);
@@ -129,7 +129,7 @@ public class BlueBackdropSide extends LinearOpMode {
                 .UNSTABLE_addTemporalMarkerOffset(1,() -> {
                     deposit.setWrist(wrist90degree);
                     deposit.setArm(armDeposit90);
-                    slides.setPidTarget(-100, 0.5);
+                    slides.setPidTarget(-100);
                     extendo.setState(midspike);
                 })
                 .lineToSplineHeading(new Pose2d(45, 29.5, Math.toRadians(-180)))
@@ -150,7 +150,7 @@ public class BlueBackdropSide extends LinearOpMode {
                 })
                 .waitSeconds(0.3)
                 .UNSTABLE_addTemporalMarkerOffset(0, () -> {
-                    slides.setPidTarget(0, 0.5);
+                    slides.setPidTarget(0);
                     virtual4Bar.setClaw(clawClose);
                     virtual4Bar.setV4b(v4bTransfer);
                     extendo.setState(retracted);
@@ -164,7 +164,7 @@ public class BlueBackdropSide extends LinearOpMode {
                 .UNSTABLE_addTemporalMarkerOffset(0.7,() -> {
                     deposit.setWrist(wrist90degree);
                     deposit.setArm(armDeposit90);
-                    slides.setPidTarget(-100, 0.5);
+                    slides.setPidTarget(-100);
                     virtual4Bar.setV4b(0.92);
 
                 })
@@ -185,7 +185,7 @@ public class BlueBackdropSide extends LinearOpMode {
                     extendo.setState(retracted);
                     virtual4Bar.setClaw(clawClose);
                     virtual4Bar.setV4b(v4bTransfer);
-                    slides.setPidTarget(0, 0.5);
+                    slides.setPidTarget(0);
                 })
                 .strafeRight(32)
                 .build();
