@@ -2,7 +2,6 @@ package org.firstinspires.ftc.teamcode.opmodes.auto;
 
 import static org.firstinspires.ftc.teamcode.subsystem.deposit.Deposit.armDeposit90;
 import static org.firstinspires.ftc.teamcode.subsystem.deposit.Deposit.armPreTransfer;
-import static org.firstinspires.ftc.teamcode.subsystem.deposit.Deposit.armTransfer;
 import static org.firstinspires.ftc.teamcode.subsystem.deposit.Deposit.bothPixels;
 import static org.firstinspires.ftc.teamcode.subsystem.deposit.Deposit.wrist90degree;
 import static org.firstinspires.ftc.teamcode.subsystem.deposit.Deposit.wristTransfer;
@@ -15,14 +14,12 @@ import static org.firstinspires.ftc.teamcode.subsystem.intake.Virtual4Bar.clawCl
 import static org.firstinspires.ftc.teamcode.subsystem.intake.Virtual4Bar.clawOpen;
 import static org.firstinspires.ftc.teamcode.subsystem.intake.Virtual4Bar.v4bPreTransfer;
 import static org.firstinspires.ftc.teamcode.subsystem.intake.Virtual4Bar.v4bTransfer;
-import static org.firstinspires.ftc.teamcode.vision.NewBluePropProcessor.Location.MIDDLE;
+import static org.firstinspires.ftc.teamcode.vision.processors.BluePropProcessor.Location.MIDDLE;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
-import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 
@@ -31,17 +28,15 @@ import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.subsystem.deposit.Deposit;
 import org.firstinspires.ftc.teamcode.subsystem.deposit.Slides;
 import org.firstinspires.ftc.teamcode.subsystem.extendo.Extendo;
-import org.firstinspires.ftc.teamcode.subsystem.intake.ActiveIntake;
 import org.firstinspires.ftc.teamcode.subsystem.intake.Virtual4Bar;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
-import org.firstinspires.ftc.teamcode.vision.NewBluePropProcessor;
-import org.firstinspires.ftc.teamcode.vision.NewBluePropProcessor;
+import org.firstinspires.ftc.teamcode.vision.processors.BluePropProcessor;
 import org.firstinspires.ftc.vision.VisionPortal;
 
 @Autonomous(name="\uD83D\uDC80\\blueBackdrop")
 public class BlueBackdropSide extends LinearOpMode {
-    private NewBluePropProcessor.Location location = MIDDLE;
-    private NewBluePropProcessor bluePropProcessor;
+    private BluePropProcessor.Location location = MIDDLE;
+    private BluePropProcessor bluePropProcessor;
     private VisionPortal visionPortal;
     Deposit deposit;
     Slides slides;
@@ -59,7 +54,7 @@ public class BlueBackdropSide extends LinearOpMode {
     @Override
     public void runOpMode(){
         drive = new SampleMecanumDrive(hardwareMap);
-        bluePropProcessor = new NewBluePropProcessor(telemetry);
+        bluePropProcessor = new BluePropProcessor(telemetry);
         visionPortal = VisionPortal.easyCreateWithDefaults(
                 hardwareMap.get(WebcamName.class, "Webcam 1"), bluePropProcessor);
         Pose2d startpose = new Pose2d(14.75-8.25, 61.5, Math.toRadians(90));

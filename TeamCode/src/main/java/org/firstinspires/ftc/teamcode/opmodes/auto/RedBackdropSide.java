@@ -2,13 +2,11 @@ package org.firstinspires.ftc.teamcode.opmodes.auto;
 
 import static org.firstinspires.ftc.teamcode.subsystem.deposit.Deposit.armDeposit90;
 import static org.firstinspires.ftc.teamcode.subsystem.deposit.Deposit.armPreTransfer;
-import static org.firstinspires.ftc.teamcode.subsystem.deposit.Deposit.armTransfer;
 import static org.firstinspires.ftc.teamcode.subsystem.deposit.Deposit.bothPixels;
 import static org.firstinspires.ftc.teamcode.subsystem.deposit.Deposit.wrist90degree;
 import static org.firstinspires.ftc.teamcode.subsystem.deposit.Deposit.wristTransfer;
 import static org.firstinspires.ftc.teamcode.subsystem.deposit.Deposit.zeroPixel;
 import static org.firstinspires.ftc.teamcode.subsystem.extendo.Extendo.Extension_States.closespike;
-import static org.firstinspires.ftc.teamcode.subsystem.extendo.Extendo.Extension_States.extended;
 import static org.firstinspires.ftc.teamcode.subsystem.extendo.Extendo.Extension_States.farspike;
 import static org.firstinspires.ftc.teamcode.subsystem.extendo.Extendo.Extension_States.midspike;
 import static org.firstinspires.ftc.teamcode.subsystem.extendo.Extendo.Extension_States.retracted;
@@ -16,15 +14,13 @@ import static org.firstinspires.ftc.teamcode.subsystem.intake.Virtual4Bar.clawCl
 import static org.firstinspires.ftc.teamcode.subsystem.intake.Virtual4Bar.clawOpen;
 import static org.firstinspires.ftc.teamcode.subsystem.intake.Virtual4Bar.v4bPreTransfer;
 import static org.firstinspires.ftc.teamcode.subsystem.intake.Virtual4Bar.v4bTransfer;
-import static org.firstinspires.ftc.teamcode.vision.NewRedPropProcessor.Location.LEFT;
-import static org.firstinspires.ftc.teamcode.vision.NewRedPropProcessor.Location.MIDDLE;
+import static org.firstinspires.ftc.teamcode.vision.processors.RedPropProcessor.Location.LEFT;
+import static org.firstinspires.ftc.teamcode.vision.processors.RedPropProcessor.Location.MIDDLE;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
-import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 
@@ -33,17 +29,15 @@ import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.subsystem.deposit.Deposit;
 import org.firstinspires.ftc.teamcode.subsystem.deposit.Slides;
 import org.firstinspires.ftc.teamcode.subsystem.extendo.Extendo;
-import org.firstinspires.ftc.teamcode.subsystem.intake.ActiveIntake;
 import org.firstinspires.ftc.teamcode.subsystem.intake.Virtual4Bar;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
-import org.firstinspires.ftc.teamcode.vision.NewRedPropProcessor;
+import org.firstinspires.ftc.teamcode.vision.processors.RedPropProcessor;
 import org.firstinspires.ftc.vision.VisionPortal;
-import org.opencv.core.Mat;
 
 @Autonomous(name="\uD83D\uDC80\\RedBackdrop", preselectTeleOp = "DaTele")
 public class RedBackdropSide extends LinearOpMode {
-    private NewRedPropProcessor.Location location = LEFT;
-    private NewRedPropProcessor redPropProcessor;
+    private RedPropProcessor.Location location = LEFT;
+    private RedPropProcessor redPropProcessor;
     private VisionPortal visionPortal;
 
     Deposit deposit;
@@ -62,7 +56,7 @@ public class RedBackdropSide extends LinearOpMode {
     @Override
     public void runOpMode(){
         drive = new SampleMecanumDrive(hardwareMap);
-        redPropProcessor = new NewRedPropProcessor(telemetry);
+        redPropProcessor = new RedPropProcessor(telemetry);
         visionPortal = VisionPortal.easyCreateWithDefaults(
                 hardwareMap.get(WebcamName.class, "Webcam 1"), redPropProcessor);
 
