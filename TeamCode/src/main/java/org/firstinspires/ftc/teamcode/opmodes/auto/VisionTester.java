@@ -11,7 +11,6 @@ import java.util.List;
 @TeleOp
 public class VisionTester extends LinearOpMode {
     Vision vision;
-
     @Override
     public void runOpMode(){
         vision = new Vision(hardwareMap,telemetry,false);
@@ -25,7 +24,6 @@ public class VisionTester extends LinearOpMode {
         vision.disablePropProcessor();
         while(opModeIsActive()){
             List<Pose2d> relocalization = vision.getTagLocalizationData();
-
             for(Pose2d p : relocalization){
                 telemetry.addLine(p.getX() + " " + p.getY() + " " + p.getHeading());
             }

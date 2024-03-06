@@ -11,7 +11,7 @@ import static org.firstinspires.ftc.teamcode.subsystem.intake.Virtual4Bar.clawCl
 import static org.firstinspires.ftc.teamcode.subsystem.intake.Virtual4Bar.clawOpen;
 import static org.firstinspires.ftc.teamcode.subsystem.intake.Virtual4Bar.v4bPreTransfer;
 import static org.firstinspires.ftc.teamcode.subsystem.intake.Virtual4Bar.v4bTransfer;
-import static org.firstinspires.ftc.teamcode.vision.processors.BluePropProcessor.Location.MIDDLE;
+import static org.firstinspires.ftc.teamcode.vision.processors.PropProcessor.Location.MIDDLE;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
@@ -29,11 +29,12 @@ import org.firstinspires.ftc.teamcode.subsystem.extendo.Extendo;
 import org.firstinspires.ftc.teamcode.subsystem.intake.Virtual4Bar;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 import org.firstinspires.ftc.teamcode.vision.processors.BluePropProcessor;
+import org.firstinspires.ftc.teamcode.vision.processors.PropProcessor;
 import org.firstinspires.ftc.vision.VisionPortal;
 
 @Autonomous(name="\uD83D\uDC80\\BlueAudience")
 public class BlueAudiemceSide extends LinearOpMode {
-    private BluePropProcessor.Location location = MIDDLE;
+    private PropProcessor.Location location = MIDDLE;
     private BluePropProcessor bluePropProcessor;
     private VisionPortal visionPortal;
 
