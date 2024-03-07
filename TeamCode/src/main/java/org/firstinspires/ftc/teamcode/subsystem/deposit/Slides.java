@@ -35,6 +35,8 @@ public class Slides {
     }
 
     public void updatePID() {
+        controller = new PIDFController(p, i, d, f);
+        controller.setTolerance(3);
         double cmd = controller.calculate(left.getCurrentPosition(), pidTarget);
         setPower(cmd);
     }
