@@ -29,9 +29,9 @@ public class Slides {
     public static double pidTarget = 0;
 
 
-    public void setPidTarget(double pidTarget) {
+    public void setPidTarget(double target) {
         //base encoder code
-        this.pidTarget = pidTarget;
+        this.pidTarget = target;
     }
 
     public void updatePID() {

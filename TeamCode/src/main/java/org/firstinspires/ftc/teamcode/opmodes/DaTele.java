@@ -104,13 +104,15 @@ public class DaTele extends LinearOpMode {
 
         drone.setPosition(0);
 
+        double slidescontrol = 0;
+
         StateMachine transferMachine = AbstractedMachine.getTransferMachine(virtual4Bar, extendo, deposit);
 
         StateMachine globalMachine = new StateMachineBuilder()
                 .state(States.NEUTRAL)
                 .loop(() -> {
                     virtual4Bar.setV4b(v4bTransfer);
-                    virtual4Bar.setClaw(clawClose);
+                    virtual4Bar.setClaw(0.34);
                     slides.setPidTarget(0);
                     extendo.setState(retracted);
                     deposit.setArm(armTransfer);
@@ -158,7 +160,7 @@ public class DaTele extends LinearOpMode {
                     deposit.setArm(armPreTransfer);
                     virtual4Bar.setClaw(clawClose);
                 })
-                .transitionTimed(.5) // putting deposit out before v4b
+                .transitionTimed(0.5) // putting deposit out before v4b
                 .state(States.PRE_PRE_INTAKE)
                 .onEnter(() -> {
                     virtual4Bar.setV4b(0.88);
@@ -246,10 +248,11 @@ public class DaTele extends LinearOpMode {
 
                 .state(States.DROP_TWO_PIXEL)
                 .onEnter(() -> deposit.setFinger(onePixel))
-                .transitionTimed(0.3, States.SECOND) // going back to neutral state
+                .transitionTimed(0.4, States.SECOND) // going back to neutral state
 
                 .state(States.SECOND)
                 .onEnter(() -> deposit.setFinger(zeroPixel))
+                .transitionTimed(0.2, States.SETWRIST)
 
                 .state(States.SETWRIST)
                 .onEnter(() -> deposit.setWrist(wristTransfer))
@@ -289,6 +292,7 @@ public class DaTele extends LinearOpMode {
             extendo.update();
 
 
+
             //extendo control
             if(gamepad1.dpad_up)
                 extendo.setState(extended);
@@ -299,8 +303,11 @@ public class DaTele extends LinearOpMode {
             if(gamepad1.dpad_down)
                 extendo.setState(retracted);
 
+            slidescontrol = (gamepad1.right_trigger-gamepad1.left_trigger)*20;
             //outtake slides control
-            slides.setPidTarget((slides.getPos()+((gamepad1.right_trigger-gamepad1.left_trigger)*10)));
+            slides.setPidTarget((slides.getPos()+slidescontrol));
+            slides.updatePID();
+
             /*if(gamepad2.dpad_down)
                 setPidTarget(0, 0.7);
             if(gamepad2.dpad_up)

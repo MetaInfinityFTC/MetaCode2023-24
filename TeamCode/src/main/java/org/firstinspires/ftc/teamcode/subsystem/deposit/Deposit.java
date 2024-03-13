@@ -22,10 +22,10 @@ public class Deposit {
     public static double armTransfer = 0.935, armDeposit90 = 0.69, armDeposit30 = 0.76, armPreTransfer = 0.83;
 
     //Wrist armpos
-    public static double wrist30degree = 0.85, wristTransfer = 0.18, wrist90degree = 0.7;
+    public static double wrist30degree = 0.85, wristTransfer = 0.19, wrist90degree = 0.7;
 
     //Finger armpos
-    public static double bothPixels = 0.02, onePixel = 0.3, zeroPixel = 0.35;
+    public static double bothPixels = 0.02, onePixel = 0.25, zeroPixel = 0.35;
 
     public Deposit(HardwareMap hardwareMap) {
         lArm = hardwareMap.servo.get("lArm");
