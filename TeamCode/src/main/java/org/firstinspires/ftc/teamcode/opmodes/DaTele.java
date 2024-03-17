@@ -252,7 +252,7 @@ public class DaTele extends LinearOpMode {
 
                 .state(States.SECOND)
                 .onEnter(() -> deposit.setFinger(zeroPixel))
-                .transitionTimed(0.2, States.SETWRIST)
+                .transitionTimed(0.4, States.SETWRIST)
 
                 .state(States.SETWRIST)
                 .onEnter(() -> deposit.setWrist(wristTransfer))
@@ -303,10 +303,12 @@ public class DaTele extends LinearOpMode {
             if(gamepad1.dpad_down)
                 extendo.setState(retracted);
 
-            slidescontrol = (gamepad1.right_trigger-gamepad1.left_trigger)*20;
+            slidescontrol = (gamepad1.left_trigger-gamepad1.right_trigger)*20;
             //outtake slides control
-            slides.setPidTarget((slides.getPos()+slidescontrol));
-            slides.updatePID();
+            /*slides.setPidTarget((slides.getPos()+slidescontrol));
+            slides.updatePID();*/
+
+            setPidTarget((left.getCurrentPosition() + slidescontrol), 1.0);
 
             /*if(gamepad2.dpad_down)
                 setPidTarget(0, 0.7);
@@ -319,10 +321,10 @@ public class DaTele extends LinearOpMode {
 
         }
     }
-    public void setPidTarget(int slidePOS, double motorPower) {
+    public void setPidTarget(double slidePOS, double motorPower) {
         //base encoder code
-        left.setTargetPosition(slidePOS);
-        right.setTargetPosition(slidePOS);
+        left.setTargetPosition((int) slidePOS);
+        right.setTargetPosition((int)slidePOS);
         left.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         right.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         left.setPower(motorPower);

@@ -17,6 +17,7 @@ import static org.firstinspires.ftc.teamcode.subsystem.intake.Virtual4Bar.v4bTra
 import static org.firstinspires.ftc.teamcode.vision.processors.PropProcessor.Location.MIDDLE;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
+import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -121,32 +122,62 @@ public class RedBackdropSide extends LinearOpMode {
 
         TrajectorySequence middlePurple = drive.trajectorySequenceBuilder(startpose)
                 .UNSTABLE_addTemporalMarkerOffset(1,() -> {
-                    deposit.setWrist(wrist90degree);
-                    deposit.setArm(armDeposit90);
-                    setPidTarget(-100, 0.5);
-                    extendo.setState(midspike);
+                    //extend to midspike
                 })
-                .lineToSplineHeading(new Pose2d(43, -29.5, Math.toRadians(-180)))
+                .lineToSplineHeading(new Pose2d(45, -32, Math.toRadians(-200)))
                 .addTemporalMarker(() -> {
-                    deposit.setFinger(zeroPixel);
-                    virtual4Bar.setV4b(0.92);
-                })
-                .waitSeconds(1)
-                .forward(4)
-                .strafeRight(8)
-                .addTemporalMarker(() -> {
-                    virtual4Bar.setClaw(clawOpen);
+                    //place yellow & purple
                 })
                 .waitSeconds(0.5)
-                .UNSTABLE_addTemporalMarkerOffset(0.2, () -> {
-                    setPidTarget(0, 0.5);
-                    virtual4Bar.setClaw(clawClose);
-                    virtual4Bar.setV4b(v4bTransfer);
-                    extendo.setState(retracted);
-                    deposit.setWrist(wristTransfer);
-                    deposit.setArm(armPreTransfer);
+                .splineToSplineHeading(new Pose2d(20, -35, Math.toRadians(-180)), Math.toRadians(180))
+                .lineTo(new Vector2d(-15, -35))
+                .waitSeconds(0.35)
+                .addTemporalMarker(() -> {
+                    //grab
                 })
-                .strafeLeft(35)
+                .lineTo(new Vector2d(20, -35))
+                .splineToConstantHeading(new Vector2d(45, -30), Math.toRadians(0))
+                .waitSeconds(0.5)
+                .addTemporalMarker(() -> {
+                    //drop
+                })
+                .splineToConstantHeading(new Vector2d(20, -35), Math.toRadians(180))
+                .lineTo(new Vector2d(-15, -35))
+                .waitSeconds(0.35)
+                .addTemporalMarker(() -> {
+                    //grab
+                })
+                .lineTo(new Vector2d(20, -35))
+                .splineToConstantHeading(new Vector2d(45, -30), Math.toRadians(0))
+                .waitSeconds(0.5)
+                .addTemporalMarker(() -> {
+                    //drop
+                })
+                .splineToConstantHeading(new Vector2d(20, -10.5), Math.toRadians(180))
+                .lineTo(new Vector2d(-15, -10.5))
+                .waitSeconds(0.35)
+                .addTemporalMarker(() -> {
+                    //grab
+                })
+                .lineTo(new Vector2d(20, -10.5))
+                .splineToConstantHeading(new Vector2d(45, -30), Math.toRadians(0))
+                .waitSeconds(0.5)
+                .addTemporalMarker(() -> {
+                    //drop
+                })
+                .splineToConstantHeading(new Vector2d(20, -10.5), Math.toRadians(180))
+                .lineTo(new Vector2d(-15, -10.5))
+                .waitSeconds(0.35)
+                .addTemporalMarker(() -> {
+                    //grab
+                })
+                .lineTo(new Vector2d(20, -10.5))
+                .splineToConstantHeading(new Vector2d(45, -30), Math.toRadians(0))
+                .waitSeconds(0.5)
+                .addTemporalMarker(() -> {
+                    //drop
+                })
+                .lineToSplineHeading(new Pose2d(45, -57, Math.toRadians(-180)))
                 .build();
 
         TrajectorySequence rightPurple = drive.trajectorySequenceBuilder(startpose)
