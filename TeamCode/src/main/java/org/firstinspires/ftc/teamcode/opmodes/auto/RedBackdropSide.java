@@ -13,6 +13,7 @@ import static org.firstinspires.ftc.teamcode.subsystem.extendo.Extendo.Extension
 import static org.firstinspires.ftc.teamcode.subsystem.intake.Virtual4Bar.clawClose;
 import static org.firstinspires.ftc.teamcode.subsystem.intake.Virtual4Bar.clawOpen;
 import static org.firstinspires.ftc.teamcode.subsystem.intake.Virtual4Bar.v4bPreTransfer;
+import static org.firstinspires.ftc.teamcode.subsystem.intake.Virtual4Bar.v4bStackHigh;
 import static org.firstinspires.ftc.teamcode.subsystem.intake.Virtual4Bar.v4bTransfer;
 import static org.firstinspires.ftc.teamcode.vision.processors.PropProcessor.Location.MIDDLE;
 
@@ -121,14 +122,28 @@ public class RedBackdropSide extends LinearOpMode {
                 .build();
 
         TrajectorySequence middlePurple = drive.trajectorySequenceBuilder(startpose)
-                .UNSTABLE_addTemporalMarkerOffset(1,() -> {
-                    //extend to midspike
+                .UNSTABLE_addTemporalMarkerOffset(0.8,() -> {
+                    deposit.setWrist(wrist90degree);
+                    deposit.setArm(armDeposit90);
+                    setPidTarget(0, 0.5);
+                    extendo.setState(midspike);
+                    virtual4Bar.setV4b(0.92);
                 })
-                .lineToSplineHeading(new Pose2d(45, -32, Math.toRadians(-200)))
+                .lineToSplineHeading(new Pose2d(46, -29, Math.toRadians(-195)))
                 .addTemporalMarker(() -> {
                     //place yellow & purple
+                    virtual4Bar.setClaw(clawOpen);
+                    deposit.setFinger(zeroPixel);
                 })
                 .waitSeconds(0.5)
+                .addTemporalMarker(() -> {
+                    deposit.setWrist(wristTransfer);
+                    deposit.setArm(armPreTransfer);
+                    extendo.setState(retracted);
+                    virtual4Bar.setClaw(clawClose);
+                    virtual4Bar.setV4b(v4bStackHigh);
+                    setPidTarget(0, 0.5);
+                })
                 .splineToSplineHeading(new Pose2d(20, -35, Math.toRadians(-180)), Math.toRadians(180))
                 .lineTo(new Vector2d(-15, -35))
                 .waitSeconds(0.35)
