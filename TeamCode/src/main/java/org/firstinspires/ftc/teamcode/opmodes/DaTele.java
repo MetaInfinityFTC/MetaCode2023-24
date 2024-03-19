@@ -113,7 +113,7 @@ public class DaTele extends LinearOpMode {
                 .loop(() -> {
                     virtual4Bar.setV4b(v4bTransfer);
                     virtual4Bar.setClaw(0.34);
-                    slides.setPidTarget(0);
+                    setPidTarget(0, 1);
                     extendo.setState(retracted);
                     deposit.setArm(armTransfer);
                     deposit.setWrist(wristTransfer);
@@ -291,8 +291,6 @@ public class DaTele extends LinearOpMode {
             //update PID loop for Extendo and Outtake Slides
             extendo.update();
 
-
-
             //extendo control
             if(gamepad1.dpad_up)
                 extendo.setState(extended);
@@ -303,28 +301,21 @@ public class DaTele extends LinearOpMode {
             if(gamepad1.dpad_down)
                 extendo.setState(retracted);
 
-            slidescontrol = (gamepad1.left_trigger-gamepad1.right_trigger)*20;
-            //outtake slides control
-            /*slides.setPidTarget((slides.getPos()+slidescontrol));
-            slides.updatePID();*/
 
-            setPidTarget((left.getCurrentPosition() + slidescontrol), 1.0);
 
-            /*if(gamepad2.dpad_down)
-                setPidTarget(0, 0.7);
-            if(gamepad2.dpad_up)
-                setPidTarget(-300, 1);
-            if(gamepad2.dpad_left)
-                setPidTarget(-150, 1);
-            if(gamepad2.dpad_right)
-                setPidTarget(-450, 1);*/
+            if(gamepad1.left_trigger > 0.2){
+                setPidTarget(left.getCurrentPosition()-20, 1);
+            }
+            if(gamepad1.right_trigger > 0.2){
+                setPidTarget(left.getCurrentPosition()+20, 1);
+            }
 
         }
     }
     public void setPidTarget(double slidePOS, double motorPower) {
         //base encoder code
         left.setTargetPosition((int) slidePOS);
-        right.setTargetPosition((int)slidePOS);
+        right.setTargetPosition((int) slidePOS);
         left.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         right.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         left.setPower(motorPower);
