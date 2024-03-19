@@ -147,6 +147,9 @@ public class DaTele extends LinearOpMode {
                     virtual4Bar.setV4b(0.7);
                     extendo.setState(hung);
                 })
+                .transition(() -> gamepad1.a, States.PRE_INTAKE)
+                .transition(() -> gamepad1.left_bumper, States.NEUTRAL)
+                .transition(() -> gamepad1.b, States.TRANSFER)
 
                 .state(States.DRONE)
                 .onEnter(() -> {
