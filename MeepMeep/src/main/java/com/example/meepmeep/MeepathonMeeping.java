@@ -20,7 +20,7 @@ public class MeepathonMeeping {
                                 .UNSTABLE_addTemporalMarkerOffset(1,() -> {
                                     //extend to midspike
                                 })
-                                .lineToSplineHeading(new Pose2d(45, -32, Math.toRadians(-200)))
+                                .lineToSplineHeading(new Pose2d(45, -32, Math.toRadians(-190)))
                                 .addTemporalMarker(() -> {
                                     //place yellow & purple
                                 })
@@ -49,6 +49,7 @@ public class MeepathonMeeping {
                                 .addTemporalMarker(() -> {
                                     //drop
                                 })
+                                .setTangent(Math.toRadians(135))
                                 .splineToConstantHeading(new Vector2d(20, -10.5), Math.toRadians(180))
                                 .lineTo(new Vector2d(-15, -10.5))
                                 .waitSeconds(0.35)
@@ -61,6 +62,7 @@ public class MeepathonMeeping {
                                 .addTemporalMarker(() -> {
                                     //drop
                                 })
+                                .setTangent(Math.toRadians(135))
                                 .splineToConstantHeading(new Vector2d(20, -10.5), Math.toRadians(180))
                                 .lineTo(new Vector2d(-15, -10.5))
                                 .waitSeconds(0.35)

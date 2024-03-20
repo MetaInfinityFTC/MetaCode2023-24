@@ -166,7 +166,7 @@ public class DaTele extends LinearOpMode {
                 .transitionTimed(0.5) // putting deposit out before v4b
                 .state(States.PRE_PRE_INTAKE)
                 .onEnter(() -> {
-                    virtual4Bar.setV4b(0.88);
+                    virtual4Bar.setV4b(0.8);
                 })
                 .transitionTimed(1)
                 .state(States.CLAWINITIAL_OPEN)
@@ -259,7 +259,7 @@ public class DaTele extends LinearOpMode {
 
                 .state(States.SETWRIST)
                 .onEnter(() -> deposit.setWrist(wristTransfer))
-                .transitionTimed(0.55, States.NEUTRAL)
+                .transitionTimed(0.3, States.NEUTRAL)
 
                 .build();
 
@@ -296,22 +296,13 @@ public class DaTele extends LinearOpMode {
 
             //extendo control
             if(gamepad1.dpad_up)
-                extendo.setState(extended);
-            if(gamepad1.dpad_right)
                 extendo.setState(second);
+            if(gamepad1.dpad_right)
+                setPidTarget(left.getCurrentPosition()+40, 1);
             if(gamepad1.dpad_left)
-                extendo.setState(first);
+                setPidTarget(left.getCurrentPosition()-40, 1);
             if(gamepad1.dpad_down)
                 extendo.setState(retracted);
-
-
-
-            if(gamepad1.left_trigger > 0.2){
-                setPidTarget(left.getCurrentPosition()-20, 1);
-            }
-            if(gamepad1.right_trigger > 0.2){
-                setPidTarget(left.getCurrentPosition()+20, 1);
-            }
 
         }
     }

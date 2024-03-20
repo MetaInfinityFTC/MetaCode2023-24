@@ -134,7 +134,7 @@ public class RedBackdropSide extends LinearOpMode {
                     deposit.setArm(armDeposit90);
                     setPidTarget(0, 0.5);
                     extendo.setState(midspike);
-                    virtual4Bar.setV4b(0.92);
+                    virtual4Bar.setV4b(0.875);
                 })
                 .lineToSplineHeading(new Pose2d(46, -29, Math.toRadians(-195)))
                 .addTemporalMarker(() -> {
@@ -152,19 +152,24 @@ public class RedBackdropSide extends LinearOpMode {
                     setPidTarget(0, 0.5);
                 })
                 .splineToSplineHeading(new Pose2d(20, -35, Math.toRadians(-180)), Math.toRadians(180))
-                .addTemporalMarker(()->extendo.setState(extended))
+                .addTemporalMarker(()-> {
+                    extendo.setState(extended);
+                    virtual4Bar.setClaw(clawOpen);
+                })
                 .lineTo(new Vector2d(-15, -35))
-                .waitSeconds(0.35)
                 .addTemporalMarker(() -> {
                     trasnferring = true;
                     transferMachine.start();
                 })
+                .waitSeconds(0.6)
                 .lineTo(new Vector2d(20, -35))
                 .splineToConstantHeading(new Vector2d(45, -30), Math.toRadians(0))
                 .addTemporalMarker(() -> {
                     trasnferring = false;
                     transferMachine.reset();
                     transferMachine.stop();
+                    deposit.setArm(armDeposit90);
+                    setPidTarget(-150, 1);
                 })
                 .waitSeconds(0.5)
                 .addTemporalMarker(() -> {

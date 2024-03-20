@@ -12,13 +12,13 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 public class Extendo {
 
     private DcMotor left, right;
-    public static double p = 0.01, i = 0, d = 0, f = 0.0005;
+    public static double p = 0.0121, i = 0, d = 0.00051, f = 0.06;
 
     PIDFController controller = new PIDFController(p, i, d, f);
 
     //enum to house states with better names
     public enum Extension_States {
-        retracted(0), hung(400),  first(500), second(800), extended(1050), closespike(75), midspike(400), farspike(800);
+        retracted(0), hung(400),  first(500), second(950), extended(1050), closespike(75), midspike(400), farspike(800);
         private double numVal;
         Extension_States(double numVal) { this.numVal = numVal;}
         public double getNumVal() { return numVal; }

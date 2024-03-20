@@ -29,7 +29,7 @@ public class AbstractedMachine {
 
                 .state(Transfer.PRE_TRANSFER)
                 .onEnter(() -> {
-                    virtual4Bar.setV4b(0.8); //raise off ground
+                    virtual4Bar.setV4b(v4bPreTransfer); //raise off ground
                     extendo.setState(retracted);
                     deposit.setWrist(wristTransfer);
                     deposit.setArm(armPreTransfer);
@@ -38,29 +38,29 @@ public class AbstractedMachine {
                 .onExit(() -> {
                     virtual4Bar.setV4b(v4bPreTransfer);
                 })
-                .waitState(1)
+                .waitState(0.6)
                 .state(Transfer.TRANSFER)
                 .onEnter(() -> {
                     virtual4Bar.setV4b(v4bTransfer);
                 })
-                .transitionTimed(1)
+                .transitionTimed(0.5)
                 .state(Transfer.TRANSFER2)
                 .onEnter(() -> {
                     deposit.setFinger(zeroPixel);
                     deposit.setArm(armTransfer);
-                })
-                .transitionTimed(0.5)
+                })/*
+                .transitionTimed(0.35)
                 .state(Transfer.CLAW_OPEN)
                 .onEnter(()-> {
                     deposit.setArm(armTransfer);
-                })
+                })*/
                 .transitionTimed(0.5)
                 .state(Transfer.BOOM)
                 .onEnter(() -> {
                     deposit.setFinger(bothPixels);
                     deposit.setArm(1);
                 })
-                .transitionTimed(1)
+                .transitionTimed(0.5)
                 .state(Transfer.ARMDOWN)
                 .onEnter(() -> {
                     virtual4Bar.setClaw(0.45); //open slightly so pixels can come out
