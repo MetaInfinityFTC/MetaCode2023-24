@@ -37,6 +37,7 @@ import com.sfdev.assembly.state.StateMachineBuilder;
 import org.firstinspires.ftc.teamcode.Blinkdin;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.subsystem.AbstractedMachine;
+import org.firstinspires.ftc.teamcode.subsystem.AbstractedMachineRTP;
 import org.firstinspires.ftc.teamcode.subsystem.deposit.Deposit;
 import org.firstinspires.ftc.teamcode.subsystem.deposit.Slides;
 import org.firstinspires.ftc.teamcode.subsystem.extendo.Extendo;
@@ -60,6 +61,7 @@ public class DaTele extends LinearOpMode {
 
     DcMotor left;
     DcMotor right;
+
     ElapsedTime timer;
 
     Blinkdin led;
@@ -106,7 +108,7 @@ public class DaTele extends LinearOpMode {
 
         double slidescontrol = 0;
 
-        StateMachine transferMachine = AbstractedMachine.getTransferMachine(virtual4Bar, extendo, deposit);
+        StateMachine transferMachine = AbstractedMachineRTP.getTransferMachine(virtual4Bar, extendo, deposit);
 
         StateMachine globalMachine = new StateMachineBuilder()
                 .state(States.NEUTRAL)
@@ -296,14 +298,13 @@ public class DaTele extends LinearOpMode {
 
             //extendo control
             if(gamepad1.dpad_up)
-                extendo.setState(second);
+                extendo.extendosetPidTarget(1050, 1);
             if(gamepad1.dpad_right)
                 setPidTarget(left.getCurrentPosition()+40, 1);
             if(gamepad1.dpad_left)
                 setPidTarget(left.getCurrentPosition()-40, 1);
             if(gamepad1.dpad_down)
-                extendo.setState(retracted);
-
+                extendo.extendosetPidTarget(0, 1);
         }
     }
     public void setPidTarget(double slidePOS, double motorPower) {

@@ -33,6 +33,7 @@ import com.sfdev.assembly.state.StateMachineBuilder;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.subsystem.AbstractedMachine;
+import org.firstinspires.ftc.teamcode.subsystem.AbstractedMachineRTP;
 import org.firstinspires.ftc.teamcode.subsystem.deposit.Deposit;
 import org.firstinspires.ftc.teamcode.subsystem.deposit.Slides;
 import org.firstinspires.ftc.teamcode.subsystem.extendo.Extendo;
@@ -63,6 +64,9 @@ public class fineilldoitmyself extends LinearOpMode {
     DcMotor left;
     DcMotor right;
 
+    DcMotor leftextendo;
+    DcMotor rightextendo;
+
     boolean trasnferring = false;
 
     double v4bStackHeight = v4bStackHigh, ticker = 1;
@@ -84,9 +88,13 @@ public class fineilldoitmyself extends LinearOpMode {
 
         left = hardwareMap.dcMotor.get("lSlide");
         right = hardwareMap.dcMotor.get("rSlide");
-        left.setDirection(DcMotorSimple.Direction.REVERSE);
-        left.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        right.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        leftextendo = hardwareMap.dcMotor.get("lSlide");
+        rightextendo = hardwareMap.dcMotor.get("rSlide");
+
+        leftextendo.setDirection(DcMotorSimple.Direction.REVERSE);
+        leftextendo.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rightextendo.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
         extendo = new Extendo(hardwareMap);
         slides = new Slides(hardwareMap);
@@ -107,15 +115,15 @@ public class fineilldoitmyself extends LinearOpMode {
         Pose2d startpose = new Pose2d(14.75, -61.5, Math.toRadians(-90));
         drive.setPoseEstimate(startpose);
 
-        StateMachine transferMachine = AbstractedMachine.getTransferMachine(virtual4Bar, extendo, deposit);
-        StateMachine dropMachine = AbstractedMachine.dropMachine(deposit);
+        StateMachine transferMachine = AbstractedMachineRTP.getTransferMachine(virtual4Bar, extendo, deposit);
+        StateMachine dropMachine = AbstractedMachineRTP.dropMachine(deposit);
 
         TrajectorySequence middlePurple = drive.trajectorySequenceBuilder(startpose)
                 .UNSTABLE_addTemporalMarkerOffset(0.8,() -> {
                     deposit.setWrist(wrist90degree);
                     deposit.setArm(armDeposit90);
                     setPidTarget(0, 0.5);
-                    extendo.setState(midspike);
+                    extendo.extendosetPidTarget(400, 1);
                     virtual4Bar.setV4b(0.875);
                 })
                 .lineToSplineHeading(new Pose2d(46, -29, Math.toRadians(-195)))
@@ -128,7 +136,7 @@ public class fineilldoitmyself extends LinearOpMode {
                 .addTemporalMarker(() -> {
                     deposit.setWrist(wristTransfer);
                     deposit.setArm(armPreTransfer);
-                    extendo.setState(retracted);
+                    extendo.extendosetPidTarget(0, 1);
                     virtual4Bar.setClaw(clawClose);
                     virtual4Bar.setV4b(v4bStackHigh);
                     setPidTarget(0, 0.5);
@@ -137,12 +145,12 @@ public class fineilldoitmyself extends LinearOpMode {
                 .addTemporalMarker(()->{
                     virtual4Bar.setClaw(clawClose);
                     virtual4Bar.setV4b(v4bStackHeight);})
-                .splineToSplineHeading(new Pose2d(20, -35, Math.toRadians(-180)), Math.toRadians(180))
+                .splineToSplineHeading(new Pose2d(20, -33, Math.toRadians(-180)), Math.toRadians(180))
                 .addTemporalMarker(()-> {
-                    extendo.setState(extended);
+                    extendo.extendosetPidTarget(1050, 1);
                     virtual4Bar.setClaw(clawOpen);
                 })
-                .lineTo(new Vector2d(-15, -35))
+                .lineTo(new Vector2d(-15, -33))
                 .addTemporalMarker(()-> {transferMachine.start(); trasnferring = true;})
                 .waitSeconds(0.2)
                 .lineTo(new Vector2d(20, -35))
@@ -169,10 +177,10 @@ public class fineilldoitmyself extends LinearOpMode {
                 .onEnter(()-> {
                     deposit.setWrist(wristTransfer);
                     deposit.setArm(armPreTransfer);
-                    extendo.setState(retracted);
+                    extendo.extendosetPidTarget(0, 1);
                     virtual4Bar.setClaw(clawClose);
                     virtual4Bar.setV4b(v4bGround);
-                    setPidTarget(0, 0.5);})
+                    extendo.extendosetPidTarget(0, 0.5);})
                 .build();
 
 
@@ -182,13 +190,13 @@ public class fineilldoitmyself extends LinearOpMode {
         }
         waitForStart();
         master.start();
+        visionPortal.close();
         while(opModeIsActive()){
             master.update();
             if (trasnferring) {
                 transferMachine.update();
             }
             drive.update();
-            extendo.update();
         }
     }
     public void setPidTarget(int slidePOS, double motorPower) {
@@ -200,4 +208,5 @@ public class fineilldoitmyself extends LinearOpMode {
         left.setPower(motorPower);
         right.setPower(motorPower);
     }
+
 }

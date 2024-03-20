@@ -12,7 +12,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 public class Extendo {
 
     private DcMotor left, right;
-    public static double p = 0.0121, i = 0, d = 0.00051, f = 0.06;
+    public static double p = 0.04, i = 0.004, d = 0.00051, f = 0.005;
 
     PIDFController controller = new PIDFController(p, i, d, f);
 
@@ -52,4 +52,15 @@ public class Extendo {
     public boolean isAtTarget() {
         return controller.atSetPoint();
     }
+
+    public void extendosetPidTarget(int slidePOS, double motorPower) {
+        //base encoder code
+        left.setTargetPosition(slidePOS);
+        right.setTargetPosition(slidePOS);
+        left.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        right.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        left.setPower(motorPower);
+        right.setPower(motorPower);
+    }
+
 }
