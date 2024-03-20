@@ -108,6 +108,7 @@ public class fineilldoitmyself extends LinearOpMode {
         drive.setPoseEstimate(startpose);
 
         StateMachine transferMachine = AbstractedMachine.getTransferMachine(virtual4Bar, extendo, deposit);
+        StateMachine dropMachine = AbstractedMachine.dropMachine(deposit);
 
         TrajectorySequence middlePurple = drive.trajectorySequenceBuilder(startpose)
                 .UNSTABLE_addTemporalMarkerOffset(0.8,() -> {
@@ -133,31 +134,19 @@ public class fineilldoitmyself extends LinearOpMode {
                     setPidTarget(0, 0.5);
                 }).build();
         TrajectorySequence grab = drive.trajectorySequenceBuilder(middlePurple.end())
+                .addTemporalMarker(()->{
+                    virtual4Bar.setClaw(clawClose);
+                    virtual4Bar.setV4b(v4bStackHeight);})
                 .splineToSplineHeading(new Pose2d(20, -35, Math.toRadians(-180)), Math.toRadians(180))
                 .addTemporalMarker(()-> {
                     extendo.setState(extended);
                     virtual4Bar.setClaw(clawOpen);
                 })
                 .lineTo(new Vector2d(-15, -35))
-                .addTemporalMarker(transferMachine::start)
-                .build();
-        TrajectorySequence drop = drive.trajectorySequenceBuilder(grab.end())
+                .addTemporalMarker(()-> {transferMachine.start(); trasnferring = true;})
+                .waitSeconds(0.2)
                 .lineTo(new Vector2d(20, -35))
-                .addTemporalMarker(() -> {
-                    deposit.setWrist(wrist90degree);
-                    deposit.setArm(armDeposit90);
-                })
                 .splineToConstantHeading(new Vector2d(46, -29), Math.toRadians(0))
-                .addTemporalMarker(() -> {
-                    deposit.setFinger(zeroPixel);
-                })
-                .waitSeconds(0.5)
-                .addTemporalMarker(()->{
-                    deposit.setWrist(wristTransfer);
-                    deposit.setArm(armPreTransfer);
-                    extendo.setState(retracted);
-                    virtual4Bar.setClaw(clawClose);
-                    virtual4Bar.setV4b(v4bStackHeight);})
                 .build();
 
         StateMachine master = new StateMachineBuilder()
@@ -166,11 +155,16 @@ public class fineilldoitmyself extends LinearOpMode {
                 .transition(()->!drive.isBusy(), states.grab)
                 .state(states.grab)
                 .onEnter(()-> drive.followTrajectorySequenceAsync(grab))
-                .transition(()-> !drive.isBusy() && !transferMachine.isRunning(), states.drop, () -> {transferMachine.stop(); transferMachine.reset();})
+                .transition(()-> !drive.isBusy() && !transferMachine.isRunning(), states.drop, () -> {
+                    trasnferring = false; transferMachine.stop(); transferMachine.reset();
+                    deposit.setWrist(wrist90degree); deposit.setArm(armDeposit90);
+                })
                 .state(states.drop)
-                .onEnter(()->drive.followTrajectorySequenceAsync(drop))
-                .transition(()->!drive.isBusy() && ticker < 2, states.grab).onExit(()->{ticker+=1; v4bStackHeight = v4bStackMid;})
-                .transition(()->!drive.isBusy() && ticker > 1, states.end)
+                .onEnter(dropMachine::start)
+                .loop(dropMachine::update)
+                .transition(()->!dropMachine.isRunning() && ticker < 2, states.grab, ()-> {dropMachine.stop(); dropMachine.reset();})
+                .transition(()->!drive.isBusy() && ticker > 1, states.end, ()-> {dropMachine.stop(); dropMachine.reset();})
+                .onExit(()->{ticker+=1; v4bStackHeight = v4bStackMid;})
                 .state(states.end)
                 .onEnter(()-> {
                     deposit.setWrist(wristTransfer);
@@ -190,6 +184,9 @@ public class fineilldoitmyself extends LinearOpMode {
         master.start();
         while(opModeIsActive()){
             master.update();
+            if (trasnferring) {
+                transferMachine.update();
+            }
             drive.update();
             extendo.update();
         }

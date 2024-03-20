@@ -21,6 +21,10 @@ public class AbstractedMachine {
 
     }
 
+    public enum Drop {
+        DROP, RESET
+    }
+
     public static StateMachine getTransferMachine(Virtual4Bar virtual4Bar, Extendo extendo, Deposit deposit) {
         return  new StateMachineBuilder()
                 .state(Transfer.GRAB)
@@ -70,5 +74,18 @@ public class AbstractedMachine {
 
                 .build();
 
+    }
+
+    public static StateMachine dropMachine(Deposit deposit) {
+        return new StateMachineBuilder()
+                .state(Drop.DROP)
+                .onEnter(()-> deposit.setFinger(zeroPixel))
+                .transitionTimed(0.5)
+                .state(Drop.RESET)
+                .onEnter(()->{
+                    deposit.setWrist(wristTransfer);
+                    deposit.setArm(armPreTransfer);
+                })
+                .build();
     }
 }
