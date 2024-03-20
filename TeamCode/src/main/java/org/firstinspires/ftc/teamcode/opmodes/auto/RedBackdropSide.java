@@ -7,6 +7,7 @@ import static org.firstinspires.ftc.teamcode.subsystem.deposit.Deposit.wrist90de
 import static org.firstinspires.ftc.teamcode.subsystem.deposit.Deposit.wristTransfer;
 import static org.firstinspires.ftc.teamcode.subsystem.deposit.Deposit.zeroPixel;
 import static org.firstinspires.ftc.teamcode.subsystem.extendo.Extendo.Extension_States.closespike;
+import static org.firstinspires.ftc.teamcode.subsystem.extendo.Extendo.Extension_States.extended;
 import static org.firstinspires.ftc.teamcode.subsystem.extendo.Extendo.Extension_States.farspike;
 import static org.firstinspires.ftc.teamcode.subsystem.extendo.Extendo.Extension_States.midspike;
 import static org.firstinspires.ftc.teamcode.subsystem.extendo.Extendo.Extension_States.retracted;
@@ -24,9 +25,11 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.sfdev.assembly.state.StateMachine;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
+import org.firstinspires.ftc.teamcode.subsystem.AbstractedMachine;
 import org.firstinspires.ftc.teamcode.subsystem.deposit.Deposit;
 import org.firstinspires.ftc.teamcode.subsystem.deposit.Slides;
 import org.firstinspires.ftc.teamcode.subsystem.extendo.Extendo;
@@ -54,6 +57,8 @@ public class RedBackdropSide extends LinearOpMode {
 
     DcMotor left;
     DcMotor right;
+
+    boolean trasnferring = false;
 
     @Override
     public void runOpMode(){
@@ -90,6 +95,8 @@ public class RedBackdropSide extends LinearOpMode {
 
         Pose2d startpose = new Pose2d(14.75, -61.5, Math.toRadians(-90));
         drive.setPoseEstimate(startpose);
+
+        StateMachine transferMachine = AbstractedMachine.getTransferMachine(virtual4Bar, extendo, deposit);
 
         TrajectorySequence leftPurple = drive.trajectorySequenceBuilder(startpose)
                 .UNSTABLE_addTemporalMarkerOffset(0.8,() -> {
@@ -145,13 +152,20 @@ public class RedBackdropSide extends LinearOpMode {
                     setPidTarget(0, 0.5);
                 })
                 .splineToSplineHeading(new Pose2d(20, -35, Math.toRadians(-180)), Math.toRadians(180))
+                .addTemporalMarker(()->extendo.setState(extended))
                 .lineTo(new Vector2d(-15, -35))
                 .waitSeconds(0.35)
                 .addTemporalMarker(() -> {
-                    //grab
+                    trasnferring = true;
+                    transferMachine.start();
                 })
                 .lineTo(new Vector2d(20, -35))
                 .splineToConstantHeading(new Vector2d(45, -30), Math.toRadians(0))
+                .addTemporalMarker(() -> {
+                    trasnferring = false;
+                    transferMachine.reset();
+                    transferMachine.stop();
+                })
                 .waitSeconds(0.5)
                 .addTemporalMarker(() -> {
                     //drop
@@ -244,6 +258,9 @@ public class RedBackdropSide extends LinearOpMode {
         while(opModeIsActive()){
             drive.update();
             extendo.update();
+            if (trasnferring) {
+                transferMachine.update();
+            }
         }
     }
     public void setPidTarget(int slidePOS, double motorPower) {
