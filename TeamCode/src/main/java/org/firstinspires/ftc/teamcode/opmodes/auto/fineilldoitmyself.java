@@ -150,9 +150,9 @@ public class fineilldoitmyself extends LinearOpMode {
                     extendo.extendosetPidTarget(1050, 1);
                     virtual4Bar.setClaw(clawOpen);
                 })
-                .lineTo(new Vector2d(-15, -33))
+                .lineTo(new Vector2d(-20, -33))
                 .addTemporalMarker(()-> {transferMachine.start(); trasnferring = true;})
-                .waitSeconds(0.2)
+                .waitSeconds(0.3)
                 .lineTo(new Vector2d(20, -35))
                 .splineToConstantHeading(new Vector2d(46, -29), Math.toRadians(0))
                 .build();
@@ -163,15 +163,16 @@ public class fineilldoitmyself extends LinearOpMode {
                 .transition(()->!drive.isBusy(), states.grab)
                 .state(states.grab)
                 .onEnter(()-> drive.followTrajectorySequenceAsync(grab))
-                .transition(()-> !drive.isBusy() && !transferMachine.isRunning(), states.drop, () -> {
+                .transition(()-> !drive.isBusy() && !transferMachine.isRunning(), () -> {
                     trasnferring = false; transferMachine.stop(); transferMachine.reset();
                     deposit.setWrist(wrist90degree); deposit.setArm(armDeposit90);
                 })
+                .waitState(0.5)
                 .state(states.drop)
                 .onEnter(dropMachine::start)
                 .loop(dropMachine::update)
                 .transition(()->!dropMachine.isRunning() && ticker < 2, states.grab, ()-> {dropMachine.stop(); dropMachine.reset();})
-                .transition(()->!drive.isBusy() && ticker > 1, states.end, ()-> {dropMachine.stop(); dropMachine.reset();})
+                .transition(()->!dropMachine.isRunning() && ticker > 1, states.end, ()-> {dropMachine.stop(); dropMachine.reset();})
                 .onExit(()->{ticker+=1; v4bStackHeight = v4bStackMid;})
                 .state(states.end)
                 .onEnter(()-> {
