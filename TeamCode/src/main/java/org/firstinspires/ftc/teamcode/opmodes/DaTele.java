@@ -300,9 +300,9 @@ public class DaTele extends LinearOpMode {
             if(gamepad1.dpad_up)
                 extendo.extendosetPidTarget(1050, 1);
             if(gamepad1.dpad_right)
-                setPidTarget(left.getCurrentPosition()+40, 1);
-            if(gamepad1.dpad_left)
                 setPidTarget(left.getCurrentPosition()-40, 1);
+            if(gamepad1.dpad_left)
+                setPidTarget(left.getCurrentPosition()+40, 1);
             if(gamepad1.dpad_down)
                 extendo.extendosetPidTarget(0, 1);
         }

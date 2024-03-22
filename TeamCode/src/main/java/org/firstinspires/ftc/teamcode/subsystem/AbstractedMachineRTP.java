@@ -67,13 +67,13 @@ public class AbstractedMachineRTP {
                 .state(Transfer.BOOM)
                 .onEnter(() -> {
                     deposit.setFinger(bothPixels);
-                    deposit.setArm(1);
+                    deposit.setArm(0.9);
                 })
                 .transitionTimed(0.5)
                 .state(Transfer.ARMDOWN)
                 .onEnter(() -> {
                     virtual4Bar.setClaw(0.45); //open slightly so pixels can come out
-                    deposit.setArm(1);
+                    deposit.setArm(0.9);
                 })
                 .state(Transfer.FINISHED) // end state
 
