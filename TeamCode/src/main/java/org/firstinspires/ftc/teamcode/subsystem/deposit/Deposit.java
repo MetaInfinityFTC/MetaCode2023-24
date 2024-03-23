@@ -19,13 +19,13 @@ public class Deposit {
 
     boolean amithere = false;
     //Arm armposs
-    public static double armTransfer = 0.8, armDeposit90 = 0.33, armDeposit30 = 0.43, armPreTransfer = 0.62;
+    public static double armTransfer = 0.82, armDeposit90 = 0.29, armDeposit30 = 0.42, armPreTransfer = 0.58;
 
     //Wrist armpos
     public static double wrist30degree = 0.84, wristTransfer = 0.1825, wrist90degree = 0.7;
 
     //Finger armpos
-    public static double bothPixels = 0.0, onePixel = 0.3, zeroPixel = 0.37;
+    public static double bothPixels = 0.1, onePixel = 0.3, zeroPixel = 0.37;
 
     public Deposit(HardwareMap hardwareMap) {
         lArm = hardwareMap.servo.get("lArm");

@@ -85,7 +85,7 @@ public class AbstractedMachineRTP {
         return new StateMachineBuilder()
                 .state(Drop.DROP)
                 .onEnter(()-> deposit.setFinger(zeroPixel))
-                .transitionTimed(0.5)
+                .transitionTimed(0.6)
                 .state(Drop.RESET)
                 .onEnter(()->{
                     deposit.setWrist(wristTransfer);
