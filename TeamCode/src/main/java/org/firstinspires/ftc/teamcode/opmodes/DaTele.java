@@ -163,12 +163,12 @@ public class DaTele extends LinearOpMode {
                 .onEnter(() -> {
                     deposit.setFinger(zeroPixel);
                     deposit.setArm(armPreTransfer);
-                    virtual4Bar.setClaw(clawClose);
                 })
                 .transitionTimed(0.5) // putting deposit out before v4b
                 .state(States.PRE_PRE_INTAKE)
                 .onEnter(() -> {
-                    virtual4Bar.setV4b(0.8);
+                    virtual4Bar.setClaw(clawClose);
+                    virtual4Bar.setV4b(0.7);
                 })
                 .transitionTimed(1)
                 .state(States.CLAWINITIAL_OPEN)
