@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.subsystem;
 import static org.firstinspires.ftc.teamcode.subsystem.deposit.Deposit.armPreTransfer;
 import static org.firstinspires.ftc.teamcode.subsystem.deposit.Deposit.armTransfer;
 import static org.firstinspires.ftc.teamcode.subsystem.deposit.Deposit.bothPixels;
+import static org.firstinspires.ftc.teamcode.subsystem.deposit.Deposit.onePixel;
 import static org.firstinspires.ftc.teamcode.subsystem.deposit.Deposit.wristTransfer;
 import static org.firstinspires.ftc.teamcode.subsystem.deposit.Deposit.zeroPixel;
 import static org.firstinspires.ftc.teamcode.subsystem.extendo.Extendo.Extension_States.retracted;
@@ -26,7 +27,7 @@ public class AbstractedMachineRTP {
     }
 
     public enum Drop {
-        DROP, RESET
+        DROP, SECOND, RESET
     }
 
 
@@ -84,8 +85,11 @@ public class AbstractedMachineRTP {
     public static StateMachine dropMachine(Deposit deposit) {
         return new StateMachineBuilder()
                 .state(Drop.DROP)
+                .onEnter(()-> deposit.setFinger(onePixel))
+                .transitionTimed(0.4)
+                .state(Drop.SECOND)
                 .onEnter(()-> deposit.setFinger(zeroPixel))
-                .transitionTimed(0.6)
+                .transitionTimed(0.2)
                 .state(Drop.RESET)
                 .onEnter(()->{
                     deposit.setWrist(wristTransfer);
