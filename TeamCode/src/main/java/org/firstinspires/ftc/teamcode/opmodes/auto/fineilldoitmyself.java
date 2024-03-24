@@ -187,6 +187,7 @@ public class fineilldoitmyself extends LinearOpMode {
                 .state(states.initial)
                 .onEnter(()-> drive.followTrajectorySequenceAsync(middlePurple))
                 .transition(()->!drive.isBusy(), states.grab1)
+
                 .state(states.grab1)
                 .onEnter(()-> drive.followTrajectorySequenceAsync(grab1))
                 .transition(()-> !drive.isBusy() && !transferMachine.isRunning(), states.drop, () -> {
@@ -198,8 +199,11 @@ public class fineilldoitmyself extends LinearOpMode {
                 .state(states.drop)
                 .onEnter(dropMachine::start)
                 .loop(dropMachine::update)
-                .transition(()->!dropMachine.isRunning() && ticker < 2, states.grab2, ()-> {dropMachine.stop(); dropMachine.reset();})
-                .onExit(()->{ticker+=1; v4bStackHeight = v4bStackMid;})
+                .transition(()-> dropMachine.getState() ==  AbstractedMachineRTP.Drop.RESET && ticker < 2, states.grab2)
+                .onExit(()->{
+                    dropMachine.stop(); dropMachine.reset();
+                    ticker+=1; v4bStackHeight = v4bStackMid;
+                })
 
                 .state(states.grab2)
                 .onEnter(()-> drive.followTrajectorySequenceAsync(grab2))
@@ -212,8 +216,11 @@ public class fineilldoitmyself extends LinearOpMode {
                 .state(states.drop1)
                 .onEnter(dropMachine::start)
                 .loop(dropMachine::update)
-                .transition(()->!dropMachine.isRunning() && ticker < 3, states.park, ()-> {dropMachine.stop(); dropMachine.reset();})
-                .onExit(()->{ticker+=1; v4bStackHeight = v4bStackHigh;})
+                .transition(()->dropMachine.getState() ==  AbstractedMachineRTP.Drop.RESET && ticker < 3, states.park)
+                .onExit(()->{
+                    ticker+=1; v4bStackHeight = v4bStackHigh;
+                    dropMachine.stop(); dropMachine.reset();
+                })
 
                 .state(states.park)
                 .onEnter(()-> drive.followTrajectorySequenceAsync(park))
@@ -225,11 +232,16 @@ public class fineilldoitmyself extends LinearOpMode {
 
                 .state(states.drop2)
                 .onEnter(() -> {
+                    dropMachine.start();
                     virtual4Bar.setV4b(v4bTransfer);
                     virtual4Bar.setClaw(clawClose);
                 })
-                .transition(()->!dropMachine.isRunning() && ticker > 2, states.end, ()-> {dropMachine.stop(); dropMachine.reset();})
-                .onExit(()->{ticker+=1; v4bStackHeight = v4bStackHigh;})
+                .loop(dropMachine::update)
+                .transition(()-> dropMachine.getState() == AbstractedMachineRTP.Drop.RESET && ticker > 2, states.end)
+                .onExit(()->{
+                    dropMachine.stop(); dropMachine.reset();
+                    ticker+=1; v4bStackHeight = v4bStackHigh;
+                })
 
                 .state(states.end)
                 .onEnter(() -> {
