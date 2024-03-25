@@ -257,6 +257,10 @@ public class fineilldoitmyself extends LinearOpMode {
                     dropMachine.update();
                 })
                 .transition(() -> dropMachine.getState() == AbstractedMachineRTP.Drop.RESET && !drive.isBusy())
+                .onExit(() -> {
+                    dropMachine.stop();
+                    dropMachine.reset();
+                })
 
                 .state(states.end)
                 .onEnter(() -> {
