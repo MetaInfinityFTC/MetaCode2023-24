@@ -49,6 +49,8 @@ public class MeepathonMeeping {
                                 .addTemporalMarker(() -> {
                                     //drop
                                 })
+
+
                                 .setTangent(Math.toRadians(135))
                                 .splineToConstantHeading(new Vector2d(20, -10.5), Math.toRadians(180))
                                 .lineTo(new Vector2d(-15, -10.5))
@@ -62,6 +64,8 @@ public class MeepathonMeeping {
                                 .addTemporalMarker(() -> {
                                     //drop
                                 })
+
+
                                 .setTangent(Math.toRadians(135))
                                 .splineToConstantHeading(new Vector2d(20, -10.5), Math.toRadians(180))
                                 .lineTo(new Vector2d(-15, -10.5))
@@ -78,6 +82,15 @@ public class MeepathonMeeping {
                                 .lineToSplineHeading(new Pose2d(45, -57, Math.toRadians(-180)))
                                 .build());
                 ;
+
+        RoadRunnerBotEntity secondBot = new DefaultBotBuilder(meepMeep)
+                // Set bot constraints: maxVel, maxAccel, maxAngVel, maxAngAccel, track width
+                .setConstraints(50, 50, Math.toRadians(180), Math.toRadians(180), 12.55)
+                .followTrajectorySequence(drive ->
+                        drive.trajectorySequenceBuilder(new Pose2d(44.75, -45, Math.toRadians(180)))
+                                .splineToConstantHeading(new Vector2d(30, -12), 0)
+                                .build());
+
 
         meepMeep.setBackground(MeepMeep.Background.FIELD_CENTERSTAGE_JUICE_DARK)
                 .setDarkMode(true)
