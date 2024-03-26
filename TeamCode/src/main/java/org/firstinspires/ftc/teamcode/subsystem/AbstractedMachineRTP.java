@@ -35,7 +35,7 @@ public class AbstractedMachineRTP {
         return  new StateMachineBuilder()
                 .state(Transfer.GRAB)
                 .onEnter(() -> virtual4Bar.setClaw(clawClose))
-                .transitionTimed(.2) // .2 seconds to grab before putting everything in transfer
+                .transitionTimed(0.3) // .2 seconds to grab before putting everything in transfer
 
                 .state(Transfer.PRE_TRANSFER)
                 .onEnter(() -> {
@@ -48,7 +48,7 @@ public class AbstractedMachineRTP {
                 .onExit(() -> {
                     virtual4Bar.setV4b(v4bPreTransfer);
                 })
-                .waitState(0.6)
+                .waitState(1)
                 .state(Transfer.TRANSFER)
                 .onEnter(() -> {
                     virtual4Bar.setV4b(v4bTransfer);
@@ -68,13 +68,13 @@ public class AbstractedMachineRTP {
                 .state(Transfer.BOOM)
                 .onEnter(() -> {
                     deposit.setFinger(bothPixels);
-                    deposit.setArm(0.9);
+                    deposit.setArm(1);
                 })
                 .transitionTimed(0.5)
                 .state(Transfer.ARMDOWN)
                 .onEnter(() -> {
-                    virtual4Bar.setClaw(0.45); //open slightly so pixels can come out
-                    deposit.setArm(0.9);
+                    virtual4Bar.setClaw(0.4); //open slightly so pixels can come out
+                    deposit.setArm(1);
                 })
                 .state(Transfer.FINISHED) // end state
 

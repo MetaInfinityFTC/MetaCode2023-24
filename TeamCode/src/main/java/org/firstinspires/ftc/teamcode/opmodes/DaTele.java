@@ -102,7 +102,7 @@ public class DaTele extends LinearOpMode {
         timer = new ElapsedTime();
 
         LeftHang.setPosition(0.25);
-        RightHang.setPosition(0.9);
+        RightHang.setPosition(0.85);
 
         drone.setPosition(0);
 
@@ -146,8 +146,8 @@ public class DaTele extends LinearOpMode {
                 .transitionTimed(0.5)
                 .state(States.HANG)
                 .onEnter(() -> {
-                    virtual4Bar.setV4b(0.7);
-                    extendo.setState(hung);
+                    virtual4Bar.setV4b(0.5);
+                    extendo.extendosetPidTarget(450, 1);
                 })
                 .transition(() -> gamepad1.a, States.PRE_INTAKE)
                 .transition(() -> gamepad1.left_bumper, States.NEUTRAL)
@@ -248,7 +248,7 @@ public class DaTele extends LinearOpMode {
                 .onEnter(() -> {
                     deposit.setFinger(onePixel);
                 })
-                .transition(() -> gamepad1.y, States.DROP_TWO_PIXEL) // on y drop second pixel
+                .transition(() -> gamepad1.y, States.SECOND) // on y drop second pixel
                 .transition(() -> gamepad1.x, States.DEPOSIT90) // x to go back to deposit 90 position
 
                 .state(States.DROP_TWO_PIXEL)
@@ -305,6 +305,12 @@ public class DaTele extends LinearOpMode {
                 setPidTarget(left.getCurrentPosition()+40, 1);
             if(gamepad1.dpad_down)
                 extendo.extendosetPidTarget(0, 1);
+
+
+            if(globalMachine.getState().equals("HANG"))
+                extendo.extendosetPidTarget(450, 1);
+            else
+                extendo.extendosetPidTarget(-1, 1);
         }
     }
     public void setPidTarget(double slidePOS, double motorPower) {
