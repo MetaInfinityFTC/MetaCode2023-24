@@ -89,7 +89,7 @@ public class AbstractedMachineRTP {
                 .transitionTimed(0.4)
                 .state(Drop.SECOND)
                 .onEnter(()-> deposit.setFinger(zeroPixel))
-                .transitionTimed(0.2)
+                .transitionTimed(0.5)
                 .state(Drop.RESET)
                 .onEnter(()->{
                     deposit.setWrist(wristTransfer);
