@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.opmodes.auto;
 
 import static org.firstinspires.ftc.teamcode.subsystem.deposit.Deposit.armDeposit90;
 import static org.firstinspires.ftc.teamcode.subsystem.deposit.Deposit.armPreTransfer;
+import static org.firstinspires.ftc.teamcode.subsystem.deposit.Deposit.armTransfer;
 import static org.firstinspires.ftc.teamcode.subsystem.deposit.Deposit.bothPixels;
 import static org.firstinspires.ftc.teamcode.subsystem.deposit.Deposit.wrist90degree;
 import static org.firstinspires.ftc.teamcode.subsystem.deposit.Deposit.wristTransfer;
@@ -69,7 +70,7 @@ public class fineilldoitmyself extends LinearOpMode {
 
     boolean trasnferring = false;
 
-    double v4bStackHeight = v4bStackHigh, ticker = 1;
+    double v4bStackHeight = v4bStackHigh, ticker = 1, cycle = 0;
 
     public enum states {
         initial, grab, drop, end
@@ -124,9 +125,9 @@ public class fineilldoitmyself extends LinearOpMode {
                     deposit.setArm(armDeposit90);
                     setPidTarget(0, 0.5);
                     extendo.extendosetPidTarget(400, 1);
-                    virtual4Bar.setV4b(0.875);
+                    virtual4Bar.setV4b(v4bStackHigh);
                 })
-                .lineToSplineHeading(new Pose2d(46, -29, Math.toRadians(-195)))
+                .lineToSplineHeading(new Pose2d(46, -31, Math.toRadians(-195)))
                 .addTemporalMarker(() -> {
                     //place yellow & purple
                     virtual4Bar.setClaw(clawOpen);
@@ -143,18 +144,20 @@ public class fineilldoitmyself extends LinearOpMode {
                 }).build();
         TrajectorySequence grab = drive.trajectorySequenceBuilder(middlePurple.end())
                 .addTemporalMarker(()->{
+                    setPidTarget(0, 1);
                     virtual4Bar.setClaw(clawClose);
                     virtual4Bar.setV4b(v4bStackHeight);})
-                .splineToSplineHeading(new Pose2d(20, -34, Math.toRadians(-180)), Math.toRadians(180))
+                .lineToSplineHeading(new Pose2d(20, -33 - (2.5 * cycle), Math.toRadians(-180)))
                 .addTemporalMarker(()-> {
                     extendo.extendosetPidTarget(1050, 1);
                     virtual4Bar.setClaw(clawOpen);
                 })
-                .lineTo(new Vector2d(-20.5, -34))
+                .lineTo(new Vector2d(-20.5, -33  - (2.5 * cycle)))
+                .waitSeconds(0.2)
                 .addTemporalMarker(()-> {transferMachine.start(); trasnferring = true;})
                 .waitSeconds(0.3)
-                .lineTo(new Vector2d(20, -34))
-                .splineToConstantHeading(new Vector2d(46, -29), Math.toRadians(0))
+                .lineTo(new Vector2d(20, -33 - (2.5 * cycle)))
+                .splineToConstantHeading(new Vector2d(44.5, -29), Math.toRadians(0))
                 .build();
 
         StateMachine master = new StateMachineBuilder()
@@ -165,7 +168,7 @@ public class fineilldoitmyself extends LinearOpMode {
                 .onEnter(()-> drive.followTrajectorySequenceAsync(grab))
                 .transition(()-> !drive.isBusy() && !transferMachine.isRunning(), () -> {
                     trasnferring = false; transferMachine.stop(); transferMachine.reset();
-                    deposit.setWrist(wrist90degree); deposit.setArm(armDeposit90);
+                    deposit.setWrist(wrist90degree); deposit.setArm(armDeposit90); setPidTarget(-200, 1);
                 })
                 .waitState(0.5)
                 .state(states.drop)
@@ -173,15 +176,17 @@ public class fineilldoitmyself extends LinearOpMode {
                 .loop(dropMachine::update)
                 .transition(()->!dropMachine.isRunning() && ticker < 2, states.grab, ()-> {dropMachine.stop(); dropMachine.reset();})
                 .transition(()->!dropMachine.isRunning() && ticker > 1, states.end, ()-> {dropMachine.stop(); dropMachine.reset();})
-                .onExit(()->{ticker+=1; v4bStackHeight = v4bStackMid;})
+                .onExit(()->{ticker+=1; v4bStackHeight = v4bStackMid; cycle++;})
                 .state(states.end)
                 .onEnter(()-> {
                     deposit.setWrist(wristTransfer);
                     deposit.setArm(armPreTransfer);
                     extendo.extendosetPidTarget(0, 1);
                     virtual4Bar.setClaw(clawClose);
-                    virtual4Bar.setV4b(v4bGround);
-                    extendo.extendosetPidTarget(0, 0.5);})
+                    virtual4Bar.setV4b(v4bTransfer);
+                    extendo.extendosetPidTarget(0, 0.5);
+                    setPidTarget(0, 1);})
+
                 .build();
 
 

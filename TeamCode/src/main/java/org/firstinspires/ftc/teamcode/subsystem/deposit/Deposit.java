@@ -19,7 +19,7 @@ public class Deposit {
 
     boolean amithere = false;
     //Arm armposs
-    public static double armTransfer = 0.77, armDeposit90 = 0.25, armDeposit30 = 0.38, armPreTransfer = 0.56;
+    public static double armTransfer = 0.77, armDeposit90 = 0.25, armDeposit30 = 0.38, armPreTransfer = 0.52;
 
     //Wrist armpos
     public static double wrist30degree = 0.8, wristTransfer = 0.165, wrist90degree = 0.65;

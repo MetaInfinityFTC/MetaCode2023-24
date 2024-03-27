@@ -40,7 +40,7 @@ public class AbstractedMachineRTP {
                 .state(Transfer.PRE_TRANSFER)
                 .onEnter(() -> {
                     virtual4Bar.setV4b(v4bPreTransfer); //raise off ground
-                    extendo.extendosetPidTarget(0, 1);
+                    extendo.extendosetPidTarget(0, 0.7);
                     deposit.setWrist(wristTransfer);
                     deposit.setArm(armPreTransfer);
                 })
