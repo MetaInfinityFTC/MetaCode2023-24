@@ -84,6 +84,7 @@ public class AbstractedMachineRTP {
 
     public static StateMachine dropMachine(Deposit deposit) {
         return new StateMachineBuilder()
+                .waitState(0.5)
                 .state(Drop.DROP)
                 .onEnter(()-> deposit.setFinger(onePixel))
                 .transitionTimed(0.4)

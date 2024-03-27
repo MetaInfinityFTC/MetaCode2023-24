@@ -158,7 +158,6 @@ public class fineilldoitmyself extends LinearOpMode {
                 .waitSeconds(0.3)
                 .lineTo(new Vector2d(20, -33 - (2.5 * cycle)))
                 .splineToConstantHeading(new Vector2d(44.5, -29), Math.toRadians(0))
-                .waitSeconds(0.2)
                 .build();
 
         StateMachine master = new StateMachineBuilder()
@@ -171,14 +170,12 @@ public class fineilldoitmyself extends LinearOpMode {
                     trasnferring = false; transferMachine.stop(); transferMachine.reset();
                     deposit.setWrist(wrist90degree); deposit.setArm(armDeposit90); setPidTarget(-200, 1);
                 })
-                .waitState(0.5)
                 .state(states.drop)
                 .onEnter(dropMachine::start)
                 .loop(dropMachine::update)
                 .transition(()->!dropMachine.isRunning() && ticker < 2, states.grab, ()-> {dropMachine.stop(); dropMachine.reset();})
-                .transition(()->!dropMachine.isRunning() && ticker > 1, ()-> {dropMachine.stop(); dropMachine.reset();})
+                .transition(()->!dropMachine.isRunning() && ticker > 1, states.end, ()-> {dropMachine.stop(); dropMachine.reset();})
                 .onExit(()->{ticker+=1; v4bStackHeight = v4bStackMid; cycle++;})
-                .waitState(0.5)
                 .state(states.end)
                 .onEnter(()-> {
                     deposit.setWrist(wristTransfer);
