@@ -73,7 +73,7 @@ public class fineilldoitmyself extends LinearOpMode {
     double v4bStackHeight = v4bStackHigh, ticker = 1, cycle = 0;
 
     public enum states {
-        initial, grab, drop, end
+        initial, grab, drop, end, siiiiilver_suuurrrfer_intermiission
     }
 
     @Override
@@ -174,7 +174,10 @@ public class fineilldoitmyself extends LinearOpMode {
                 .onEnter(dropMachine::start)
                 .loop(dropMachine::update)
                 .transition(()->!dropMachine.isRunning() && ticker < 2, states.grab, ()-> {dropMachine.stop(); dropMachine.reset();})
-                .transition(()->!dropMachine.isRunning() && ticker > 1, states.end, ()-> {dropMachine.stop(); dropMachine.reset();})
+                .transition(()->!dropMachine.isRunning() && ticker > 1, states.siiiiilver_suuurrrfer_intermiission, ()-> {dropMachine.stop(); dropMachine.reset();})
+                .state(states.siiiiilver_suuurrrfer_intermiission)
+                .onEnter(()->{telemetry.addData("Yash tweaking", 0); telemetry.update();})
+                .transitionTimed(0.5)
                 .onExit(()->{ticker+=1; v4bStackHeight = v4bStackMid; cycle++;})
                 .state(states.end)
                 .onEnter(()-> {
