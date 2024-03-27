@@ -175,10 +175,10 @@ public class fineilldoitmyself extends LinearOpMode {
                 .loop(dropMachine::update)
                 .transition(()->!dropMachine.isRunning() && ticker < 2, states.grab, ()-> {dropMachine.stop(); dropMachine.reset();})
                 .transition(()->!dropMachine.isRunning() && ticker > 1, states.siiiiilver_suuurrrfer_intermiission, ()-> {dropMachine.stop(); dropMachine.reset();})
+                .onExit(()->{ticker+=1; v4bStackHeight = v4bStackMid; cycle++;})
                 .state(states.siiiiilver_suuurrrfer_intermiission)
                 .onEnter(()->{telemetry.addData("Yash tweaking", 0); telemetry.update();})
                 .transitionTimed(0.5)
-                .onExit(()->{ticker+=1; v4bStackHeight = v4bStackMid; cycle++;})
                 .state(states.end)
                 .onEnter(()-> {
                     deposit.setWrist(wristTransfer);
