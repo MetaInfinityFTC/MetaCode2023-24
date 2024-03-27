@@ -178,7 +178,7 @@ public class fineilldoitmyself extends LinearOpMode {
                 .onExit(()->{ticker+=1; v4bStackHeight = v4bStackMid; cycle++;})
                 .state(states.siiiiilver_suuurrrfer_intermiission)
                 .onEnter(()->{telemetry.addData("Yash tweaking", 0); telemetry.update();})
-                .transitionTimed(0.5)
+                .transitionTimed(0.8, states.end)
                 .state(states.end)
                 .onEnter(()-> {
                     deposit.setWrist(wristTransfer);
