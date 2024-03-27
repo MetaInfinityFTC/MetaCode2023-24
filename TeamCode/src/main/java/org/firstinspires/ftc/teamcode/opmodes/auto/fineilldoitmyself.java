@@ -147,17 +147,17 @@ public class fineilldoitmyself extends LinearOpMode {
                     setPidTarget(0, 1);
                     virtual4Bar.setClaw(clawClose);
                     virtual4Bar.setV4b(v4bStackHeight);})
-                .lineToSplineHeading(new Pose2d(20, -33 - (2.5 * cycle), Math.toRadians(-180)))
+                .lineToSplineHeading(new Pose2d(20, -34 - (2 * cycle), Math.toRadians(-180)))
                 .addTemporalMarker(()-> {
                     extendo.extendosetPidTarget(1050, 1);
                     virtual4Bar.setClaw(clawOpen);
                 })
-                .lineTo(new Vector2d(-20.5, -33  - (2.5 * cycle)))
+                .lineToSplineHeading(new Pose2d(-20.5, -34  - (2 * cycle), Math.toRadians(-180)))
                 .waitSeconds(0.2)
                 .addTemporalMarker(()-> {transferMachine.start(); trasnferring = true;})
                 .waitSeconds(0.3)
-                .lineTo(new Vector2d(20, -33 - (2.5 * cycle)))
-                .splineToConstantHeading(new Vector2d(44.5, -29), Math.toRadians(0))
+                .lineTo(new Vector2d(20, -34 - (2 * cycle)))
+                .splineToConstantHeading(new Vector2d(43 - cycle, -29), Math.toRadians(0))
                 .build();
 
         StateMachine master = new StateMachineBuilder()
