@@ -127,13 +127,13 @@ public class fineilldoitmyself extends LinearOpMode {
                     extendo.extendosetPidTarget(400, 1);
                     virtual4Bar.setV4b(v4bStackHigh);
                 })
-                .lineToSplineHeading(new Pose2d(46, -31, Math.toRadians(-195)))
+                .lineToSplineHeading(new Pose2d(46, -31, Math.toRadians(-192.5)))
                 .addTemporalMarker(() -> {
                     //place yellow & purple
                     virtual4Bar.setClaw(clawOpen);
                     deposit.setFinger(zeroPixel);
                 })
-                .waitSeconds(0.5)
+                .waitSeconds(0.25)
                 .addTemporalMarker(() -> {
                     deposit.setWrist(wristTransfer);
                     deposit.setArm(armPreTransfer);
@@ -141,23 +141,25 @@ public class fineilldoitmyself extends LinearOpMode {
                     virtual4Bar.setClaw(clawClose);
                     virtual4Bar.setV4b(v4bStackHigh);
                     setPidTarget(0, 0.5);
-                }).build();
+                })
+                .turn(Math.toRadians(12.5))
+                .build();
         TrajectorySequence grab = drive.trajectorySequenceBuilder(middlePurple.end())
                 .addTemporalMarker(()->{
                     setPidTarget(0, 1);
                     virtual4Bar.setClaw(clawClose);
                     virtual4Bar.setV4b(v4bStackHeight);})
-                .lineToSplineHeading(new Pose2d(20, -34 - (2 * cycle), Math.toRadians(-180)))
+                .splineToConstantHeading(new Vector2d(20, -35 - (3 * cycle)), Math.toRadians(-180))
                 .addTemporalMarker(()-> {
                     extendo.extendosetPidTarget(1050, 1);
                     virtual4Bar.setClaw(clawOpen);
                 })
-                .lineToSplineHeading(new Pose2d(-20.5, -34  - (2 * cycle), Math.toRadians(-180)))
+                .lineToSplineHeading(new Pose2d(-20.5 - (2 * cycle), -35  - (3 * cycle), Math.toRadians(-180)))
                 .waitSeconds(0.2)
                 .addTemporalMarker(()-> {transferMachine.start(); trasnferring = true;})
                 .waitSeconds(0.3)
-                .lineTo(new Vector2d(20, -34 - (2 * cycle)))
-                .splineToConstantHeading(new Vector2d(43 - cycle, -29), Math.toRadians(0))
+                .lineTo(new Vector2d(20, -35 - (3 * cycle)))
+                .splineToConstantHeading(new Vector2d(43, -31), Math.toRadians(0))
                 .build();
 
         StateMachine master = new StateMachineBuilder()
@@ -168,7 +170,7 @@ public class fineilldoitmyself extends LinearOpMode {
                 .onEnter(()-> drive.followTrajectorySequenceAsync(grab))
                 .transition(()-> !drive.isBusy() && !transferMachine.isRunning(), () -> {
                     trasnferring = false; transferMachine.stop(); transferMachine.reset();
-                    deposit.setWrist(wrist90degree); deposit.setArm(armDeposit90); setPidTarget(-200, 1);
+                    deposit.setWrist(wrist90degree); deposit.setArm(armDeposit90); setPidTarget(-300, 1);
                 })
                 .state(states.drop)
                 .onEnter(dropMachine::start)

@@ -48,7 +48,7 @@ public class AbstractedMachineRTP {
                 .onExit(() -> {
                     virtual4Bar.setV4b(v4bPreTransfer);
                 })
-                .waitState(1)
+                .waitState(1.3)
                 .state(Transfer.TRANSFER)
                 .onEnter(() -> {
                     virtual4Bar.setV4b(v4bTransfer);
