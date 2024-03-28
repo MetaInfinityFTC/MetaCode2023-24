@@ -1,11 +1,6 @@
 package org.firstinspires.ftc.teamcode.opmodes.auto;
 
-import static org.firstinspires.ftc.teamcode.subsystem.deposit.Deposit.armDeposit90;
-import static org.firstinspires.ftc.teamcode.subsystem.deposit.Deposit.armPreTransfer;
-import static org.firstinspires.ftc.teamcode.subsystem.deposit.Deposit.bothPixels;
-import static org.firstinspires.ftc.teamcode.subsystem.deposit.Deposit.wrist90degree;
-import static org.firstinspires.ftc.teamcode.subsystem.deposit.Deposit.wristTransfer;
-import static org.firstinspires.ftc.teamcode.subsystem.deposit.Deposit.zeroPixel;
+import static org.firstinspires.ftc.teamcode.subsystem.deposit.Deposit.*;
 import static org.firstinspires.ftc.teamcode.subsystem.intake.Virtual4Bar.clawClose;
 import static org.firstinspires.ftc.teamcode.subsystem.intake.Virtual4Bar.clawOpen;
 import static org.firstinspires.ftc.teamcode.subsystem.intake.Virtual4Bar.v4bPreTransfer;
@@ -143,7 +138,7 @@ public class fineilldoitmyself extends LinearOpMode {
 
         grab = drive.trajectorySequenceBuilder(middlePurple.end())
                 .addTemporalMarker(()->{
-//                    setPidTarget(0, 1);
+                    setPidTarget(0, 1);
                     virtual4Bar.setClaw(clawClose);
                     virtual4Bar.setV4b(v4bStackHeight);})
                 .UNSTABLE_addTemporalMarkerOffset(0.3, ()-> {
@@ -163,6 +158,7 @@ public class fineilldoitmyself extends LinearOpMode {
 
         grabSecondPath = drive.trajectorySequenceBuilder(grab.end())
                 .addTemporalMarker(()->{
+                    deposit.setArm(armTransfer);
                     setPidTarget(0, 1);
                     virtual4Bar.setV4b(v4bStackHeight);})
                 .UNSTABLE_addTemporalMarkerOffset(0.2, () -> virtual4Bar.setClaw(clawOpen))
@@ -172,6 +168,7 @@ public class fineilldoitmyself extends LinearOpMode {
                 .addTemporalMarker(()-> {
                     extendo.extendosetPidTarget(1050, 1);
                     virtual4Bar.setClaw(clawOpen);
+                    deposit.setArm(armPreTransfer);
                 })
 
                 // stack
@@ -259,10 +256,13 @@ public class fineilldoitmyself extends LinearOpMode {
         switch(totalCycles - cycle) {
             case 1: // cycle 1
                 drive.followTrajectorySequenceAsync(grab);
+                break;
             case 2:
                 drive.followTrajectorySequenceAsync(grab);
+                break;
             case 3:
                 drive.followTrajectorySequenceAsync(grabSecondPath);
+                break;
         }
 
     }
