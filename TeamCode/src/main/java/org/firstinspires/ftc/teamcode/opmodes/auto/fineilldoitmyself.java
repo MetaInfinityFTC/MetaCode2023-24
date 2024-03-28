@@ -147,7 +147,7 @@ public class fineilldoitmyself extends LinearOpMode {
                 })
                 .splineToConstantHeading(new Vector2d(20, -35 - (3 * (cycleOffset-1))), Math.toRadians(-180))
 
-                .lineToSplineHeading(new Pose2d(-20.5 - (2 * cycleOffset-1), -35  - (3 * (cycleOffset-1)), Math.toRadians(-180)))
+                .lineToSplineHeading(new Pose2d(-20.5 - (2 * (cycleOffset-1)), -35  - (3 * (cycleOffset-1)), Math.toRadians(-180)))
                 .waitSeconds(0.2)
                 .addTemporalMarker(()-> {transferMachine.start(); trasnferring = true;})
                 .waitSeconds(0.3)
