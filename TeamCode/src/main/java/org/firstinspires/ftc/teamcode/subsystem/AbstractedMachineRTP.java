@@ -9,6 +9,7 @@ import static org.firstinspires.ftc.teamcode.subsystem.deposit.Deposit.zeroPixel
 import static org.firstinspires.ftc.teamcode.subsystem.extendo.Extendo.Extension_States.retracted;
 import static org.firstinspires.ftc.teamcode.subsystem.intake.Virtual4Bar.clawClose;
 import static org.firstinspires.ftc.teamcode.subsystem.intake.Virtual4Bar.v4bPreTransfer;
+import static org.firstinspires.ftc.teamcode.subsystem.intake.Virtual4Bar.v4bStackHigh;
 import static org.firstinspires.ftc.teamcode.subsystem.intake.Virtual4Bar.v4bTransfer;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -82,14 +83,17 @@ public class AbstractedMachineRTP {
 
     }
 
-    public static StateMachine dropMachine(Deposit deposit) {
+    public static StateMachine dropMachine(Deposit deposit, Virtual4Bar virtual4Bar) {
         return new StateMachineBuilder()
                 .waitState(1)
                 .state(Drop.DROP)
                 .onEnter(()-> deposit.setFinger(onePixel))
                 .transitionTimed(0.3)
                 .state(Drop.SECOND)
-                .onEnter(()-> deposit.setFinger(zeroPixel))
+                .onEnter(()-> {
+                    deposit.setFinger(zeroPixel);
+                    virtual4Bar.setV4b(v4bStackHigh);
+                })
                 .transitionTimed(1.2)
                 .state(Drop.RESET)
                 .onEnter(()->{
