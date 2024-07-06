@@ -18,9 +18,9 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 
-public class ActiveIntake{{
+public class ActiveIntake{
     //hello peepeepoopoo
-    }
+
     static DcMotorEx intake;
     public void initintake(DcMotorEx intake1){
     intake = intake1;
