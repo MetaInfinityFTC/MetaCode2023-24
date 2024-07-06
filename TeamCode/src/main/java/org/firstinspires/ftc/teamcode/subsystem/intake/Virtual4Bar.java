@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
 @Config
+@Deprecated
 public class Virtual4Bar {
 
     private Servo v4b, claw;

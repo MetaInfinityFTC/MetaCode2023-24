@@ -10,6 +10,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 public class Slides {
 
     public static double p = 0.03, i = 0, d = 0, f = 0.01;
+    public static double tolerance = 3;
     PIDFController controller;
 
     private DcMotor left, right;
@@ -23,7 +24,7 @@ public class Slides {
         left.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         right.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         controller = new PIDFController(p, i, d, f);
-        controller.setTolerance(3);
+        controller.setTolerance(tolerance);
     }
 
     public static double pidTarget = 0;
@@ -31,23 +32,25 @@ public class Slides {
 
     public void setPidTarget(double target) {
         //base encoder code
-        this.pidTarget = target;
+        pidTarget = target;
     }
 
     public void updatePID() {
-        controller = new PIDFController(p, i, d, f);
-        controller.setTolerance(3);
+        controller.setPIDF(p, i, d, f);
+        controller.setTolerance(tolerance);
         double cmd = controller.calculate(left.getCurrentPosition(), pidTarget);
         setPower(cmd);
     }
 
-    public void manual(double inputPower) {
-        if ((left.getCurrentPosition() > lowerLimit && inputPower < 0) || (left.getCurrentPosition() < upperLimit && inputPower > 0)) {
-            setPidTarget(inputPower);
-        } else {
-            setPower(f);
-        }
-    }
+    //DO NOT USE THIS
+
+//    public void manual(double inputPower) {
+//        if ((left.getCurrentPosition() > lowerLimit && inputPower < 0) || (left.getCurrentPosition() < upperLimit && inputPower > 0)) {
+//            setPidTarget(inputPower);
+//        } else {
+//            setPower(f);
+//        }
+//    }
 
     public void setPower(double power) {
         left.setPower(power);
