@@ -46,6 +46,7 @@ import org.firstinspires.ftc.teamcode.telecontrol.DriveControl;
 
 @Config
 @TeleOp(name = "DaTele")
+@Deprecated
 public class DaTele extends LinearOpMode {
     Deposit deposit;
     Slides slides;

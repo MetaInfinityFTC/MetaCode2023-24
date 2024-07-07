@@ -6,8 +6,10 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
+import org.firstinspires.ftc.teamcode.subsystem.Subsystem;
+
 @Config
-public class NewActiveIntake {
+public class NewActiveIntake implements Subsystem {
     private final Servo linkage;
     private final DcMotor intake;
     private ColorSensor distanceSensors;
@@ -35,8 +37,30 @@ public class NewActiveIntake {
         setIntake(on);
     }
 
+    public void ground(){
+        setLinkage(ground);
+    }
+
+    public void mid(){
+        setLinkage(stackMid);
+    }
+
+    public void high(){
+        setLinkage(stackHigh);
+    }
+
     public void detectPixels() {
         //distanceSensors
+    }
+
+    @Override
+    public void update() {
+
+    }
+
+    @Override
+    public void init() {
+
     }
 }
 
