@@ -5,6 +5,7 @@ import com.arcrobotics.ftclib.controller.PIDFController;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.teamcode.subsystem.Subsystem;
 
@@ -19,7 +20,7 @@ public class Slides implements Subsystem {
 
     public double upperLimit = 450, lowerLimit = 0;
 
-    public int row = 0;
+    public int row = 1;
 
     public static double row0 = 0;
     public static double row1 = 0;
@@ -33,7 +34,11 @@ public class Slides implements Subsystem {
     public static double row9 = 0;
     public static double row10 = 0;
 
+    public static double hangHeight = 200;
+
     public static int rows = 10;
+
+    public boolean hang = false;
 
     public Slides(HardwareMap hardwareMap) {
         left = hardwareMap.dcMotor.get("lSlide");
@@ -50,7 +55,7 @@ public class Slides implements Subsystem {
 
     public void setPidTarget(double target) {
         //base encoder code
-        pidTarget = target;
+        pidTarget = Range.clip(target, lowerLimit, upperLimit);
     }
 
 
@@ -60,7 +65,14 @@ public class Slides implements Subsystem {
         controller.setPIDF(p, i, d, f);
         controller.setTolerance(tolerance);
         double cmd = controller.calculate(left.getCurrentPosition(), pidTarget);
-        setPower(cmd);
+        if(hang){
+            setPower(-1);
+        }
+        else setPower(cmd);
+    }
+
+    public void toHangPosition(){
+        setPidTarget(hangHeight);
     }
 
     @Override

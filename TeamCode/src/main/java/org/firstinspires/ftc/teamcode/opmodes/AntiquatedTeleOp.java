@@ -18,6 +18,7 @@ import org.firstinspires.ftc.teamcode.subsystem.intake.ActiveIntake;
 @Config
 @Disabled
 @TeleOp(name = "\uD83D\uDC80\\tele")
+@Deprecated
 public class AntiquatedTeleOp extends LinearOpMode {
     //get our analog input from the hardwareMap
     AnalogInput analogInput;// = hardwareMap.get(AnalogInput.class, "miniaxon");

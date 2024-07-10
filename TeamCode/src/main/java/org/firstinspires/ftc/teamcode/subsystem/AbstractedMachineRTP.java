@@ -20,6 +20,7 @@ import org.firstinspires.ftc.teamcode.subsystem.deposit.Deposit;
 import org.firstinspires.ftc.teamcode.subsystem.extendo.Extendo;
 import org.firstinspires.ftc.teamcode.subsystem.intake.Virtual4Bar;
 
+@Deprecated
 public class AbstractedMachineRTP {
 
     public enum Transfer {

@@ -14,6 +14,7 @@ import static org.firstinspires.ftc.teamcode.subsystem.intake.Virtual4Bar.clawCl
 import static org.firstinspires.ftc.teamcode.subsystem.intake.Virtual4Bar.v4bPreTransfer;
 import static org.firstinspires.ftc.teamcode.subsystem.intake.Virtual4Bar.v4bTransfer;
 
+@Deprecated
 public class AbstractedMachine {
 
     public enum Transfer {

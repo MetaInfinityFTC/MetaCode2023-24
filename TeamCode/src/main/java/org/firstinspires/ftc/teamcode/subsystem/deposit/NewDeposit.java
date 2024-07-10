@@ -101,4 +101,10 @@ public class NewDeposit implements Subsystem {
         setClawL(c);
         setClawR(c);
     }
+
+    public void collapse(){
+        setArm(armPreTransfer);
+        setWrist(wristTransfer);
+        clawDrop();
+    }
 }
