@@ -74,10 +74,14 @@ public class NewDeposit implements Subsystem {
     }
 
     public void grabL(){
-        setClawL(lGrab);
+        if(swivel.getPosition() < 0.5)
+            setClawL(lGrab);
+        else setClawR(rGrab);
     }
     public void dropL(){
-        setClawL(lDrop);
+        if(swivel.getPosition() < 0.5)
+            setClawL(lDrop);
+        else setClawR(rDrop);
     }
 
     public void setClawL(double l){
@@ -85,10 +89,14 @@ public class NewDeposit implements Subsystem {
     }
 
     public void grabR(){
-        setClawR(rGrab);
+        if(swivel.getPosition() >= 0.5)
+            setClawL(lGrab);
+        else setClawR(rGrab);
     }
     public void dropR(){
-        setClawR(rDrop);
+        if(swivel.getPosition() >= 0.5)
+            setClawL(lDrop);
+        else setClawR(rDrop);
     }
 
     public void setClawR(double r){
