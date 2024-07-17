@@ -18,7 +18,7 @@ public class DriveControl implements Control{
     @Override
     public void update() {
         double y = -gp1.left_stick_y; // Remember, Y stick value is reversed
-        double x = gp1.left_stick_x * 1.1; // Counteract imperfect strafing
+        double x = -gp1.left_stick_x * 1.1; // Counteract imperfect strafing
         double rx = gp1.right_stick_x;
 
         r.db.drive.setWeightedDrivePower(new Pose2d(y, x, -rx));

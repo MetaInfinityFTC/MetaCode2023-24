@@ -96,7 +96,7 @@ public class TeleCRI extends LinearOpMode {
                     if(!cs.isScheduled(transfer)){
                         if(transfering){
                             transfering = false;
-                            s = State.DEPOSIT;
+                            s = State.NEUTRAL;
                         }
                         else {
                             cs.schedule(transfer);

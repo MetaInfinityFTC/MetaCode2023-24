@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.hardware.Gamepad;
 import org.firstinspires.ftc.robotcore.internal.stellaris.FlashLoaderCommand;
 import org.firstinspires.ftc.teamcode.FallingEdge;
 import org.firstinspires.ftc.teamcode.Robot;
+import org.firstinspires.ftc.teamcode.subsystem.deposit.NewDeposit;
 
 public class DepositControl implements Control{
 
@@ -32,6 +33,7 @@ public class DepositControl implements Control{
     public void update() {
 
         r.d.setSwivel();
+        r.d.setArm(NewDeposit.armDeposit);
         swivelL.update(gp1.left_bumper);
         swivelR.update(gp1.right_bumper);
         drop.update(gp1.x);
