@@ -59,7 +59,7 @@ public class TeleCRI extends LinearOpMode {
         CommandScheduler cs = CommandScheduler.getInstance();
         Command transfer = GlobalCommands.getTransfer(r);
 
-        FallingEdge endgameTrigger = new FallingEdge(() -> {if(s != State.ENDGAME) {
+        FallingEdge endgameTrigger = new FallingEdge(() -> {if(s != State.ENDGAME && s != State.TRANSFER) {
             s = State.ENDGAME;
             r.d.collapse();
             r.s.setPosition(0);
@@ -94,7 +94,10 @@ public class TeleCRI extends LinearOpMode {
                             transfering = false;
                             s = State.DEPOSIT;
                         }
-                        else cs.schedule(transfer);
+                        else {
+                            cs.schedule(transfer);
+                            transfering = true;
+                        }
                     }
                     break;
 

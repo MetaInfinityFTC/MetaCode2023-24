@@ -21,12 +21,19 @@ public class DepositControl implements Control{
     FallingEdge dropR = new FallingEdge(() -> r.d.dropR());
     FallingEdge drop = new FallingEdge(() -> r.d.clawDrop());
 
+    FallingEdge swivelL = new FallingEdge(() -> r.d.swivelPos++);
+    FallingEdge swivelR = new FallingEdge(() -> r.d.swivelPos--);
+
     FallingEdge rowUp = new FallingEdge(() -> r.s.row++);
     FallingEdge rowDown = new FallingEdge(() -> r.s.row--);
 
 
     @Override
     public void update() {
+
+        r.d.setSwivel();
+        swivelL.update(gp1.left_bumper);
+        swivelR.update(gp1.right_bumper);
         drop.update(gp1.x);
         dropL.update(gp1.left_trigger > 0);
         dropR.update(gp1.right_trigger > 0);

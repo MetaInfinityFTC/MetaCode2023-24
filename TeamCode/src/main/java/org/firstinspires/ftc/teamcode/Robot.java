@@ -12,6 +12,7 @@ import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.subsystem.Drive;
 import org.firstinspires.ftc.teamcode.subsystem.Drone;
 import org.firstinspires.ftc.teamcode.subsystem.Subsystem;
+import org.firstinspires.ftc.teamcode.subsystem.Hang;
 import org.firstinspires.ftc.teamcode.subsystem.deposit.NewDeposit;
 import org.firstinspires.ftc.teamcode.subsystem.extendo.Extendo;
 import org.firstinspires.ftc.teamcode.subsystem.intake.NewActiveIntake;
@@ -29,6 +30,7 @@ public class Robot {
     public Slides s;
     public Drive db;
     public Drone dr;
+    public Hang h;
 
     public List<Subsystem> subsystems;
 
@@ -48,8 +50,9 @@ public class Robot {
         s = new Slides(hardwareMap);
         db = new Drive(hardwareMap);
         dr = new Drone(hardwareMap);
+        h = new Hang(hardwareMap);
 
-        subsystems = new ArrayList<>(Arrays.asList(d, e, i, s, db, dr));
+        subsystems = new ArrayList<>(Arrays.asList(d, e, i, s, db, dr, h));
         // define motors & servos in initialization
     }
 

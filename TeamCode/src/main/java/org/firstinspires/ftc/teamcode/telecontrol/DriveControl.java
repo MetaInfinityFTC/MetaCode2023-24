@@ -21,6 +21,6 @@ public class DriveControl implements Control{
         double x = gp1.left_stick_x * 1.1; // Counteract imperfect strafing
         double rx = gp1.right_stick_x;
 
-        r.db.drive.setWeightedDrivePower(new Pose2d(y, x, rx));
+        r.db.drive.setWeightedDrivePower(new Pose2d(x, y, rx));
     }
 }

@@ -28,14 +28,19 @@ public class IntakeControl implements Control{
 
     @Override
     public void update() {
+
+        r.i.setIntake(gp1.left_trigger - gp1.right_trigger);
+
         ground.update(gp1.a);
         mid.update(gp1.y);
         high.update(gp1.b);
 
         in.update(gp1.dpad_down);
-        in.update(gp1.dpad_left);
-        in.update(gp1.dpad_right);
+        p1.update(gp1.dpad_left);
+        p2.update(gp1.dpad_right);
         out.update(gp1.dpad_up);
+
+
 
 
     }

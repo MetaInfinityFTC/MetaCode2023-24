@@ -9,7 +9,7 @@ import org.firstinspires.ftc.teamcode.subsystem.Subsystem;
 
 @Config
 public class NewDeposit implements Subsystem {
-    public static Servo lArm, rArm, wrist, lclaw, rclaw;
+    public static Servo lArm, rArm, wrist, lclaw, rclaw, swivel;
 
     ElapsedTime timer = new ElapsedTime();
 
@@ -23,6 +23,13 @@ public class NewDeposit implements Subsystem {
     public static double rGrab = 0.0;
     public static double rDrop = 0.0;
 
+    public static double swivelTransfer = 0;
+    public static double swivelFlat = 0;
+    public static double swivelVert = 0;
+
+    public int swivelPos = 0;
+
+
     public NewDeposit(HardwareMap hardwareMap) {
         lArm = hardwareMap.servo.get("lArm");
         rArm = hardwareMap.servo.get("rArm");
@@ -30,8 +37,9 @@ public class NewDeposit implements Subsystem {
 
         wrist = hardwareMap.servo.get("wrist");
 
-        lclaw = hardwareMap.servo.get("lclaw");
-        rclaw = hardwareMap.servo.get("rclaw");
+        lclaw = hardwareMap.servo.get("lClaw");
+        rclaw = hardwareMap.servo.get("rClaw");
+        swivel = hardwareMap.get(Servo.class, "swivel");
     }
 
     @Override
@@ -107,4 +115,21 @@ public class NewDeposit implements Subsystem {
         setWrist(wristTransfer);
         clawDrop();
     }
+
+    public void setSwivel(double pos){
+        swivel.setPosition(pos);
+    }
+
+    public void setSwivel(){
+        setSwivel(getSwivelValue(swivelPos));
+    }
+
+    public void setSwivel(int pos){
+        setSwivel(getSwivelValue(pos));
+    }
+
+    public static double getSwivelValue(int pos){
+        return swivelFlat + ((pos + 6 * 100) % 6) * Math.abs(swivelFlat - swivelVert) * 2 / 3;
+    }
+
 }

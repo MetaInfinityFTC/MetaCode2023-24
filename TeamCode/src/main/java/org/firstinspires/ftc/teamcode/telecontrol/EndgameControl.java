@@ -4,7 +4,9 @@ import com.qualcomm.robotcore.hardware.Gamepad;
 
 import org.firstinspires.ftc.teamcode.FallingEdge;
 import org.firstinspires.ftc.teamcode.Robot;
+import org.firstinspires.ftc.teamcode.subsystem.Hang;
 import org.firstinspires.ftc.teamcode.subsystem.deposit.Slides;
+import org.firstinspires.ftc.teamcode.subsystem.extendo.Extendo;
 
 public class EndgameControl implements Control{
 
@@ -22,12 +24,13 @@ public class EndgameControl implements Control{
 
     FallingEdge launch = new FallingEdge(() -> r.dr.launch());
     FallingEdge hang = new FallingEdge(() -> {
-       if(Slides.pidTarget != Slides.hangHeight){
-           r.s.toHangPosition();
+       if(Hang.rHang.getPosition() == Hang.down){
+           r.h.up();
+           r.e.setState(Extendo.Extension_States.hung);
        }
        else{
-           r.s.hang = true;
-           r.s.setPosition(0);
+           r.h.down();
+           r.e.setState(Extendo.Extension_States.retracted);
        }
     });
 
