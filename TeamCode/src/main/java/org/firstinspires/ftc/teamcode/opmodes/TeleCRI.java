@@ -75,11 +75,15 @@ public class TeleCRI extends LinearOpMode {
                     r.s.hang = false;
                     r.d.setWrist(NewDeposit.wristTransfer);
                     r.d.setArm(NewDeposit.armPreTransfer);
+                    r.d.setSwivel(NewDeposit.swivelTransfer);
                     if(gamepad1.right_trigger > 0 || gamepad1.left_trigger > 0){
                         s = State.INTAKE;
                     }
                     if(gamepad1.x){
                         s = State.TRANSFER;
+                    }
+                    if(gamepad1.y){
+                        s = State.DEPOSIT;
                     }
                     break;
                 case INTAKE:
@@ -100,7 +104,6 @@ public class TeleCRI extends LinearOpMode {
                         }
                     }
                     break;
-
                 case DEPOSIT:
                     dpc.update();
                     if(NewDeposit.lclaw.getPosition() == NewDeposit.lDrop && NewDeposit.rclaw.getPosition() == NewDeposit.rDrop){

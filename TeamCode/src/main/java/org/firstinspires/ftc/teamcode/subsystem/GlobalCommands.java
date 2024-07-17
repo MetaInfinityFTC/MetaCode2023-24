@@ -14,7 +14,7 @@ public class GlobalCommands{
     public static double LIFT_DELAY = 0.2;
 
     public static SequentialCommandGroup getTransfer(Robot r){
-        return new SequentialCommandGroup(new FunctionalCommand(() -> {r.startTime = System.nanoTime();}, ()->{r.d.setArm(NewDeposit.armTransfer);r.d.clawDrop();}, (Boolean ended) -> {}, () -> System.nanoTime() - r.startTime > ARM_DELAY * 1e9),
+        return new SequentialCommandGroup(new FunctionalCommand(() -> {r.startTime = System.nanoTime();}, ()->{r.d.setArm(NewDeposit.armTransfer);r.d.clawDrop();r.d.setSwivel(NewDeposit.swivelTransfer);}, (Boolean ended) -> {}, () -> System.nanoTime() - r.startTime > ARM_DELAY * 1e9),
                 new FunctionalCommand(() -> {r.startTime = System.nanoTime();}, ()->{r.d.clawGrab();}, (Boolean ended) -> {}, () -> System.nanoTime() - r.startTime > GRAB_DELAY * 1e9),
                 new FunctionalCommand(() -> {r.startTime = System.nanoTime();}, ()->{r.d.setArm(NewDeposit.armPreTransfer);}, (Boolean ended) -> {}, () -> System.nanoTime() - r.startTime > LIFT_DELAY * 1e9));
 
