@@ -58,7 +58,8 @@ public class TeleCRI extends LinearOpMode {
 
         }
 
-        ElapsedTime t = null;
+       // ElapsedTime t = null;
+        ElapsedTime t = new ElapsedTime();
 
         CommandScheduler cs = CommandScheduler.getInstance();
         Command transfer = GlobalCommands.getTransfer(r);
