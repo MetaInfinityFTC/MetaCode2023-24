@@ -35,8 +35,8 @@ import org.firstinspires.ftc.teamcode.vision.processors.BluePropProcessor;
 import org.firstinspires.ftc.teamcode.vision.processors.PropProcessor;
 import org.firstinspires.ftc.vision.VisionPortal;
 
-@Autonomous(name="\uD83D\uDC80\\blueBackdrop")
-public class BlueBackdropSide extends LinearOpMode {
+@Autonomous(name="blueBackdrop", preselectTeleOp = "TeleCRI")
+public class CRIBlueBackdropSide extends LinearOpMode {
     private PropProcessor.Location location = MIDDLE;
     private BluePropProcessor bluePropProcessor;
     private VisionPortal visionPortal;

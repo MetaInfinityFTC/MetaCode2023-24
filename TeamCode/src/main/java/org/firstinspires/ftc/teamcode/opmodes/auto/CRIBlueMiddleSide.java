@@ -22,7 +22,7 @@ import org.firstinspires.ftc.teamcode.vision.processors.BluePropProcessor;
 import org.firstinspires.ftc.teamcode.vision.processors.PropProcessor;
 import org.firstinspires.ftc.vision.VisionPortal;
 
-@Autonomous(name="CRIBlueMiddle")
+@Autonomous(name="CRIBlueMiddle", preselectTeleOp = "TeleCRI")
 public class CRIBlueMiddleSide extends LinearOpMode {
     private PropProcessor.Location location = MIDDLE;
     private BluePropProcessor bluePropProcessor;

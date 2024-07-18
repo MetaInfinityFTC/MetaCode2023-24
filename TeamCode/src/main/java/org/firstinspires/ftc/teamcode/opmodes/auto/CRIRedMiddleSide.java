@@ -36,7 +36,7 @@ import org.firstinspires.ftc.teamcode.vision.processors.PropProcessor;
 import org.firstinspires.ftc.teamcode.vision.processors.RedPropProcessor;
 import org.firstinspires.ftc.vision.VisionPortal;
 
-@Autonomous(name="RedMiddle")
+@Autonomous(name="RedMiddle", preselectTeleOp = "TeleCRI")
 public class CRIRedMiddleSide extends LinearOpMode {
     private PropProcessor.Location location = MIDDLE;
     private RedPropProcessor redPropProcessor;
