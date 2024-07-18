@@ -62,6 +62,10 @@ public class Slides implements Subsystem {
 
     @Override
     public void update() {
+        if(getPos() < 0){
+            left.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            right.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        }
         controller.setPIDF(p, i, d, f);
         controller.setTolerance(tolerance);
         double cmd = controller.calculate(left.getCurrentPosition(), pidTarget);
