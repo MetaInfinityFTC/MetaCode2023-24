@@ -1,8 +1,20 @@
 package org.firstinspires.ftc.teamcode.opmodes.auto;
 
-import static org.firstinspires.ftc.teamcode.subsystem.deposit.Deposit.*;
+import static org.firstinspires.ftc.teamcode.subsystem.deposit.Deposit.armDeposit90;
+import static org.firstinspires.ftc.teamcode.subsystem.deposit.Deposit.armPreTransfer;
+import static org.firstinspires.ftc.teamcode.subsystem.deposit.Deposit.armTransfer;
+import static org.firstinspires.ftc.teamcode.subsystem.deposit.Deposit.bothPixels;
+import static org.firstinspires.ftc.teamcode.subsystem.deposit.Deposit.wrist90degree;
+import static org.firstinspires.ftc.teamcode.subsystem.deposit.Deposit.wristTransfer;
+import static org.firstinspires.ftc.teamcode.subsystem.deposit.Deposit.zeroPixel;
+import static org.firstinspires.ftc.teamcode.subsystem.extendo.Extendo.Extension_States.closespike;
+import static org.firstinspires.ftc.teamcode.subsystem.extendo.Extendo.Extension_States.extended;
+import static org.firstinspires.ftc.teamcode.subsystem.extendo.Extendo.Extension_States.farspike;
+import static org.firstinspires.ftc.teamcode.subsystem.extendo.Extendo.Extension_States.midspike;
+import static org.firstinspires.ftc.teamcode.subsystem.extendo.Extendo.Extension_States.retracted;
 import static org.firstinspires.ftc.teamcode.subsystem.intake.Virtual4Bar.clawClose;
 import static org.firstinspires.ftc.teamcode.subsystem.intake.Virtual4Bar.clawOpen;
+import static org.firstinspires.ftc.teamcode.subsystem.intake.Virtual4Bar.v4bGround;
 import static org.firstinspires.ftc.teamcode.subsystem.intake.Virtual4Bar.v4bPreTransfer;
 import static org.firstinspires.ftc.teamcode.subsystem.intake.Virtual4Bar.v4bStackHigh;
 import static org.firstinspires.ftc.teamcode.subsystem.intake.Virtual4Bar.v4bStackMid;
@@ -57,16 +69,12 @@ public class fineilldoitmyself extends LinearOpMode {
 
     boolean trasnferring = false;
 
-    double v4bStackHeight = v4bStackHigh;
-
-    int cycle = 4, totalCycles = cycle, cycleOffset = totalCycles - cycle;
+    double v4bStackHeight = v4bStackHigh, ticker = 1, cycle = 0;
 
     public enum states {
         initial, grab, drop, end, siiiiilver_suuurrrfer_intermiission
     }
 
-    TrajectorySequence grabSecondPath;
-    TrajectorySequence grab;
     @Override
     public void runOpMode(){
         drive = new SampleMecanumDrive(hardwareMap);
@@ -114,11 +122,11 @@ public class fineilldoitmyself extends LinearOpMode {
                 .UNSTABLE_addTemporalMarkerOffset(0.8,() -> {
                     deposit.setWrist(wrist90degree);
                     deposit.setArm(armDeposit90);
-                    setPidTarget(0, 0.5);
+                    setPidTarget(-20, 0.5);
                     extendo.extendosetPidTarget(400, 1);
                     virtual4Bar.setV4b(v4bStackHigh);
                 })
-                .lineToSplineHeading(new Pose2d(46, -31, Math.toRadians(-192.5)))
+                .lineToSplineHeading(new Pose2d(45.6, -29.8, Math.toRadians(-192.5)))
                 .addTemporalMarker(() -> {
                     //place yellow & purple
                     virtual4Bar.setClaw(clawOpen);
@@ -135,80 +143,44 @@ public class fineilldoitmyself extends LinearOpMode {
                 })
                 .turn(Math.toRadians(12.5))
                 .build();
-
-        grab = drive.trajectorySequenceBuilder(middlePurple.end())
+        TrajectorySequence grab = drive.trajectorySequenceBuilder(middlePurple.end())
                 .addTemporalMarker(()->{
                     setPidTarget(0, 1);
                     virtual4Bar.setClaw(clawClose);
                     virtual4Bar.setV4b(v4bStackHeight);})
-                .UNSTABLE_addTemporalMarkerOffset(0.3, ()-> {
-                    extendo.extendosetPidTarget(1050, 1);
-                    virtual4Bar.setClaw(clawOpen);
-                })
-                .splineToConstantHeading(new Vector2d(20, -40 - (3 * (cycleOffset-1))), Math.toRadians(-180))
-                .lineToSplineHeading(new Pose2d(-20.5 - (2 * (cycleOffset-1)), -40  - (3 * (cycleOffset-1)), Math.toRadians(-180)))
-                .waitSeconds(0.1)
-                .addTemporalMarker(()-> {transferMachine.start(); trasnferring = true;})
-                .waitSeconds(0.3)
-                .lineTo(new Vector2d(20, -40 - (3 * (cycleOffset-1))))
-                .splineToConstantHeading(new Vector2d(43, -31), Math.toRadians(0))
-                .build();
-
-
-        grabSecondPath = drive.trajectorySequenceBuilder(grab.end())
-                .addTemporalMarker(()->{
-                    deposit.setArm(armTransfer);
-                    setPidTarget(0, 1);
-                    virtual4Bar.setV4b(v4bStackHeight);})
-                .UNSTABLE_addTemporalMarkerOffset(0.2, () -> virtual4Bar.setClaw(clawOpen))
-
-                .setTangent(Math.toRadians(135))
-                .splineToConstantHeading(new Vector2d(20, -12), Math.toRadians(180))
+                .splineToConstantHeading(new Vector2d(20, -34.5 - (4.5 * cycle)), Math.toRadians(-180))
                 .addTemporalMarker(()-> {
                     extendo.extendosetPidTarget(1050, 1);
                     virtual4Bar.setClaw(clawOpen);
-                    deposit.setArm(armPreTransfer);
                 })
-
-                // stack
-                .lineTo(new Vector2d(-23.5, -12))
-                .waitSeconds(0.1)
-                .addTemporalMarker(() -> {
-                    transferMachine.start();
-                })
-                .waitSeconds(0.4)
-                .addTemporalMarker(() -> extendo.extendosetPidTarget(0, 1))
-                .lineTo(new Vector2d(20, -12))
-                .splineToConstantHeading(new Vector2d(43, -30), Math.toRadians(-45))
-                .waitSeconds(.3)
-
-                .addTemporalMarker(dropMachine::start)
+                .lineToSplineHeading(new Pose2d(-20 - (1.5 * cycle), -34.5  - (4.5 * cycle), Math.toRadians(-180)))
+                .waitSeconds(0.3)
+                .addTemporalMarker(()-> {transferMachine.start(); trasnferring = true;})
+                .waitSeconds(0.5)
+                .lineTo(new Vector2d(20, -34.5 - (4.5 * cycle)))
+                .splineToConstantHeading(new Vector2d(42.7  - (0.5 * cycle), -27- (4 * cycle)), Math.toRadians(0))
+                .waitSeconds(0.3)
                 .build();
 
         StateMachine master = new StateMachineBuilder()
                 .state(states.initial)
                 .onEnter(()-> drive.followTrajectorySequenceAsync(middlePurple))
                 .transition(()->!drive.isBusy(), states.grab)
-                .onExit(() -> cycle--)
-
                 .state(states.grab)
-                .onEnter(this::runGrabPath)
+                .onEnter(()-> drive.followTrajectorySequenceAsync(grab))
                 .transition(()-> !drive.isBusy() && !transferMachine.isRunning(), () -> {
                     trasnferring = false; transferMachine.stop(); transferMachine.reset();
-                    deposit.setWrist(wrist90degree); deposit.setArm(armDeposit90); setPidTarget(-300, 1);
+                    deposit.setWrist(wrist90degree); deposit.setArm(armDeposit90); setPidTarget(-275, 1);
                 })
-
                 .state(states.drop)
                 .onEnter(dropMachine::start)
                 .loop(dropMachine::update)
-                .transition(()->!dropMachine.isRunning() && (cycle) > 0, states.grab, ()-> {dropMachine.reset(); dropMachine.stop(); })
-                .transition(()->!dropMachine.isRunning() && (cycle) == 0, states.siiiiilver_suuurrrfer_intermiission, ()-> {dropMachine.reset(); dropMachine.stop();})
-                .onExit(()->{v4bStackHeight = v4bStackMid; cycle--;})
-
+                .transition(()->!dropMachine.isRunning() && ticker < 2, states.grab, ()-> {dropMachine.reset(); dropMachine.stop(); })
+                .transition(()->!dropMachine.isRunning() && ticker > 1, states.siiiiilver_suuurrrfer_intermiission, ()-> {dropMachine.reset(); dropMachine.stop();})
+                .onExit(()->{ticker+=1; v4bStackHeight = v4bStackMid; cycle++;})
                 .state(states.siiiiilver_suuurrrfer_intermiission)
                 .onEnter(()->{telemetry.addData("Yash tweaking", 0); telemetry.update();})
                 .transitionTimed(0.8, states.end)
-
                 .state(states.end)
                 .onEnter(()-> {
                     deposit.setWrist(wristTransfer);
@@ -230,7 +202,6 @@ public class fineilldoitmyself extends LinearOpMode {
         master.start();
         visionPortal.close();
         while(opModeIsActive()){
-            cycleOffset = totalCycles - cycle;
             master.update();
             if (trasnferring) {
                 transferMachine.update();
@@ -248,19 +219,4 @@ public class fineilldoitmyself extends LinearOpMode {
         right.setPower(motorPower);
     }
 
-
-    public void runGrabPath() {
-        switch(totalCycles - cycle) {
-            case 1: // cycle 1
-                drive.followTrajectorySequenceAsync(grab);
-                break;
-            case 2:
-                drive.followTrajectorySequenceAsync(grab);
-                break;
-            case 3:
-                drive.followTrajectorySequenceAsync(grabSecondPath);
-                break;
-        }
-
-    }
 }

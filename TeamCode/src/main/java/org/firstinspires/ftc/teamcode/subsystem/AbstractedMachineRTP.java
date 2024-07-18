@@ -42,7 +42,7 @@ public class AbstractedMachineRTP {
                 .state(Transfer.PRE_TRANSFER)
                 .onEnter(() -> {
                     virtual4Bar.setV4b(v4bPreTransfer); //raise off ground
-                    extendo.extendosetPidTarget(0, 0.7);
+                    extendo.extendosetPidTarget(0, 0.5);
                     deposit.setWrist(wristTransfer);
                     deposit.setArm(armPreTransfer);
                 })
@@ -50,7 +50,7 @@ public class AbstractedMachineRTP {
                 .onExit(() -> {
                     virtual4Bar.setV4b(v4bPreTransfer);
                 })
-                .waitState(1.3)
+                .waitState(1)
                 .state(Transfer.TRANSFER)
                 .onEnter(() -> {
                     virtual4Bar.setV4b(v4bTransfer);
@@ -70,13 +70,13 @@ public class AbstractedMachineRTP {
                 .state(Transfer.BOOM)
                 .onEnter(() -> {
                     deposit.setFinger(bothPixels);
-                    deposit.setArm(1);
+                    deposit.setArm(0.85);
                 })
                 .transitionTimed(0.5)
                 .state(Transfer.ARMDOWN)
                 .onEnter(() -> {
                     virtual4Bar.setClaw(0.4); //open slightly so pixels can come out
-                    deposit.setArm(1);
+                    deposit.setArm(0.85);
                 })
                 .state(Transfer.FINISHED) // end state
 
@@ -93,9 +93,8 @@ public class AbstractedMachineRTP {
                 .state(Drop.SECOND)
                 .onEnter(()-> {
                     deposit.setFinger(zeroPixel);
-                    virtual4Bar.setV4b(v4bStackHigh);
                 })
-                .transitionTimed(1.2)
+                .transitionTimed(0.5)
                 .state(Drop.RESET)
                 .onEnter(()->{
                     deposit.setWrist(wristTransfer);

@@ -31,13 +31,11 @@ public class ExtendoTuner extends OpMode {
     @Override
     public void init() {
         slides = new Extendo(hardwareMap);
-        v4b = new Virtual4Bar(hardwareMap);
         telemetry = new MultipleTelemetry(FtcDashboard.getInstance().getTelemetry());
     }
 
     @Override
     public void loop() {
-        v4b.setV4b(v4bPreTransfer);
         slides.setState(states);
         slides.update();
         telemetry.addData("extendoPos", slides.getPos());

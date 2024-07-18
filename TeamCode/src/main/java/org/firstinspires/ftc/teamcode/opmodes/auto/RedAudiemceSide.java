@@ -26,7 +26,7 @@ import com.sfdev.assembly.state.StateMachine;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
-import org.firstinspires.ftc.teamcode.subsystem.AbstractedMachine;
+import org.firstinspires.ftc.teamcode.subsystem.AbstractedMachineRTP;
 import org.firstinspires.ftc.teamcode.subsystem.deposit.Deposit;
 import org.firstinspires.ftc.teamcode.subsystem.deposit.Slides;
 import org.firstinspires.ftc.teamcode.subsystem.extendo.Extendo;
@@ -91,7 +91,7 @@ public class RedAudiemceSide extends LinearOpMode {
         left.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         right.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
-        StateMachine transferMachine = AbstractedMachine.getTransferMachine(virtual4Bar, extendo, deposit);
+        StateMachine transferMachine = AbstractedMachineRTP.getTransferMachine(virtual4Bar, extendo, deposit);
 
         Pose2d startpose = new Pose2d(-36, -58, Math.toRadians(-90));
         drive.setPoseEstimate(startpose);

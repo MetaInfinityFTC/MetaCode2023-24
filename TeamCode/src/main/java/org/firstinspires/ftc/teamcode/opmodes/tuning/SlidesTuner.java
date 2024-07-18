@@ -21,6 +21,9 @@ public class SlidesTuner extends LinearOpMode {
 
         Telemetry t = new MultipleTelemetry(FtcDashboard.getInstance().getTelemetry(), telemetry);
 
+        while(opModeInInit()){
+            telemetry.update();
+        }
         while(opModeIsActive()){
             s.setPidTarget(goalPos);
 

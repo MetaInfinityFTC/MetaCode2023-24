@@ -9,9 +9,9 @@ import org.firstinspires.ftc.teamcode.subsystem.deposit.NewDeposit;
 
 public class GlobalCommands{
 
-    public static double GRAB_DELAY = 0.2;
-    public static double ARM_DELAY = 0.2;
-    public static double LIFT_DELAY = 0.2;
+    public static double GRAB_DELAY = 0.6;
+    public static double ARM_DELAY = 0.6;
+    public static double LIFT_DELAY = 0.6;
 
     public static SequentialCommandGroup getTransfer(Robot r){
         return new SequentialCommandGroup(new FunctionalCommand(() -> {r.startTime = System.nanoTime();}, ()->{r.d.setArm(NewDeposit.armTransfer);r.d.clawDrop();r.d.setSwivel(NewDeposit.swivelTransfer);}, (Boolean ended) -> {}, () -> System.nanoTime() - r.startTime > ARM_DELAY * 1e9),

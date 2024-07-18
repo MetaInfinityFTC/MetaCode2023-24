@@ -29,7 +29,7 @@ import com.sfdev.assembly.state.StateMachine;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
-import org.firstinspires.ftc.teamcode.subsystem.AbstractedMachine;
+import org.firstinspires.ftc.teamcode.subsystem.AbstractedMachineRTP;
 import org.firstinspires.ftc.teamcode.subsystem.deposit.Deposit;
 import org.firstinspires.ftc.teamcode.subsystem.deposit.Slides;
 import org.firstinspires.ftc.teamcode.subsystem.extendo.Extendo;
@@ -67,8 +67,8 @@ public class RedBackdropSide extends LinearOpMode {
         visionPortal = VisionPortal.easyCreateWithDefaults(
                 hardwareMap.get(WebcamName.class, "Webcam 1"), redPropProcessor);
 
-        LeftHang = hardwareMap.servo.get("LeftHang");
-        RightHang = hardwareMap.servo.get("RightHang");
+        LeftHang = hardwareMap.servo.get("lHang");
+        RightHang = hardwareMap.servo.get("rHang");
         drone = hardwareMap.servo.get("drone");
 
         left = hardwareMap.dcMotor.get("lSlide");
@@ -96,131 +96,18 @@ public class RedBackdropSide extends LinearOpMode {
         Pose2d startpose = new Pose2d(14.75, -61.5, Math.toRadians(-90));
         drive.setPoseEstimate(startpose);
 
-        StateMachine transferMachine = AbstractedMachine.getTransferMachine(virtual4Bar, extendo, deposit);
+        StateMachine transferMachine = AbstractedMachineRTP.getTransferMachine(virtual4Bar, extendo, deposit);
 
         TrajectorySequence leftPurple = drive.trajectorySequenceBuilder(startpose)
-                .UNSTABLE_addTemporalMarkerOffset(0.8,() -> {
-                    deposit.setWrist(wrist90degree);
-                    deposit.setArm(armDeposit90);
-                    setPidTarget(-100, 0.5);
-                    extendo.setState(farspike);
-                    virtual4Bar.setV4b(0.92);
-                })
-                .lineToSplineHeading(new Pose2d(43, -30, Math.toRadians(-180)))
-                .waitSeconds(0.2)
-                .addTemporalMarker(() -> {
-                    virtual4Bar.setClaw(clawOpen);
-                })
-                .waitSeconds(0.5)
-                .lineToSplineHeading(new Pose2d(43, -27, Math.toRadians(-180)))
-                .addTemporalMarker(() -> {
-                    deposit.setFinger(zeroPixel);
-                })
-                .forward(4)
-                .addTemporalMarker(() -> {
-                    deposit.setWrist(wristTransfer);
-                    deposit.setArm(armPreTransfer);
-                    extendo.setState(retracted);
-                    virtual4Bar.setClaw(clawClose);
-                    virtual4Bar.setV4b(v4bTransfer);
-                    setPidTarget(0, 0.5);
-                })
-                .strafeLeft(32)
+                .addTemporalMarker(()-> {extendo.extendosetPidTarget(800,1);})
                 .build();
 
         TrajectorySequence middlePurple = drive.trajectorySequenceBuilder(startpose)
-                .UNSTABLE_addTemporalMarkerOffset(0.8,() -> {
-                    deposit.setWrist(wrist90degree);
-                    deposit.setArm(armDeposit90);
-                    setPidTarget(0, 0.5);
-                    extendo.setState(midspike);
-                    virtual4Bar.setV4b(0.875);
-                })
-                .lineToSplineHeading(new Pose2d(46, -29, Math.toRadians(-195)))
-                .addTemporalMarker(() -> {
-                    //place yellow & purple
-                    virtual4Bar.setClaw(clawOpen);
-                    deposit.setFinger(zeroPixel);
-                })
-                .waitSeconds(0.5)
-                .addTemporalMarker(() -> {
-                    deposit.setWrist(wristTransfer);
-                    deposit.setArm(armPreTransfer);
-                    extendo.setState(retracted);
-                    virtual4Bar.setClaw(clawClose);
-                    virtual4Bar.setV4b(v4bStackHigh);
-                    setPidTarget(0, 0.5);
-                })
-                .splineToSplineHeading(new Pose2d(20, -35, Math.toRadians(-180)), Math.toRadians(180))
-                .addTemporalMarker(()-> {
-                    extendo.setState(extended);
-                    virtual4Bar.setClaw(clawOpen);
-                })
-                .lineTo(new Vector2d(-15, -35))
-                .addTemporalMarker(() -> {
-                    trasnferring = true;
-                    transferMachine.start();
-                })
-                .waitSeconds(0.6)
-                .lineTo(new Vector2d(20, -35))
-                .splineToConstantHeading(new Vector2d(45, -30), Math.toRadians(0))
-                .addTemporalMarker(() -> {
-                    trasnferring = false;
-                    transferMachine.reset();
-                    transferMachine.stop();
-                    deposit.setArm(armDeposit90);
-                    setPidTarget(-150, 1);
-                })
-                .waitSeconds(0.5)
-                .addTemporalMarker(() -> {
-                    //drop
-                })
-                .splineToConstantHeading(new Vector2d(20, -35), Math.toRadians(180))
-                .lineTo(new Vector2d(-15, -35))
-                .waitSeconds(0.35)
-                .addTemporalMarker(() -> {
-                    //grab
-                })
-                .lineTo(new Vector2d(20, -35))
-                .splineToConstantHeading(new Vector2d(45, -30), Math.toRadians(0))
-                .waitSeconds(0.5)
-                .addTemporalMarker(() -> {
-                    //drop
-                })
-                .splineToConstantHeading(new Vector2d(20, -10.5), Math.toRadians(180))
-                .lineTo(new Vector2d(-15, -10.5))
-                .waitSeconds(0.35)
-                .addTemporalMarker(() -> {
-                    //grab
-                })
-                .lineTo(new Vector2d(20, -10.5))
-                .splineToConstantHeading(new Vector2d(45, -30), Math.toRadians(0))
-                .waitSeconds(0.5)
-                .addTemporalMarker(() -> {
-                    //drop
-                })
-                .splineToConstantHeading(new Vector2d(20, -10.5), Math.toRadians(180))
-                .lineTo(new Vector2d(-15, -10.5))
-                .waitSeconds(0.35)
-                .addTemporalMarker(() -> {
-                    //grab
-                })
-                .lineTo(new Vector2d(20, -10.5))
-                .splineToConstantHeading(new Vector2d(45, -30), Math.toRadians(0))
-                .waitSeconds(0.5)
-                .addTemporalMarker(() -> {
-                    //drop
-                })
-                .lineToSplineHeading(new Pose2d(45, -57, Math.toRadians(-180)))
+                .addTemporalMarker(()-> {extendo.extendosetPidTarget(800,1);})
                 .build();
 
         TrajectorySequence rightPurple = drive.trajectorySequenceBuilder(startpose)
-                .UNSTABLE_addTemporalMarkerOffset(1,() -> {
-                    deposit.setWrist(wrist90degree);
-                    deposit.setArm(armDeposit90);
-                    setPidTarget(-100, 0.5);
-                    extendo.setState(closespike);
-                })
+
                 .lineToSplineHeading(new Pose2d(43, -36, Math.toRadians(-180)))
                 .addTemporalMarker(() -> {
                     deposit.setFinger(zeroPixel);
@@ -261,6 +148,7 @@ public class RedBackdropSide extends LinearOpMode {
                 break;
         }
         while(opModeIsActive()){
+
             drive.update();
             extendo.update();
             if (trasnferring) {

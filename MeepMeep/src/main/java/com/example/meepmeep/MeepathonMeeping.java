@@ -12,76 +12,44 @@ public class MeepathonMeeping {
     public static void main(String[] args) {
         MeepMeep meepMeep = new MeepMeep(700);
 
+        int cycleOffset = 1;
+
         RoadRunnerBotEntity myBot = new DefaultBotBuilder(meepMeep)
                 // Set bot constraints: maxVel, maxAccel, maxAngVel, maxAngAccel, track width
-                .setConstraints(50, 50, Math.toRadians(180), Math.toRadians(180), 12.55)
+                .setConstraints(35, 30, Math.toRadians(180), Math.toRadians(180), 12.55)
                 .followTrajectorySequence(drive ->
-                        drive.trajectorySequenceBuilder(new Pose2d(14.75, -61.5, Math.toRadians(-90)))
-                                .UNSTABLE_addTemporalMarkerOffset(1,() -> {
-                                    //extend to midspike
-                                })
-                                .lineToSplineHeading(new Pose2d(45, -32, Math.toRadians(-190)))
-                                .addTemporalMarker(() -> {
-                                    //place yellow & purple
-                                })
-                                .waitSeconds(0.5)
-                                .splineToSplineHeading(new Pose2d(20, -35, Math.toRadians(-180)), Math.toRadians(180))
-                                .lineTo(new Vector2d(-15, -35))
-                                .waitSeconds(0.35)
-                                .addTemporalMarker(() -> {
-                                    //grab
-                                })
-                                .lineTo(new Vector2d(20, -35))
-                                .splineToSplineHeading(new Pose2d(45, -30, Math.toRadians(-180)), Math.toRadians(0))
-                                .waitSeconds(0.5)
-                                .addTemporalMarker(() -> {
-                                    //drop
-                                })
-                                .splineToSplineHeading(new Pose2d(20, -35, Math.toRadians(-180)), Math.toRadians(180))
-                                .lineTo(new Vector2d(-15, -35))
-                                .waitSeconds(0.35)
-                                .addTemporalMarker(() -> {
-                                    //grab
-                                })
-                                .lineTo(new Vector2d(20, -35))
-                                .splineToSplineHeading(new Pose2d(45, -30, Math.toRadians(-180)), Math.toRadians(0))
-                                .waitSeconds(0.5)
-                                .addTemporalMarker(() -> {
-                                    //drop
-                                })
-
-
-                                .setTangent(Math.toRadians(135))
-                                .splineToConstantHeading(new Vector2d(20, -10.5), Math.toRadians(180))
-                                .lineTo(new Vector2d(-15, -10.5))
-                                .waitSeconds(0.35)
-                                .addTemporalMarker(() -> {
-                                    //grab
-                                })
-                                .lineTo(new Vector2d(20, -10.5))
-                                .splineToConstantHeading(new Vector2d(45, -30), Math.toRadians(0))
-                                .waitSeconds(0.5)
-                                .addTemporalMarker(() -> {
-                                    //drop
-                                })
-
-
-                                .setTangent(Math.toRadians(135))
-                                .splineToConstantHeading(new Vector2d(20, -10.5), Math.toRadians(180))
-                                .lineTo(new Vector2d(-15, -10.5))
-                                .waitSeconds(0.35)
-                                .addTemporalMarker(() -> {
-                                    //grab
-                                })
-                                .lineTo(new Vector2d(20, -10.5))
-                                .splineToConstantHeading(new Vector2d(45, -30), Math.toRadians(0))
-                                .waitSeconds(0.5)
-                                .addTemporalMarker(() -> {
-                                    //drop
-                                })
-                                .lineToSplineHeading(new Pose2d(45, -57, Math.toRadians(-180)))
-                                .build());
-                ;
+                        drive.trajectorySequenceBuilder(new Pose2d(20, 0, Math.toRadians(90)))
+                                .splineTo(new Vector2d(0, 20), Math.toRadians(180))
+                                .splineTo(new Vector2d(-20, 0), Math.toRadians(-90))
+                                .splineTo(new Vector2d(0,-20), Math.toRadians(0))
+                                .splineTo(new Vector2d(20, 0), Math.toRadians(90))
+                                //circle
+                                .waitSeconds(10)
+                                .forward(-10)
+                                .lineTo(new Vector2d(0, 20))
+                                .lineTo(new Vector2d(-20, -10))
+                                .lineTo(new Vector2d(20, -10))
+                                //triangle
+                                .waitSeconds(10)
+                                .lineTo(new Vector2d(20, 0))
+                                .splineToSplineHeading(new Pose2d(20,-20,Math.toRadians(0)), Math.toRadians(180))
+                                .lineToSplineHeading(new Pose2d(-10, 0, Math.toRadians(180)))
+                                .splineToLinearHeading(new Pose2d(-10,-20, Math.toRadians(0)), Math.toRadians(0))
+                                .lineToConstantHeading(new Vector2d(20, 0))
+                                //infinity
+                                .waitSeconds(10)
+                                .setTangent(90)
+                                .splineToSplineHeading(new Pose2d(0, 20, Math.toRadians(180)), Math.toRadians(180))
+                                .splineToSplineHeading(new Pose2d(-20, 0, Math.toRadians(360)), Math.toRadians(-90))
+                                .splineToSplineHeading(new Pose2d(0,-20, Math.toRadians(180)), Math.toRadians(0))
+                                .splineToSplineHeading(new Pose2d(20, 0, Math.toRadians(360)), Math.toRadians(90))
+                                //circlespin
+                                .waitSeconds(10)
+                                .splineToSplineHeading(new Pose2d(20, 20, Math.toRadians(180)), Math.toRadians(180))
+                                .splineToSplineHeading(new Pose2d(0, 20, Math.toRadians(360)), Math.toRadians(-90))
+                                .splineToSplineHeading(new Pose2d(0,0, Math.toRadians(180)), Math.toRadians(0))
+                                .splineToSplineHeading(new Pose2d(20, 0, Math.toRadians(360)), Math.toRadians(90))
+                               .build());
 
         RoadRunnerBotEntity secondBot = new DefaultBotBuilder(meepMeep)
                 // Set bot constraints: maxVel, maxAccel, maxAngVel, maxAngAccel, track width

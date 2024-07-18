@@ -14,8 +14,8 @@ public class Virtual4Bar {
 
     //TODO: Tune
     //Can be accessed from outside the class for easy setting without a big enum/easy tuning
-    public static double clawOpen = 0.5, clawClose = 0.15, transferOpen = 0.3;
-    public static double v4bGround = 0.76, v4bTransfer = 0.28, v4bPreTransfer = 0.35, v4bStackHigh = 0.7175, v4bStackMid = 0.735;
+    public static double clawOpen = 0.5, clawClose = 0.23, transferOpen = 0.3;
+    public static double v4bGround = 0.77, v4bTransfer = 0.28, v4bPreTransfer = 0.42, v4bStackHigh = .715, v4bStackMid = 0.73;
     //too many vars for a fancy enum lmao
 
     //TODO: Set string names to config names

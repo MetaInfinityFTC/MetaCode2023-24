@@ -10,13 +10,13 @@ import org.firstinspires.ftc.teamcode.Robot;
 @Config
 public class AllServoTest extends LinearOpMode {
 
-    public static double clawL = 0;
-    public static double clawR = 0;
-    public static double wrist = 0;
-    public static double arm = 0;
+    public static double clawL = 0.5;
+    public static double clawR = 0.5;
+    public static double wrist = 0.5;
+    public static double arm = 0.5;
     public static double swivel = 0;
 
-    public static double linkage = 0;
+    public static double linkage = 0.5;
 
     public static double drone = 0;
 
@@ -27,7 +27,11 @@ public class AllServoTest extends LinearOpMode {
 
         Robot r = new Robot(hardwareMap, telemetry);
 
-        while(opModeIsActive()){
+        while(opModeInInit()){
+            telemetry.update();
+        }
+
+        while (opModeIsActive()) {
             r.d.setWrist(wrist);
             r.d.setArm(arm);
             r.d.setClawL(clawL);

@@ -9,8 +9,8 @@ public class Hang implements Subsystem {
 
     public static Servo lHang, rHang;
 
-    public static double down = 0;
-    public static double up  = 0;
+    public static double down = 0.9;
+    public static double up  = 0.5;
 
     HardwareMap h;
 
@@ -43,7 +43,7 @@ public class Hang implements Subsystem {
 
 
     public void setHang(double pos){
-        lHang.setPosition(pos);
+        lHang.setPosition(pos+0.05);
         rHang.setPosition(pos);
     }
 }

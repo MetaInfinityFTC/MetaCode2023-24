@@ -68,7 +68,7 @@ public class DaTele extends LinearOpMode {
     Blinkdin led;
 
     enum States {
-        NEUTRAL, INTAKE, PRE_INTAKE, DEPOSIT30, TRANSFER, GRAB, DROP_ONE_PIXEL, DROP_TWO_PIXEL, TILL_TRANSFER, TILL_DEPO, CLAW_OPEN, WRIST90, CLAWINITIAL_OPEN, PRE_PRE_INTAKE, SECONDPIXEL, SETWRIST, EXTEND, REARANGE, HIGHSTACK, MIDSTACK, DRONE, HANG, PRE_HANG, SECOND, DEPOSIT90
+        NEUTRAL, INTAKE, PRE_INTAKE, DEPOSIT30, TRANSFER, GRAB, DROP_ONE_PIXEL, DROP_TWO_PIXEL, TILL_TRANSFER, TILL_DEPO, CLAW_OPEN, WRIST90, CLAWINITIAL_OPEN, PRE_PRE_INTAKE, SECONDPIXEL, SETWRIST, EXTEND, REARANGE, HIGHSTACK, MIDSTACK, DRONE, HANG, PRE_HANG, SECOND, TRANSFERONEPIXEL, HANG2, DEPOSIT90
     }
 
     public void runOpMode() {
@@ -110,6 +110,7 @@ public class DaTele extends LinearOpMode {
         double slidescontrol = 0;
 
         StateMachine transferMachine = AbstractedMachineRTP.getTransferMachine(virtual4Bar, extendo, deposit);
+        StateMachine transferMachineOnePixel = AbstractedMachine.getTransferMachine(virtual4Bar, extendo, deposit);
 
         StateMachine globalMachine = new StateMachineBuilder()
                 .state(States.NEUTRAL)
@@ -150,6 +151,12 @@ public class DaTele extends LinearOpMode {
                     virtual4Bar.setV4b(0.5);
                     extendo.extendosetPidTarget(450, 1);
                 })
+                .transitionTimed(0.5)
+                .state(States.HANG2)
+                .onEnter(() -> {
+                    deposit.setArm(armTransfer);
+                    extendo.extendosetPidTarget(450, 1);
+                })
                 .transition(() -> gamepad1.a, States.PRE_INTAKE)
                 .transition(() -> gamepad1.left_bumper, States.NEUTRAL)
                 .transition(() -> gamepad1.b, States.TRANSFER)
@@ -169,7 +176,7 @@ public class DaTele extends LinearOpMode {
                 .state(States.PRE_PRE_INTAKE)
                 .onEnter(() -> {
                     virtual4Bar.setClaw(clawClose);
-                    virtual4Bar.setV4b(0.7);
+                    virtual4Bar.setV4b(0.66);
                 })
                 .transitionTimed(1)
                 .state(States.CLAWINITIAL_OPEN)
@@ -178,8 +185,9 @@ public class DaTele extends LinearOpMode {
                     virtual4Bar.setClaw(clawOpen);
                 })
                 .transition(() -> gamepad1.b, States.TRANSFER)
-                .transition(() -> gamepad1.left_bumper,  States.MIDSTACK)
-                .transition(() -> gamepad1.right_bumper,  States.HIGHSTACK)
+                .transition(() -> gamepad1.x,  States.MIDSTACK)
+                .transition(() -> gamepad1.y,  States.HIGHSTACK)
+                .transition(() -> gamepad1.right_bumper, States.TRANSFERONEPIXEL)
 
                 .state(States.MIDSTACK)
                 .onEnter(() -> {
@@ -187,8 +195,8 @@ public class DaTele extends LinearOpMode {
                     virtual4Bar.setClaw(clawOpen);
                 })
                 .transition(() -> gamepad1.b, States.TRANSFER)
-                .transition(() -> gamepad1.left_bumper,  States.CLAWINITIAL_OPEN)
-                .transition(() -> gamepad1.right_bumper,  States.HIGHSTACK)
+                .transition(() -> gamepad1.a,  States.CLAWINITIAL_OPEN)
+                .transition(() -> gamepad1.y,  States.HIGHSTACK)
 
                 .state(States.HIGHSTACK)
                 .onEnter(() -> {
@@ -196,8 +204,8 @@ public class DaTele extends LinearOpMode {
                     virtual4Bar.setClaw(clawOpen);
                 })
                 .transition(() -> gamepad1.b, States.TRANSFER)
-                .transition(() -> gamepad1.left_bumper,  States.CLAWINITIAL_OPEN)
-                .transition(() -> gamepad1.right_bumper,  States.MIDSTACK)
+                .transition(() -> gamepad1.a,  States.CLAWINITIAL_OPEN)
+                .transition(() -> gamepad1.x,  States.MIDSTACK)
 
                 // abstracted transfer machine
                 .state(States.TRANSFER)
@@ -207,40 +215,50 @@ public class DaTele extends LinearOpMode {
                     transferMachine.stop();
                     transferMachine.reset();
                 })
-                .transition(() -> !transferMachine.isRunning()) // transition once transfer is finished
+                .transition(() -> !transferMachine.isRunning(), States.TILL_DEPO) // transition once transfer is finished
+
+                .state(States.TRANSFERONEPIXEL)
+                .onEnter(transferMachineOnePixel::start)
+                .loop(transferMachineOnePixel::update)
+                .onExit(() -> {
+                    transferMachineOnePixel.stop();
+                    transferMachineOnePixel.reset();
+                })
+                .transition(() -> !transferMachineOnePixel.isRunning(), States.TILL_DEPO) // transition once transfer is finished
 
                 .state(States.TILL_DEPO)
-                .transition(() -> gamepad1.x) //press x to go to deposit
+                .transition(() -> gamepad1.x, States.DEPOSIT30) //press x to go to deposit
                 .transition(() -> gamepad1.a, States.PRE_INTAKE)
                 .transition(() -> gamepad1.left_bumper, States.NEUTRAL)
+                .transition(() -> gamepad1.right_bumper, States.DEPOSIT90)
 
-                .state(States.DEPOSIT90)
+                .state(States.DEPOSIT30)
                 .onEnter(() -> {
                     deposit.setFinger(bothPixels);
-                    deposit.setArm(armDeposit90);
+                    deposit.setArm(armDeposit30);
                 })
                 .transitionTimed(1)
                 .state(States.WRIST90)
                 .onEnter(() -> {
                     virtual4Bar.setClaw(clawClose);
-                    deposit.setWrist(wrist90degree);
+                    deposit.setWrist(wrist30degree);
                 })
-                .transition(() -> gamepad1.right_bumper, States.DEPOSIT30)
+                .transition(() -> gamepad1.x, States.DEPOSIT90)
                 .transition(() -> gamepad1.y, States.DROP_TWO_PIXEL)
-                .transition(() -> gamepad1.start, States.DROP_ONE_PIXEL)
+                .transition(() -> gamepad1.touchpad, States.DROP_ONE_PIXEL)
                 .transition(() -> gamepad1.a, States.PRE_INTAKE)
                 .transition(() -> gamepad1.left_bumper, States.NEUTRAL)
                 .transition(() -> gamepad1.b, States.TRANSFER)
 
-                .state(States.DEPOSIT30)
+                .state(States.DEPOSIT90)
                 .onEnter(() -> {
                     virtual4Bar.setClaw(clawClose);
-                    deposit.setWrist(wrist30degree);
-                    deposit.setArm(armDeposit30);
+                    deposit.setWrist(wrist90degree);
+                    deposit.setArm(armDeposit90);
                 })
-                .transition(() -> gamepad1.x, States.DEPOSIT90) // x to go back to deposit 90 position
+                .transition(() -> gamepad1.right_bumper, States.DEPOSIT30) // x to go back to deposit 90 position
                 .transition(() -> gamepad1.y, States.DROP_TWO_PIXEL) // y to drop both pixel/the remaining pixel
-                .transition(() -> gamepad1.start, States.DROP_ONE_PIXEL) //start to just drop one pixel
+                .transition(() -> gamepad1.touchpad, States.DROP_ONE_PIXEL) //start to just drop one pixel
                 .transition(() -> gamepad1.a, States.PRE_INTAKE)
                 .transition(() -> gamepad1.left_bumper, States.NEUTRAL)
                 .transition(() -> gamepad1.b, States.TRANSFER)
@@ -285,11 +303,18 @@ public class DaTele extends LinearOpMode {
             double frontRightPower = (y - x - rx) / denominator;
             double backRightPower = (y + x - rx) / denominator;
 
-            frontLeftMotor.setPower(frontLeftPower);
-            backLeftMotor.setPower(backLeftPower);
-            frontRightMotor.setPower(frontRightPower);
-            backRightMotor.setPower(backRightPower);
-
+            if(globalMachine.getState() == States.CLAWINITIAL_OPEN) {
+                frontLeftMotor.setPower(frontLeftPower * 0.8);
+                backLeftMotor.setPower(backLeftPower * 0.8);
+                frontRightMotor.setPower(frontRightPower * 0.8);
+                backRightMotor.setPower(backRightPower * 0.8);
+            }
+            else {
+                frontLeftMotor.setPower(frontLeftPower * 1);
+                backLeftMotor.setPower(backLeftPower * 1);
+                frontRightMotor.setPower(frontRightPower * 1);
+                backRightMotor.setPower(backRightPower * 1);
+            }
             globalMachine.update();
 
             telemetry.addData("State: ", globalMachine.getState());
@@ -298,18 +323,20 @@ public class DaTele extends LinearOpMode {
             extendo.update();
 
             //extendo control
-            if(gamepad1.dpad_up)
-                extendo.extendosetPidTarget(1050, 1);
             if(gamepad1.dpad_right)
-                setPidTarget(left.getCurrentPosition()-40, 1);
+                setPidTarget(left.getCurrentPosition()-50, 1);
             if(gamepad1.dpad_left)
-                setPidTarget(left.getCurrentPosition()+40, 1);
-            if(gamepad1.dpad_down)
-                extendo.extendosetPidTarget(0, 1);
+                setPidTarget(left.getCurrentPosition()+50, 1);
 
 
-            if(globalMachine.getState().equals("HANG"))
+            if(globalMachine.getState() == States.HANG || globalMachine.getState() == States.HANG2)
                 extendo.extendosetPidTarget(450, 1);
+            else if(globalMachine.getState() == States.CLAWINITIAL_OPEN || globalMachine.getState() == States.TRANSFER) {
+                if (gamepad1.dpad_up)
+                    extendo.extendosetPidTarget(300, 1);
+                else if (gamepad1.dpad_down)
+                    extendo.extendosetPidTarget(0, 1);
+            }
             else
                 extendo.extendosetPidTarget(-1, 1);
         }
