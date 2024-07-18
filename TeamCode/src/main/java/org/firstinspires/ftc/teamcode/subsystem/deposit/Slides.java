@@ -57,8 +57,8 @@ public class Slides implements Subsystem {
         llift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         rlift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
-        llift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        rlift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        llift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        rlift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 
     public void update() {
