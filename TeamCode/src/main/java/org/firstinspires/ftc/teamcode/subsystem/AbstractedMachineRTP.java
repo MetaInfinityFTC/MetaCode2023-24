@@ -1,10 +1,5 @@
 package org.firstinspires.ftc.teamcode.subsystem;
 
-import static org.firstinspires.ftc.teamcode.subsystem.deposit.Deposit.armPreTransfer;
-import static org.firstinspires.ftc.teamcode.subsystem.deposit.Deposit.armTransfer;
-import static org.firstinspires.ftc.teamcode.subsystem.deposit.Deposit.bothPixels;
-import static org.firstinspires.ftc.teamcode.subsystem.deposit.Deposit.onePixel;
-import static org.firstinspires.ftc.teamcode.subsystem.deposit.Deposit.wristTransfer;
 import static org.firstinspires.ftc.teamcode.subsystem.deposit.Deposit.zeroPixel;
 import static org.firstinspires.ftc.teamcode.subsystem.extendo.Extendo.Extension_States.retracted;
 import static org.firstinspires.ftc.teamcode.subsystem.intake.Virtual4Bar.clawClose;
@@ -43,8 +38,6 @@ public class AbstractedMachineRTP {
                 .onEnter(() -> {
                     virtual4Bar.setV4b(v4bPreTransfer); //raise off ground
                     extendo.extendosetPidTarget(0, 0.5);
-                    deposit.setWrist(wristTransfer);
-                    deposit.setArm(armPreTransfer);
                 })
                 .transition(extendo::isAtTarget) //0.2 seconds to move everything before bringing v4b back
                 .onExit(() -> {
@@ -59,7 +52,6 @@ public class AbstractedMachineRTP {
                 .state(Transfer.TRANSFER2)
                 .onEnter(() -> {
                     deposit.setFinger(zeroPixel);
-                    deposit.setArm(armTransfer);
                 })/*
                 .transitionTimed(0.35)
                 .state(Transfer.CLAW_OPEN)
@@ -69,7 +61,6 @@ public class AbstractedMachineRTP {
                 .transitionTimed(0.5)
                 .state(Transfer.BOOM)
                 .onEnter(() -> {
-                    deposit.setFinger(bothPixels);
                     deposit.setArm(0.85);
                 })
                 .transitionTimed(0.5)
@@ -88,7 +79,6 @@ public class AbstractedMachineRTP {
         return new StateMachineBuilder()
                 .waitState(1)
                 .state(Drop.DROP)
-                .onEnter(()-> deposit.setFinger(onePixel))
                 .transitionTimed(0.3)
                 .state(Drop.SECOND)
                 .onEnter(()-> {
@@ -97,8 +87,6 @@ public class AbstractedMachineRTP {
                 .transitionTimed(0.5)
                 .state(Drop.RESET)
                 .onEnter(()->{
-                    deposit.setWrist(wristTransfer);
-                    deposit.setArm(armPreTransfer);
                 })
                 .build();
     }

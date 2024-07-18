@@ -12,7 +12,7 @@ import org.firstinspires.ftc.teamcode.subsystem.Subsystem;
 public class Extendo implements Subsystem {
 
     private DcMotor left, right;
-    public static double p = 0.04, i = 0.004, d = 0.00051, f = 0.005;
+    public static double p = 0.03, i = 0, d = 0.0001, f = 0.0004;
     public static double tolerance = 3;
 
     PIDFController controller = new PIDFController(p, i, d, f);
@@ -21,7 +21,7 @@ public class Extendo implements Subsystem {
 
     //enum to house states with better names
     public enum Extension_States {
-        retracted(0), hung(275),  first(400), second(800), extended(1050), closespike(75), midspike(400), farspike(800);
+        retracted(0), hung(1730),  first(1800), second(2550), extended(3700), closespike(1800), midspike(2550), farspike(3700);
         private double ticks;
         Extension_States(double ticks) { this.ticks = ticks;}
         public double getTicks() { return ticks; }
@@ -35,6 +35,7 @@ public class Extendo implements Subsystem {
         left.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         left.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         controller.setTolerance(tolerance);
+        setState(Extension_States.retracted);
     }
 
 

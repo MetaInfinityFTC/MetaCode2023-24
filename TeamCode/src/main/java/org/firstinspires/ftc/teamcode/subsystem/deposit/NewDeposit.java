@@ -14,7 +14,7 @@ public class NewDeposit implements Subsystem {
     ElapsedTime timer = new ElapsedTime();
 
 
-    public static double armTransfer = 0.57, armDeposit = 0.02, armPreTransfer = 0.45;
+    public static double armTransfer = 0.57, armDeposit = 0.07, armPreTransfer = 0.45;
     public static double wrist30degree = 0.9, wristTransfer = 0.465;
 
     public static double lGrab = 0.75;

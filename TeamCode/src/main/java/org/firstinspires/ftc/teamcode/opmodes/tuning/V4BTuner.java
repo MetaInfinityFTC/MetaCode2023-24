@@ -1,9 +1,5 @@
 package org.firstinspires.ftc.teamcode.opmodes.tuning;
 
-import static org.firstinspires.ftc.teamcode.subsystem.deposit.Deposit.armPreTransfer;
-import static org.firstinspires.ftc.teamcode.subsystem.deposit.Deposit.armTransfer;
-import static org.firstinspires.ftc.teamcode.subsystem.deposit.Deposit.bothPixels;
-import static org.firstinspires.ftc.teamcode.subsystem.deposit.Deposit.wristTransfer;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;

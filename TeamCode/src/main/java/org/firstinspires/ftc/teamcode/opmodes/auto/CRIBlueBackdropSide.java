@@ -1,13 +1,11 @@
 package org.firstinspires.ftc.teamcode.opmodes.auto;
 
-import static org.firstinspires.ftc.teamcode.subsystem.deposit.Deposit.armDeposit30;
-import static org.firstinspires.ftc.teamcode.subsystem.deposit.Deposit.armDeposit90;
-import static org.firstinspires.ftc.teamcode.subsystem.deposit.Deposit.armPreTransfer;
 import static org.firstinspires.ftc.teamcode.subsystem.deposit.Deposit.bothPixels;
-import static org.firstinspires.ftc.teamcode.subsystem.deposit.Deposit.wrist30degree;
-import static org.firstinspires.ftc.teamcode.subsystem.deposit.Deposit.wrist90degree;
-import static org.firstinspires.ftc.teamcode.subsystem.deposit.Deposit.wristTransfer;
 import static org.firstinspires.ftc.teamcode.subsystem.deposit.Deposit.zeroPixel;
+import static org.firstinspires.ftc.teamcode.subsystem.deposit.NewDeposit.armDeposit;
+import static org.firstinspires.ftc.teamcode.subsystem.deposit.NewDeposit.armPreTransfer;
+import static org.firstinspires.ftc.teamcode.subsystem.deposit.NewDeposit.wrist30degree;
+import static org.firstinspires.ftc.teamcode.subsystem.deposit.NewDeposit.wristTransfer;
 import static org.firstinspires.ftc.teamcode.subsystem.extendo.Extendo.Extension_States.closespike;
 import static org.firstinspires.ftc.teamcode.subsystem.extendo.Extendo.Extension_States.extended;
 import static org.firstinspires.ftc.teamcode.subsystem.extendo.Extendo.Extension_States.farspike;
@@ -66,11 +64,6 @@ public class CRIBlueBackdropSide extends LinearOpMode {
         drive = new SampleMecanumDrive(hardwareMap);
         bluePropProcessor = new BluePropProcessor(telemetry);
 
-        left = hardwareMap.dcMotor.get("lSlide");
-        right = hardwareMap.dcMotor.get("rSlide");
-        left.setDirection(DcMotorSimple.Direction.REVERSE);
-        left.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        right.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
         extendo = new Extendo(hardwareMap);
         slides = new Slides(hardwareMap);
@@ -93,7 +86,7 @@ public class CRIBlueBackdropSide extends LinearOpMode {
         TrajectorySequence leftPurple = drive.trajectorySequenceBuilder(startpose)
                 .lineToSplineHeading(new Pose2d(45, 38, Math.toRadians(-180)))
                 .addTemporalMarker(() -> {
-                    deposit.setArm(armDeposit30);
+                    deposit.setArm(armDeposit);
                     deposit.setWrist(wrist30degree);
                     extendo.setState(closespike);
                 })
@@ -122,7 +115,7 @@ public class CRIBlueBackdropSide extends LinearOpMode {
         TrajectorySequence middlePurple = drive.trajectorySequenceBuilder(startpose)
                 .lineToSplineHeading(new Pose2d(45, 29.5, Math.toRadians(-180)))
                 .addTemporalMarker(() -> {
-                    deposit.setArm(armDeposit30);
+                    deposit.setArm(armDeposit);
                     deposit.setWrist(wrist30degree);
                     extendo.setState(closespike);
                 })
@@ -149,7 +142,7 @@ public class CRIBlueBackdropSide extends LinearOpMode {
         TrajectorySequence rightPurple = drive.trajectorySequenceBuilder(startpose)
                 .lineToSplineHeading(new Pose2d(45, 24, Math.toRadians(-180)))
                 .UNSTABLE_addTemporalMarkerOffset(-0.5, () -> {
-                    deposit.setArm(armDeposit30);
+                    deposit.setArm(armDeposit);
                     deposit.setWrist(wrist30degree);
                     extendo.setState(extended);
                 })

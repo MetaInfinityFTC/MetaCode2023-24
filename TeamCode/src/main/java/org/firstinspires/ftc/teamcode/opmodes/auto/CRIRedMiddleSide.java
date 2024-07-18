@@ -1,10 +1,10 @@
 package org.firstinspires.ftc.teamcode.opmodes.auto;
 
 
-import static org.firstinspires.ftc.teamcode.subsystem.deposit.Deposit.armDeposit30;
-import static org.firstinspires.ftc.teamcode.subsystem.deposit.Deposit.armPreTransfer;
-import static org.firstinspires.ftc.teamcode.subsystem.deposit.Deposit.wrist30degree;
-import static org.firstinspires.ftc.teamcode.subsystem.deposit.Deposit.wristTransfer;
+import static org.firstinspires.ftc.teamcode.subsystem.deposit.NewDeposit.armDeposit;
+import static org.firstinspires.ftc.teamcode.subsystem.deposit.NewDeposit.armPreTransfer;
+import static org.firstinspires.ftc.teamcode.subsystem.deposit.NewDeposit.wrist30degree;
+import static org.firstinspires.ftc.teamcode.subsystem.deposit.NewDeposit.wristTransfer;
 import static org.firstinspires.ftc.teamcode.subsystem.extendo.Extendo.Extension_States.closespike;
 import static org.firstinspires.ftc.teamcode.subsystem.extendo.Extendo.Extension_States.midspike;
 import static org.firstinspires.ftc.teamcode.subsystem.extendo.Extendo.Extension_States.retracted;
@@ -92,7 +92,7 @@ public class CRIRedMiddleSide extends LinearOpMode {
                 .lineToSplineHeading(new Pose2d(-20, -47, Math.toRadians(-180)))
                 .lineTo(new Vector2d(20, -47))
                 .UNSTABLE_addTemporalMarkerOffset(0.5, () -> {
-                    deposit.setArm(armDeposit30);
+                    deposit.setArm(armDeposit);
                     deposit.setWrist(wrist30degree);
                 })
                 .splineTo(new Vector2d(43, -30), Math.toRadians(0))
@@ -128,7 +128,7 @@ public class CRIRedMiddleSide extends LinearOpMode {
                 .lineToSplineHeading(new Pose2d(-20, -47, Math.toRadians(180)))
                 .lineTo(new Vector2d(10, -47))
                 .UNSTABLE_addTemporalMarkerOffset(0.5, () -> {
-                    deposit.setArm(armDeposit30);
+                    deposit.setArm(armDeposit);
                     deposit.setWrist(wrist30degree);
                 })
                 .lineToSplineHeading(new Pose2d(20, -47, Math.toRadians(180)))
@@ -166,7 +166,7 @@ public class CRIRedMiddleSide extends LinearOpMode {
                 .lineToSplineHeading(new Pose2d(-20, -47, Math.toRadians(-180)))
                 .lineTo(new Vector2d(20, -47))
                 .UNSTABLE_addTemporalMarkerOffset(0.5, () -> {
-                    deposit.setArm(armDeposit30);
+                    deposit.setArm(armDeposit);
                     deposit.setWrist(wrist30degree);
                 })
                 .splineTo(new Vector2d(43, -40), Math.toRadians(0))

@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.opmodes.tuning;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 /*
 Use this to find positions and set the positions in the subsystem
@@ -15,7 +16,8 @@ public class ExtendoPosFinder extends OpMode {
 
     @Override
     public void init() {
-        right = hardwareMap.dcMotor.get("rightEx");
+        right = hardwareMap.dcMotor.get("leftEx");
+        right.setDirection(DcMotor.Direction.REVERSE);
         right.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         right.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         right.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);

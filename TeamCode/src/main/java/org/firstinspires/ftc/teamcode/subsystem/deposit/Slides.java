@@ -29,24 +29,23 @@ public class Slides implements Subsystem {
     private DcMotorEx llift;
     private DcMotorEx rlift;
 
-    public int row = 1;
+    public int row = 0;
 
     public static double row0 = 0;
-    public static double row1 = 150;
-    public static double row2 = 300;
-    public static double row3 = 450;
-    public static double row4 = 600;
-    public static double row5 = 750;
-    public static double row6 = 900;
-    public static double row7 = 1050;
-    public static double row8 = 1200;
+    public static double row1 = 100;
+    public static double row2 = 200;
+    public static double row3 = 300;
+    public static double row4 = 400;
+    public static double row5 = 500;
+    public static double row6 = 600;
+    public static double row7 = 700;
+    public static double row8 = 800;
 
     public static int rows = 8;
 
 
     public Slides(HardwareMap hardwareMap) {
         controller = new PIDController(p, i, d);
-        telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
 
         llift = hardwareMap.get(DcMotorEx.class,"lSlide");
         rlift = hardwareMap.get(DcMotorEx.class,"rSlide");
@@ -79,11 +78,6 @@ public class Slides implements Subsystem {
         llift.setPower(Lpower);
         rlift.setPower(Rpower);
 
-        telemetry.addData("pos", larmPos);
-        telemetry.addData("pos", rarmPos);
-        telemetry.addData("target", LiftTarget);
-        telemetry.addData("target", LiftTarget);
-        telemetry.update();
     }
     public void setPidTarget(double target) {
         //base encoder code
