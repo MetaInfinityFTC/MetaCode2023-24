@@ -109,8 +109,8 @@ public class RedPropProcessor extends PropProcessor {
             location = Location.RIGHT;
             telemetry.addData("Position:", " RIGHT");
         }else{
-            location = Location.MIDDLE;
-            telemetry.addData("Position:", " MIDDLE");
+            location = Location.LEFT;
+            telemetry.addData("Position:", " LEFT");
         }
         telemetry.update();
 

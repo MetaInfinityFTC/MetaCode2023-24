@@ -76,29 +76,30 @@ public class CRIRedBackdropSide extends LinearOpMode {
         drive.setPoseEstimate(startpose);
 
         TrajectorySequence leftPurple = drive.trajectorySequenceBuilder(startpose)
-                .lineToSplineHeading(new Pose2d(43, -28, Math.toRadians(-180)))
+                .lineToSplineHeading(new Pose2d(45, -25, Math.toRadians(-180)))
                 .UNSTABLE_addTemporalMarkerOffset(-0.5, () -> {
                     deposit.setArm(armDeposit);
                     deposit.setWrist(wrist30degree);
                     extendo.setState(extended);
                 })
-                .waitSeconds(1)
-                .forward(4)
+                .waitSeconds(0.5)
                 .addTemporalMarker(() -> {
                     intake.setIntake(1);
-                })
-                .waitSeconds(0.1)
-                .addTemporalMarker(() -> {
                     deposit.clawDrop();
                 })
                 .waitSeconds(0.5)
+                .forward(8)
+                .waitSeconds(0.3)
+                .addTemporalMarker(() -> {
+                    intake.setIntake(0);
+                })
                 .UNSTABLE_addTemporalMarkerOffset(0.2, () -> {
                     extendo.setState(retracted);
                     deposit.setWrist(wristTransfer);
                     deposit.setArm(armPreTransfer);
                 })
-                .strafeLeft(33)
-                .back(10)
+                .strafeLeft(32)
+                .back(18)
                 .build();
 
         TrajectorySequence middlePurple = drive.trajectorySequenceBuilder(startpose)
@@ -117,7 +118,10 @@ public class CRIRedBackdropSide extends LinearOpMode {
                 .addTemporalMarker(() -> {
                     intake.setIntake(1);
                 })
-                .waitSeconds(0.1)
+                .waitSeconds(0.3)
+                .addTemporalMarker(() -> {
+                    intake.setIntake(0);
+                })
                 .UNSTABLE_addTemporalMarkerOffset(0.2, () -> {
                     extendo.setState(retracted);
                     deposit.setWrist(wristTransfer);
@@ -128,29 +132,32 @@ public class CRIRedBackdropSide extends LinearOpMode {
                 .build();
 
         TrajectorySequence rightPurple = drive.trajectorySequenceBuilder(startpose)
-                .lineToSplineHeading(new Pose2d(43, -36, Math.toRadians(-180)))
+                .lineToSplineHeading(new Pose2d(46, -38, Math.toRadians(-180)))
                 .UNSTABLE_addTemporalMarkerOffset(-0.5, () -> {
                     deposit.setArm(armDeposit);
                     deposit.setWrist(wrist30degree);
                     extendo.setState(closespike);
-                })
-                .waitSeconds(1)
+                }).waitSeconds(1)
                 .addTemporalMarker(() -> {
                     deposit.clawDrop();
                 })
                 .waitSeconds(0.5)
+                .forward(2)
                 .strafeRight(8)
                 .addTemporalMarker(() -> {
                     intake.setIntake(1);
                 })
-                .waitSeconds(0.1)
+                .waitSeconds(0.5)
+                .addTemporalMarker(() -> {
+                    intake.setIntake(0);
+                })
                 .UNSTABLE_addTemporalMarkerOffset(0.2, () -> {
                     extendo.setState(retracted);
                     deposit.setWrist(wristTransfer);
                     deposit.setArm(armPreTransfer);
                 })
-                .strafeLeft(33)
-                .back(10)
+                .strafeLeft(28)
+                .back(12)
                 .build();
 
         while (!isStarted()) {
