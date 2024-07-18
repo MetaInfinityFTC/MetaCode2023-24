@@ -9,8 +9,8 @@ import org.firstinspires.ftc.teamcode.subsystem.deposit.NewDeposit;
 
 public class GlobalCommands{
 
-    public static double GRAB_DELAY = 0.6;
-    public static double ARM_DELAY = 0.6;
+    public static double GRAB_DELAY = 1;
+    public static double ARM_DELAY = 1;
     public static double LIFT_DELAY = 0.6;
 
     public static SequentialCommandGroup getTransfer(Robot r){

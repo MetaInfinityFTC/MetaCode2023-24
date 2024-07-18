@@ -21,7 +21,7 @@ public class Extendo implements Subsystem {
 
     //enum to house states with better names
     public enum Extension_States {
-        retracted(0), hung(400),  first(500), second(950), extended(1050), closespike(75), midspike(400), farspike(800);
+        retracted(0), hung(275),  first(400), second(800), extended(1050), closespike(75), midspike(400), farspike(800);
         private double ticks;
         Extension_States(double ticks) { this.ticks = ticks;}
         public double getTicks() { return ticks; }

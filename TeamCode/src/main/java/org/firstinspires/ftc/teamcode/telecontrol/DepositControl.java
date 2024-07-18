@@ -6,6 +6,7 @@ import org.firstinspires.ftc.robotcore.internal.stellaris.FlashLoaderCommand;
 import org.firstinspires.ftc.teamcode.FallingEdge;
 import org.firstinspires.ftc.teamcode.Robot;
 import org.firstinspires.ftc.teamcode.subsystem.deposit.NewDeposit;
+import org.firstinspires.ftc.teamcode.subsystem.deposit.Slides;
 
 public class DepositControl implements Control{
 
