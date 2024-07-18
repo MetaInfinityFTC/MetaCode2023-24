@@ -13,8 +13,6 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import org.firstinspires.ftc.teamcode.subsystem.Subsystem;
 
 @Config
-@TeleOp
-//@Disabled
 public class Slides implements Subsystem {
     private PIDController controller;
     public static double p = 0.01, i = 0, d = 0.0; // d = dampener (dampens arm movement and is scary). ignore i

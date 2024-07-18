@@ -40,6 +40,8 @@ public class TeleCRI extends LinearOpMode {
 
     public boolean transfering = false;
 
+    public static double DROP_DELAY = 0.2;
+
     @Override
     public void runOpMode() throws InterruptedException {
 
@@ -56,7 +58,7 @@ public class TeleCRI extends LinearOpMode {
 
         }
 
-        ElapsedTime t = new ElapsedTime();
+        ElapsedTime t = null;
 
         CommandScheduler cs = CommandScheduler.getInstance();
         Command transfer = GlobalCommands.getTransfer(r);
@@ -108,9 +110,14 @@ public class TeleCRI extends LinearOpMode {
                     break;
                 case DEPOSIT:
                     dpc.update();
-                    if (NewDeposit.lclaw.getPosition() == NewDeposit.lDrop && NewDeposit.rclaw.getPosition() == NewDeposit.rDrop) {
+                    if (NewDeposit.lclaw.getPosition() == NewDeposit.lDrop && NewDeposit.rclaw.getPosition() == NewDeposit.rDrop && t == null
+                    && !(gamepad1.x || gamepad1.right_trigger > 0 || gamepad1.left_trigger > 0)) {
+                        t = new ElapsedTime();
+                    }
+                    if(t.seconds() > DROP_DELAY){
                         s = State.NEUTRAL;
-                        r.s.setPidTarget(0);
+                        r.s.setPosition(0);
+                        t = null;
                     }
                     break;
 
