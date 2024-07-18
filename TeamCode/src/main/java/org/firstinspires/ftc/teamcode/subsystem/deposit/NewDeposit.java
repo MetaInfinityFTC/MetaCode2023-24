@@ -14,15 +14,16 @@ public class NewDeposit implements Subsystem {
     ElapsedTime timer = new ElapsedTime();
 
 
-    public static double armTransfer = 0.57, armDeposit = 0.02, armPreTransfer = 0.45;
-    public static double wrist30degree = 0.9, wristTransfer = 0.465;
+    public static double armTransfer = 0.0, armDeposit = 0.0, armPreTransfer = 0.0;
+    public static double wrist30degree = 0.0, wristTransfer = 0.0, wrist90degree = 0.0;
+    public static double pixel = 0.0, noPixel = 0.0;
 
-    public static double lGrab = 0.75;
-    public static double lDrop = 1;
-    public static double rGrab = 0.45;
-    public static double rDrop = 0.2;
+    public static double lGrab = 0.0;
+    public static double lDrop = 0.0;
+    public static double rGrab = 0.0;
+    public static double rDrop = 0.0;
 
-    public static double swivelTransfer = 0.27;
+    public static double swivelTransfer = 0;
     public static double swivelFlat = 0;
     public static double swivelVert = 0;
 
@@ -73,15 +74,14 @@ public class NewDeposit implements Subsystem {
     }
 
     public void grabL(){
-        if(swivel.getPosition() < 0.5)
+        if(swivel.getPosition() < 0.25 || swivel.getPosition() > 0.75)
             setClawL(lGrab);
         else setClawR(rGrab);
     }
     public void dropL(){
-        if(swivel.getPosition() < 0.5)
+        if(swivel.getPosition() < 0.25 || swivel.getPosition() > 0.75)
             setClawL(lDrop);
         else setClawR(rDrop);
-
     }
 
     public void setClawL(double l){
@@ -89,12 +89,12 @@ public class NewDeposit implements Subsystem {
     }
 
     public void grabR(){
-        if(swivel.getPosition() <= 0.5)
+        if(!(swivel.getPosition() < 0.25 || swivel.getPosition() > 0.75))
             setClawL(lGrab);
         else setClawR(rGrab);
     }
     public void dropR(){
-        if(swivel.getPosition() <= 0.5)
+        if(!(swivel.getPosition() < 0.25 || swivel.getPosition() > 0.75))
             setClawL(lDrop);
         else setClawR(rDrop);
     }

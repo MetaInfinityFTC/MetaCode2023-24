@@ -119,6 +119,10 @@ public class TeleCRI extends LinearOpMode {
                     s = State.NEUTRAL;
             }
 
+            r.tele.addData("LClaw", NewDeposit.lclaw.getPosition());
+            r.tele.addData("RClaw", NewDeposit.rclaw.getPosition());
+            r.tele.addData("State", s.name());
+
             cs.run();
             dc.update();
             r.update();

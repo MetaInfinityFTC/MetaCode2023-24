@@ -41,8 +41,8 @@ public class DepositControl implements Control{
         dropL.update(gp1.left_trigger > 0);
         dropR.update(gp1.right_trigger > 0);
 
-        rowUp.update(gp1.right_bumper);
-        rowDown.update(gp1.left_bumper);
+        rowUp.update(gp1.dpad_up);
+        rowDown.update(gp1.dpad_down);
 
         r.s.setPosition();
     }

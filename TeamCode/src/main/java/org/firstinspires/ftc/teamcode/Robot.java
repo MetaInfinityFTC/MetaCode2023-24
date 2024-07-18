@@ -35,7 +35,7 @@ public class Robot {
     public List<Subsystem> subsystems;
 
     public HardwareMap hardwareMap;
-    Telemetry tele;
+    public Telemetry tele;
 
     public double startTime = 0;
 
