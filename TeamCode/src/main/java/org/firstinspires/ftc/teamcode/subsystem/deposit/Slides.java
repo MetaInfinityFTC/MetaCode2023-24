@@ -14,9 +14,9 @@ public class Slides implements Subsystem {
 
     public static double p = 0.03, i = 0, d = 0, f = 0.01;
     public static double tolerance = 3;
-    PIDFController controller;
+    public PIDFController controller;
 
-    private DcMotor left, right;
+    public static DcMotor left, right;
 
     public double upperLimit = 450, lowerLimit = 0;
 
@@ -38,7 +38,6 @@ public class Slides implements Subsystem {
 
     public static int rows = 10;
 
-    public boolean hang = false;
 
     public Slides(HardwareMap hardwareMap) {
         left = hardwareMap.dcMotor.get("lSlide");
@@ -50,7 +49,7 @@ public class Slides implements Subsystem {
         controller.setTolerance(tolerance);
     }
 
-    public static double pidTarget = 0;
+    public double pidTarget = 0;
 
 
     public void setPidTarget(double target) {
@@ -68,11 +67,8 @@ public class Slides implements Subsystem {
         }
         controller.setPIDF(p, i, d, f);
         controller.setTolerance(tolerance);
-        double cmd = controller.calculate(left.getCurrentPosition(), pidTarget);
-        if(hang){
-            setPower(-1);
-        }
-        else setPower(cmd);
+        double cmd = controller.calculate(getPos(), pidTarget);
+        setPower(cmd);
     }
 
     public void toHangPosition(){

@@ -72,7 +72,6 @@ public class TeleCRI extends LinearOpMode {
 
             switch (s){
                 case NEUTRAL:
-                    r.s.hang = false;
                     r.d.setWrist(NewDeposit.wristTransfer);
                     r.d.setArm(NewDeposit.armPreTransfer);
                     r.d.setSwivel(NewDeposit.swivelTransfer);
