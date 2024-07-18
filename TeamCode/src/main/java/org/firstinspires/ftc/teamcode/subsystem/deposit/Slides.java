@@ -1,100 +1,101 @@
 package org.firstinspires.ftc.teamcode.subsystem.deposit;
+import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.telemetry;
 
+import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
-import com.arcrobotics.ftclib.controller.PIDFController;
+import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
+import com.arcrobotics.ftclib.controller.PIDController;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.teamcode.subsystem.Subsystem;
 
 @Config
+@TeleOp
+//@Disabled
 public class Slides implements Subsystem {
+    private PIDController controller;
+    public static double p = 0.01, i = 0, d = 0.0; // d = dampener (dampens arm movement and is scary). ignore i
+    public static double f = .001;  // prevents arm from falling from gravity
 
-    public static double p = 0, i = 0, d = 0, f = 0;
-    public static double tolerance = 3;
-    public PIDFController controller;
 
-    public static DcMotor left, right;
+    public static double LiftTarget = 0; // target position
 
-    public double upperLimit = 450, lowerLimit = 0;
+    //public static int START_POS = 0;
+    public static int LOW = 0;
+    public static int MID = 0;
+    public static int HIGH = 0;
+
+    private DcMotorEx llift;
+    private DcMotorEx rlift;
 
     public int row = 1;
 
     public static double row0 = 0;
-    public static double row1 = 0;
-    public static double row2 = 0;
-    public static double row3 = 0;
-    public static double row4 = 0;
-    public static double row5 = 0;
-    public static double row6 = 0;
-    public static double row7 = 0;
-    public static double row8 = 0;
-    public static double row9 = 0;
-    public static double row10 = 0;
+    public static double row1 = 150;
+    public static double row2 = 300;
+    public static double row3 = 450;
+    public static double row4 = 600;
+    public static double row5 = 750;
+    public static double row6 = 900;
+    public static double row7 = 1050;
+    public static double row8 = 1200;
 
-    public static double hangHeight = 200;
-
-    public static int rows = 10;
+    public static int rows = 8;
 
 
     public Slides(HardwareMap hardwareMap) {
-        left = hardwareMap.dcMotor.get("lSlide");
-        right = hardwareMap.dcMotor.get("rSlide");
-        right.setDirection(DcMotorSimple.Direction.REVERSE);
-        left.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        right.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        controller = new PIDFController(p, i, d, f);
-        controller.setTolerance(tolerance);
+        controller = new PIDController(p, i, d);
+        telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
+
+        llift = hardwareMap.get(DcMotorEx.class,"lSlide");
+        rlift = hardwareMap.get(DcMotorEx.class,"rSlide");
+
+        llift.setDirection(DcMotorEx.Direction.FORWARD);
+        rlift.setDirection(DcMotorEx.Direction.REVERSE);
+
+        llift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rlift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        llift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        rlift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
 
-    public double pidTarget = 0;
+    public void update() {
+        controller.setPID(p, i, d);
 
+        int larmPos = llift.getCurrentPosition();
+        int rarmPos = rlift.getCurrentPosition();
 
+        double Lpid = controller.calculate(larmPos, LiftTarget);
+        double Rpid = controller.calculate(rarmPos, LiftTarget);
+
+        // double Lff = Math.cos(Math.toRadians(LiftTarget / ticks_in_degree)) * f; //* (12/voltageSensor.getVoltage()
+        // double Rff = Math.cos(Math.toRadians(LiftTarget / ticks_in_degree)) * f; // * (12/voltageSensor.getVoltage()
+
+        double Lpower = Lpid + f;
+        double Rpower = Rpid + f;
+
+        llift.setPower(Lpower);
+        rlift.setPower(Rpower);
+
+        telemetry.addData("pos", larmPos);
+        telemetry.addData("pos", rarmPos);
+        telemetry.addData("target", LiftTarget);
+        telemetry.addData("target", LiftTarget);
+        telemetry.update();
+    }
     public void setPidTarget(double target) {
         //base encoder code
-        pidTarget = Range.clip(target, lowerLimit, upperLimit);
-    }
-
-
-
-    @Override
-    public void update() {
-        if(getPos() < 0){
-            left.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            right.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        }
-        controller.setPIDF(p, i, d, f);
-        controller.setTolerance(tolerance);
-        double cmd = controller.calculate(getPos(), pidTarget);
-        setPower(cmd);
-    }
-
-    public void toHangPosition(){
-        setPidTarget(hangHeight);
+        LiftTarget = target;
     }
 
     @Override
     public void init() {
-        setPosition(0);
+        setPosition();;
     }
-
-    //DO NOT USE THIS
-
-//    public void manual(double inputPower) {
-//        if ((left.getCurrentPosition() > lowerLimit && inputPower < 0) || (left.getCurrentPosition() < upperLimit && inputPower > 0)) {
-//            setPidTarget(inputPower);
-//        } else {
-//            setPower(f);
-//        }
-//    }
-
-    public void setPower(double power) {
-        left.setPower(power);
-        right.setPower(power);
-    }
-
     public double getRowPosition(int row){
         if(row == 0) return row0;
 
@@ -117,15 +118,10 @@ public class Slides implements Subsystem {
                 return row7;
             case 8:
                 return row8;
-            case 9:
-                return row9;
-            case 10:
-                return row10;
         }
 
         return row0;
     }
-
     public void setPosition(){
         setPosition(row);
     }
@@ -135,11 +131,7 @@ public class Slides implements Subsystem {
     }
 
     public double getPos() {
-        return right.getCurrentPosition();
-    }
-
-    public boolean isAtTarget() {
-        return controller.atSetPoint();
+        return rlift.getCurrentPosition();
     }
 
 }

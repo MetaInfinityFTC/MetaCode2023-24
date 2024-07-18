@@ -15,7 +15,7 @@ import org.firstinspires.ftc.teamcode.Robot;
 import org.firstinspires.ftc.teamcode.subsystem.Drive;
 import org.firstinspires.ftc.teamcode.subsystem.GlobalCommands;
 import org.firstinspires.ftc.teamcode.subsystem.deposit.NewDeposit;
-import org.firstinspires.ftc.teamcode.subsystem.deposit.pidftest;
+import org.firstinspires.ftc.teamcode.subsystem.deposit.Slides;
 import org.firstinspires.ftc.teamcode.telecontrol.DepositControl;
 import org.firstinspires.ftc.teamcode.telecontrol.DriveControl;
 import org.firstinspires.ftc.teamcode.telecontrol.EndgameControl;
@@ -128,11 +128,6 @@ public class TeleCRI extends LinearOpMode {
             cs.run();
             dc.update();
             r.update();
-
-            pidftest.LiftTarget = (pidftest.LiftTarget) - gamepad1.right_stick_y;
-
-            if (gamepad1.start)
-                pidftest.LiftTarget = 0;
         }
     }
 }
