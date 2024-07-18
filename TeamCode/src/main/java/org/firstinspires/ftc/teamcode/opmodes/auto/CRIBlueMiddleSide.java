@@ -1,14 +1,5 @@
 package org.firstinspires.ftc.teamcode.opmodes.auto;
 
-import static org.firstinspires.ftc.teamcode.subsystem.deposit.Deposit.armDeposit90;
-import static org.firstinspires.ftc.teamcode.subsystem.deposit.Deposit.armPreTransfer;
-import static org.firstinspires.ftc.teamcode.subsystem.deposit.Deposit.wrist90degree;
-import static org.firstinspires.ftc.teamcode.subsystem.deposit.Deposit.wristTransfer;
-import static org.firstinspires.ftc.teamcode.subsystem.deposit.Deposit.zeroPixel;
-import static org.firstinspires.ftc.teamcode.subsystem.extendo.Extendo.Extension_States.retracted;
-import static org.firstinspires.ftc.teamcode.subsystem.intake.Virtual4Bar.clawClose;
-import static org.firstinspires.ftc.teamcode.subsystem.intake.Virtual4Bar.clawOpen;
-import static org.firstinspires.ftc.teamcode.subsystem.intake.Virtual4Bar.v4bTransfer;
 import static org.firstinspires.ftc.teamcode.vision.processors.PropProcessor.Location.MIDDLE;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
@@ -20,7 +11,6 @@ import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 import org.firstinspires.ftc.teamcode.vision.processors.BluePropProcessor;
 import org.firstinspires.ftc.teamcode.vision.processors.PropProcessor;
-import org.firstinspires.ftc.vision.VisionPortal;
 
 @Autonomous(name="CRIBlueMiddle", preselectTeleOp = "TeleCRI")
 public class CRIBlueMiddleSide extends LinearOpMode {
@@ -39,7 +29,6 @@ public class CRIBlueMiddleSide extends LinearOpMode {
         TrajectorySequence leftPurple = drive.trajectorySequenceBuilder(startpose)
                 .UNSTABLE_addTemporalMarkerOffset(1.0, () -> {
                 })
-                // .lineToSplineHeading(new Pose2d(-42.5, 11, Math.toRadians(90)))
                 .back(5)
                 .turn(Math.toRadians(25))
                 .UNSTABLE_addTemporalMarkerOffset(0, () -> {
@@ -47,7 +36,6 @@ public class CRIBlueMiddleSide extends LinearOpMode {
                 .waitSeconds(0.5)
                 .UNSTABLE_addTemporalMarkerOffset(0, () -> {
                 })
-                .back(5)
                 .lineToSplineHeading(new Pose2d(-20, 47, Math.toRadians(-180)))
                 .lineTo(new Vector2d(20, 47))
                 .UNSTABLE_addTemporalMarkerOffset(0.5, () -> {
@@ -99,11 +87,8 @@ public class CRIBlueMiddleSide extends LinearOpMode {
                 .turn(Math.toRadians(-25))
                 .UNSTABLE_addTemporalMarkerOffset(0, () -> {
                 })
-                .waitSeconds(0.5)
-                .UNSTABLE_addTemporalMarkerOffset(0, () -> {
-                })
                 .lineToSplineHeading(new Pose2d(-20, 47, Math.toRadians(-180)))
-                .waitSeconds(1)
+                .waitSeconds(0.5)
                 .UNSTABLE_addTemporalMarkerOffset(-0.5, () -> {
                 })
                 .lineTo(new Vector2d(20, 47))

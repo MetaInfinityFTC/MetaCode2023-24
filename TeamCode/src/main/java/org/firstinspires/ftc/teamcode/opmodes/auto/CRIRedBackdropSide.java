@@ -47,7 +47,7 @@ public class CRIRedBackdropSide extends LinearOpMode {
     DcMotor left;
     DcMotor right;
 
-    boolean trasnferring = false;
+    boolean transferring = false;
 
     @Override
     public void runOpMode(){
@@ -55,7 +55,6 @@ public class CRIRedBackdropSide extends LinearOpMode {
         redPropProcessor = new RedPropProcessor(telemetry);
         visionPortal = VisionPortal.easyCreateWithDefaults(
                 hardwareMap.get(WebcamName.class, "Webcam 1"), redPropProcessor);
-
 
         left = hardwareMap.dcMotor.get("lSlide");
         right = hardwareMap.dcMotor.get("rSlide");
@@ -105,7 +104,8 @@ public class CRIRedBackdropSide extends LinearOpMode {
                     deposit.setArm(armPreTransfer);
                 })
                 .strafeLeft(33)
-                .back(10)                .build();
+                .back(10)
+                .build();
 
         TrajectorySequence middlePurple = drive.trajectorySequenceBuilder(startpose)
                 .lineToSplineHeading(new Pose2d(43, -32, Math.toRadians(-180)))
@@ -131,10 +131,10 @@ public class CRIRedBackdropSide extends LinearOpMode {
                     deposit.setArm(armPreTransfer);
                 })
                 .strafeLeft(29)
-                .back(10)                .build();
+                .back(10)
+                .build();
 
         TrajectorySequence rightPurple = drive.trajectorySequenceBuilder(startpose)
-
                 .lineToSplineHeading(new Pose2d(43, -36, Math.toRadians(-180)))
                 .UNSTABLE_addTemporalMarkerOffset(-0.5, () -> {
                     deposit.setArm(armDeposit30);
@@ -142,7 +142,6 @@ public class CRIRedBackdropSide extends LinearOpMode {
                     extendo.setState(closespike);
                 })
                 .waitSeconds(1)
-
                 .addTemporalMarker(() -> {
                     deposit.clawDrop();
                 })

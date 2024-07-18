@@ -20,7 +20,6 @@ public class CRIWTF {
                         drive.trajectorySequenceBuilder(new Pose2d(-36, 58, Math.toRadians(90)))
                                 .UNSTABLE_addTemporalMarkerOffset(1.0, () -> {
                                 })
-                                // .lineToSplineHeading(new Pose2d(-42.5, 11, Math.toRadians(90)))
                                 .back(5)
                                 .turn(Math.toRadians(25))
                                 .UNSTABLE_addTemporalMarkerOffset(0, () -> {
@@ -28,7 +27,6 @@ public class CRIWTF {
                                 .waitSeconds(0.5)
                                 .UNSTABLE_addTemporalMarkerOffset(0, () -> {
                                 })
-                                .back(5)
                                 .lineToSplineHeading(new Pose2d(-20, 47, Math.toRadians(-180)))
                                 .lineTo(new Vector2d(20, 47))
                                 .UNSTABLE_addTemporalMarkerOffset(0.5, () -> {
@@ -75,7 +73,6 @@ public class CRIWTF {
                                 })
                                 .lineTo(new Vector2d(42, 10))
                                 .build());
-
         RoadRunnerBotEntity blueRight = new DefaultBotBuilder(meepMeep)
                 .setColorScheme(new ColorSchemeBlueDark())
                 .setConstraints(35, 30, Math.toRadians(180), Math.toRadians(180), 12.55)
@@ -108,7 +105,113 @@ public class CRIWTF {
                                 .lineTo(new Vector2d(42, 10))
                                 .build());
 
+        RoadRunnerBotEntity redLeft = new DefaultBotBuilder(meepMeep)
+                .setConstraints(35, 30, Math.toRadians(180), Math.toRadians(180), 12.55)
+                .followTrajectorySequence(drive ->
+                        drive.trajectorySequenceBuilder(new Pose2d(-36, -58, Math.toRadians(-90)))
+                                .UNSTABLE_addTemporalMarkerOffset(1.0, () -> {
+                                })
+                                .back(5)
+                                .turn(Math.toRadians(25))
+                                .UNSTABLE_addTemporalMarkerOffset(0, () -> {
+                                })
+                                .waitSeconds(0.5)
+                                .UNSTABLE_addTemporalMarkerOffset(0, () -> {
+                                })
+                                .lineToSplineHeading(new Pose2d(-20, -47, Math.toRadians(-180)))
+                                .lineTo(new Vector2d(20, -47))
+                                .UNSTABLE_addTemporalMarkerOffset(0.5, () -> {
+                                })
+                                .splineTo(new Vector2d(43, -30), Math.toRadians(0))
+                                .waitSeconds(1)
+                                .UNSTABLE_addTemporalMarkerOffset(0, () -> {
+                                })
+                                .waitSeconds(1)
+                                .forward(2)
+                                .addTemporalMarker(() -> {
+                                })
+                                .forward(4)
+                                .lineTo(new Vector2d(42, -10))
+                                .build());
+        RoadRunnerBotEntity redMiddle = new DefaultBotBuilder(meepMeep)
+                .setConstraints(35, 30, Math.toRadians(180), Math.toRadians(180), 12.55)
+                .followTrajectorySequence(drive ->
+                        drive.trajectorySequenceBuilder(new Pose2d(-36, -58, Math.toRadians(-90)))
+                                .UNSTABLE_addTemporalMarkerOffset(1.0, () -> {
+                                })
+                                .back(5)
+                                .UNSTABLE_addTemporalMarkerOffset(0, () -> {
+                                })
+                                .waitSeconds(0.3)
+                                .UNSTABLE_addTemporalMarkerOffset(0.5, () -> {
+                                })
+                                .lineToSplineHeading(new Pose2d(-20, -47, Math.toRadians(180)))
+                                .waitSeconds(0.5)
+                                .UNSTABLE_addTemporalMarkerOffset(0.2, () -> {
+                                })
+                                .lineTo(new Vector2d(10, -47))
+                                .lineToSplineHeading(new Pose2d(20, -47, Math.toRadians(180)))
+                                .UNSTABLE_addTemporalMarkerOffset(0.5, () -> {
+                                })
+                                .splineTo(new Vector2d(43, -35), Math.toRadians(0))
+                                .waitSeconds(1)
+                                .UNSTABLE_addTemporalMarkerOffset(0, () -> {
+                                })
+                                .waitSeconds(0.5)
+                                .forward(4)
+                                .addTemporalMarker(() -> {
+                                })
+                                .lineTo(new Vector2d(42, -10))
+                                .build());
+        RoadRunnerBotEntity redRight = new DefaultBotBuilder(meepMeep)
+                .setConstraints(35, 30, Math.toRadians(180), Math.toRadians(180), 12.55)
+                .followTrajectorySequence(drive ->
+                        drive.trajectorySequenceBuilder(new Pose2d(-36, -58, Math.toRadians(-90)))
+                                .UNSTABLE_addTemporalMarkerOffset(0.3, () -> {
+                                })
+                                .back(5)
+                                .turn(Math.toRadians(-25))
+                                .UNSTABLE_addTemporalMarkerOffset(0, () -> {
+                                })
+                                .waitSeconds(0.5)
+                                .UNSTABLE_addTemporalMarkerOffset(0, () -> {
+                                })
+                                .lineToSplineHeading(new Pose2d(-20, -47, Math.toRadians(-180)))
+                                .waitSeconds(0.5)
+                                .UNSTABLE_addTemporalMarkerOffset(-0.5, () -> {
+                                })
+                                .lineTo(new Vector2d(20, -47))
+                                .UNSTABLE_addTemporalMarkerOffset(0, () -> {
+                                })
+                                .splineTo(new Vector2d(43, -40), Math.toRadians(0))
+                                .waitSeconds(1)
+                                .UNSTABLE_addTemporalMarkerOffset(0, () -> {
+                                })
+                                .waitSeconds(0.5)
+                                .forward(4)
+                                .addTemporalMarker(() -> {
+                                })
+                                .lineTo(new Vector2d(42, -10))
+                                .build());
+        RoadRunnerBotEntity wtf = new DefaultBotBuilder(meepMeep)
+                .setConstraints(35, 30, Math.toRadians(180), Math.toRadians(180), 12.55)
+                .followTrajectorySequence(drive ->
+                        drive.trajectorySequenceBuilder(new Pose2d(14.75-8.25, 61.5, Math.toRadians(90)))
+                                .UNSTABLE_addTemporalMarkerOffset(0.7,() -> {
+                                })
+                                .UNSTABLE_addTemporalMarkerOffset(1.1, () -> {
+                                })
+                                .lineToSplineHeading(new Pose2d(45, 24, Math.toRadians(-180)))
+                                .waitSeconds(0.3)
+                                .addTemporalMarker(() -> {
 
+                                })
+                                .waitSeconds(0.5)
+                                .forward(2)
+                                .addTemporalMarker(() -> {
+                                })
+                                .strafeRight(32)
+                                .build());
 
         meepMeep.setBackground(MeepMeep.Background.FIELD_CENTERSTAGE_JUICE_DARK)
                 .setDarkMode(true)
@@ -116,6 +219,10 @@ public class CRIWTF {
                 .addEntity(blueLeft)
                 .addEntity(blueMiddle)
                 .addEntity(blueRight)
+                .addEntity(redLeft)
+                .addEntity(redMiddle)
+                .addEntity(redRight)
+                .addEntity(wtf)
                 .start();
     }
 }
