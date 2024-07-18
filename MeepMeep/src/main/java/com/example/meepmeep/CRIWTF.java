@@ -197,21 +197,26 @@ public class CRIWTF {
                 .setConstraints(35, 30, Math.toRadians(180), Math.toRadians(180), 12.55)
                 .followTrajectorySequence(drive ->
                         drive.trajectorySequenceBuilder(new Pose2d(14.75-8.25, 61.5, Math.toRadians(90)))
-                                .UNSTABLE_addTemporalMarkerOffset(0.7,() -> {
+                                .lineToSplineHeading(new Pose2d(45, 38, Math.toRadians(-180)))
+                                .UNSTABLE_addTemporalMarkerOffset(-0.5, () -> {
                                 })
-                                .UNSTABLE_addTemporalMarkerOffset(1.1, () -> {
-                                })
-                                .lineToSplineHeading(new Pose2d(45, 24, Math.toRadians(-180)))
-                                .waitSeconds(0.3)
+                                .waitSeconds(1.0)
                                 .addTemporalMarker(() -> {
-
                                 })
                                 .waitSeconds(0.5)
                                 .forward(2)
+                                .strafeLeft(8)
                                 .addTemporalMarker(() -> {
                                 })
-                                .strafeRight(32)
+                                .waitSeconds(0.5)
+                                .addTemporalMarker(() -> {
+                                })
+                                .UNSTABLE_addTemporalMarkerOffset(0.2, () -> {
+                                })
+                                .strafeRight(25)
+                                .back(12)
                                 .build());
+
 
         meepMeep.setBackground(MeepMeep.Background.FIELD_CENTERSTAGE_JUICE_DARK)
                 .setDarkMode(true)

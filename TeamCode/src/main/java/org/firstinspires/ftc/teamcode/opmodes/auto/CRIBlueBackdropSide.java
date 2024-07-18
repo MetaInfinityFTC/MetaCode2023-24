@@ -85,51 +85,54 @@ public class CRIBlueBackdropSide extends LinearOpMode {
 
         TrajectorySequence leftPurple = drive.trajectorySequenceBuilder(startpose)
                 .lineToSplineHeading(new Pose2d(45, 38, Math.toRadians(-180)))
-                .addTemporalMarker(() -> {
+                .UNSTABLE_addTemporalMarkerOffset(-0.5, () -> {
                     deposit.setArm(armDeposit);
                     deposit.setWrist(wrist30degree);
                     extendo.setState(closespike);
                 })
-                .waitSeconds(1)
-                .forward(2)
-                .waitSeconds(0.1)
+                .waitSeconds(1.0)
                 .addTemporalMarker(() -> {
                     deposit.clawDrop();
                 })
                 .waitSeconds(0.5)
+                .forward(2)
+                .strafeLeft(8)
+                .addTemporalMarker(() -> {
+                    intake.setIntake(1);
+                })
+                .waitSeconds(0.5)
+                .addTemporalMarker(() -> {
+                    intake.setIntake(0);
+                })
                 .UNSTABLE_addTemporalMarkerOffset(0.2, () -> {
-                    setPidTarget(0, 0.5);
                     extendo.setState(retracted);
                     deposit.setWrist(wristTransfer);
                     deposit.setArm(armPreTransfer);
                 })
-                .strafeLeft(10)
-                .waitSeconds(0.5)
-                .addTemporalMarker(() -> {
-                    intake.setIntake(1);
-                })
-                .waitSeconds(0.3)
-                .strafeRight(25)
+                .strafeRight(32)
+                .back(12)
                 .build();
 
         TrajectorySequence middlePurple = drive.trajectorySequenceBuilder(startpose)
-                .lineToSplineHeading(new Pose2d(45, 29.5, Math.toRadians(-180)))
-                .addTemporalMarker(() -> {
+                .lineToSplineHeading(new Pose2d(45, 32, Math.toRadians(-180)))
+                .UNSTABLE_addTemporalMarkerOffset(-0.5, () -> {
                     deposit.setArm(armDeposit);
                     deposit.setWrist(wrist30degree);
-                    extendo.setState(closespike);
+                    extendo.setState(midspike);
                 })
                 .waitSeconds(1.0)
                 .addTemporalMarker(() -> {
                     deposit.clawDrop();
                 })
-                .forward(2)
-                .waitSeconds(1.0)
-                .strafeLeft(4)
+                .waitSeconds(0.5)
+                .strafeLeft(12)
                 .addTemporalMarker(() -> {
                     intake.setIntake(1);
                 })
-                .waitSeconds(0.1)
+                .waitSeconds(0.3)
+                .addTemporalMarker(() -> {
+                    intake.setIntake(0);
+                })
                 .UNSTABLE_addTemporalMarkerOffset(0, () -> {
                     setPidTarget(0, 0.5);
                     extendo.setState(retracted);
@@ -137,6 +140,7 @@ public class CRIBlueBackdropSide extends LinearOpMode {
                     deposit.setArm(armPreTransfer);
                 })
                 .strafeRight(32)
+                .back(10)
                 .build();
 
         TrajectorySequence rightPurple = drive.trajectorySequenceBuilder(startpose)
@@ -146,16 +150,17 @@ public class CRIBlueBackdropSide extends LinearOpMode {
                     deposit.setWrist(wrist30degree);
                     extendo.setState(extended);
                 })
-                .waitSeconds(1.0)
+                .waitSeconds(0.5)
                 .addTemporalMarker(() -> {
                     deposit.clawDrop();
-                })
-                .waitSeconds(0.5)
-                .forward(2)
-                .addTemporalMarker(() -> {
                     intake.setIntake(1);
                 })
-                .waitSeconds(0.1)
+                .waitSeconds(0.5)
+                .forward(8)
+                .waitSeconds(0.3)
+                .addTemporalMarker(() -> {
+                    intake.setIntake(0);
+                })
                 .UNSTABLE_addTemporalMarkerOffset(0.2, () -> {
                     setPidTarget(0, 0.5);
                     extendo.setState(retracted);
