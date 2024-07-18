@@ -14,7 +14,7 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 @Config
 @TeleOp
 //@Disabled
-public class pid_lift extends OpMode {
+public class pid_lift implements Subsystem {
     private PIDController controller;
     public static double p = 0.00, i = 0, d = 0.0; // d = dampener (dampens arm movement and is scary). ignore i
     public static double f = .00;  // prevents arm from falling from gravity
