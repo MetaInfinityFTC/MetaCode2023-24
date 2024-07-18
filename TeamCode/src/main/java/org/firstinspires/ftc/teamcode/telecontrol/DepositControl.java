@@ -6,6 +6,7 @@ import org.firstinspires.ftc.robotcore.internal.stellaris.FlashLoaderCommand;
 import org.firstinspires.ftc.teamcode.FallingEdge;
 import org.firstinspires.ftc.teamcode.Robot;
 import org.firstinspires.ftc.teamcode.subsystem.deposit.NewDeposit;
+import org.firstinspires.ftc.teamcode.subsystem.deposit.pidftest;
 
 public class DepositControl implements Control{
 
@@ -25,8 +26,8 @@ public class DepositControl implements Control{
     FallingEdge swivelL = new FallingEdge(() -> r.d.swivelPos++);
     FallingEdge swivelR = new FallingEdge(() -> r.d.swivelPos--);
 
-    FallingEdge rowUp = new FallingEdge(() -> r.s.row++);
-    FallingEdge rowDown = new FallingEdge(() -> r.s.row--);
+    FallingEdge rowUp = new FallingEdge(() -> r.s.setPidTarget((pidftest.LiftTarget)+30));
+    FallingEdge rowDown = new FallingEdge(() -> r.s.setPidTarget((pidftest.LiftTarget)-30));
 
 
     @Override
@@ -43,7 +44,5 @@ public class DepositControl implements Control{
 
         rowUp.update(gp1.dpad_up);
         rowDown.update(gp1.dpad_down);
-
-        r.s.setPosition();
     }
 }

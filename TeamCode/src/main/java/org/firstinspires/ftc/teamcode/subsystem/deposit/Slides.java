@@ -12,7 +12,7 @@ import org.firstinspires.ftc.teamcode.subsystem.Subsystem;
 @Config
 public class Slides implements Subsystem {
 
-    public static double p = 0.03, i = 0, d = 0, f = 0.01;
+    public static double p = 0, i = 0, d = 0, f = 0;
     public static double tolerance = 3;
     public PIDFController controller;
 
@@ -42,7 +42,7 @@ public class Slides implements Subsystem {
     public Slides(HardwareMap hardwareMap) {
         left = hardwareMap.dcMotor.get("lSlide");
         right = hardwareMap.dcMotor.get("rSlide");
-        left.setDirection(DcMotorSimple.Direction.REVERSE);
+        right.setDirection(DcMotorSimple.Direction.REVERSE);
         left.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         right.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         controller = new PIDFController(p, i, d, f);

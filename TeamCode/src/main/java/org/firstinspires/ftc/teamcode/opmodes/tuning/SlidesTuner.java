@@ -26,13 +26,12 @@ public class SlidesTuner extends LinearOpMode {
         }
         while(opModeIsActive()){
             s.setPidTarget(goalPos);
-            s.update();
 
             t.addData("Goal pos", goalPos);
             t.addData("Current pos", s.getPos());
             t.addData("pid power", s.controller.calculate(s.getPos(), s.pidTarget));
             t.addData("motor power", Slides.left.getPower());
-
+            s.update();
             t.update();
         }
     }

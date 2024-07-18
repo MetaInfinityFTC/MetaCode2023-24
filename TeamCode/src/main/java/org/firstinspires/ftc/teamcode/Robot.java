@@ -14,6 +14,7 @@ import org.firstinspires.ftc.teamcode.subsystem.Drone;
 import org.firstinspires.ftc.teamcode.subsystem.Subsystem;
 import org.firstinspires.ftc.teamcode.subsystem.Hang;
 import org.firstinspires.ftc.teamcode.subsystem.deposit.NewDeposit;
+import org.firstinspires.ftc.teamcode.subsystem.deposit.pidftest;
 import org.firstinspires.ftc.teamcode.subsystem.extendo.Extendo;
 import org.firstinspires.ftc.teamcode.subsystem.intake.NewActiveIntake;
 import org.firstinspires.ftc.teamcode.subsystem.deposit.Slides;
@@ -27,7 +28,7 @@ public class Robot {
     public NewDeposit d;
     public Extendo e;
     public NewActiveIntake i;
-    public Slides s;
+    public pidftest s;
     public Drive db;
     public Drone dr;
     public Hang h;
@@ -47,7 +48,7 @@ public class Robot {
         d = new NewDeposit(hardwareMap);
         e = new Extendo(hardwareMap);
         i = new NewActiveIntake(hardwareMap);
-        s = new Slides(hardwareMap);
+        s = new pidftest(hardwareMap);
         db = new Drive(hardwareMap);
         dr = new Drone(hardwareMap);
         h = new Hang(hardwareMap);
