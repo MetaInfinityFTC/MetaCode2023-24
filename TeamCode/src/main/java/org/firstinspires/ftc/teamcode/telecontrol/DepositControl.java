@@ -19,6 +19,8 @@ public class DepositControl implements Control{
         gp2 = two;
     }
 
+    public boolean low = true;
+
     FallingEdge dropL = new FallingEdge(() -> r.d.dropL());
     FallingEdge dropR = new FallingEdge(() -> r.d.dropR());
     FallingEdge drop = new FallingEdge(() -> r.d.clawDrop());
@@ -29,13 +31,21 @@ public class DepositControl implements Control{
     FallingEdge rowUp = new FallingEdge(() -> r.s.row++);
     FallingEdge rowDown = new FallingEdge(() -> r.s.row--);
 
+    FallingEdge switchOuttake = new FallingEdge(() -> low = !low);
+
 
     @Override
     public void update() {
 
         r.d.setSwivel();
-        r.d.setArm(NewDeposit.armDeposit);
-        r.d.setWrist(NewDeposit.wrist30degree);
+        if(low){
+            r.d.setArm(NewDeposit.armDeposit);
+            r.d.setWrist(NewDeposit.wrist30degree);
+        }
+        else{
+            r.d.setArm(NewDeposit.armHighDeposit);
+            r.d.setWrist(NewDeposit.wrist90Degree);
+        }
         swivelL.update(gp1.left_bumper);
         swivelR.update(gp1.right_bumper);
         drop.update(gp1.x);

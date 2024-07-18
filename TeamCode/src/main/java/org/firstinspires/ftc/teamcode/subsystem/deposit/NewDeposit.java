@@ -26,6 +26,9 @@ public class NewDeposit implements Subsystem {
     public static double swivelFlat = 0;
     public static double swivelVert = 0;
 
+    public static double armHighDeposit = 0;
+    public static double wrist90Degree = 0;
+
     public int swivelPos = 0;
 
 

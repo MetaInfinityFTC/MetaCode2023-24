@@ -111,12 +111,14 @@ public class TeleCRI extends LinearOpMode {
                     break;
                 case DEPOSIT:
                     dpc.update();
-                    if (NewDeposit.lclaw.getPosition() == NewDeposit.lDrop && NewDeposit.rclaw.getPosition() == NewDeposit.rDrop && t == null
+                    if (NewDeposit.lclaw.getPosition() == NewDeposit.lDrop && NewDeposit.rclaw.getPosition() == NewDeposit.rDrop
                             && !(gamepad1.x || gamepad1.right_trigger > 0 || gamepad1.left_trigger > 0)) {
+                        t = new ElapsedTime();
                         t.reset();
                     }
                     if((t!=null) && (t.seconds() > DROP_DELAY)){
                         s = State.NEUTRAL;
+                        dpc.low = true; //comment if you don't want it to reset
                         r.s.setPosition(0);
                         t = null;
                     }
