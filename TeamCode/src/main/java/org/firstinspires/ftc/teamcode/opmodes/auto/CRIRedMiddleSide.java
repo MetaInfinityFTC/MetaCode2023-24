@@ -6,6 +6,7 @@ import static org.firstinspires.ftc.teamcode.subsystem.deposit.NewDeposit.armPre
 import static org.firstinspires.ftc.teamcode.subsystem.deposit.NewDeposit.wrist30degree;
 import static org.firstinspires.ftc.teamcode.subsystem.deposit.NewDeposit.wristTransfer;
 import static org.firstinspires.ftc.teamcode.subsystem.extendo.Extendo.Extension_States.closespike;
+import static org.firstinspires.ftc.teamcode.subsystem.extendo.Extendo.Extension_States.extended;
 import static org.firstinspires.ftc.teamcode.subsystem.extendo.Extendo.Extension_States.midspike;
 import static org.firstinspires.ftc.teamcode.subsystem.extendo.Extendo.Extension_States.retracted;
 import static org.firstinspires.ftc.teamcode.vision.processors.PropProcessor.Location.MIDDLE;
@@ -79,13 +80,17 @@ public class CRIRedMiddleSide extends LinearOpMode {
         TrajectorySequence leftPurple = drive.trajectorySequenceBuilder(startpose)
                 .back(5)
                 .UNSTABLE_addTemporalMarkerOffset(0.5, () -> {
-                    extendo.setState(midspike);
+                    extendo.setState(extended);
                 })
                 .turn(Math.toRadians(25))
+                .waitSeconds(0.5)
                 .addTemporalMarker(0, () -> {
                     intake.setIntake(1);
                 })
                 .waitSeconds(0.5)
+                .addTemporalMarker(0, () -> {
+                    intake.setIntake(0);
+                })
                 .UNSTABLE_addTemporalMarkerOffset(0, () -> {
                     extendo.setState(retracted);
                 })
@@ -96,11 +101,11 @@ public class CRIRedMiddleSide extends LinearOpMode {
                     deposit.setWrist(wrist30degree);
                 })
                 .splineTo(new Vector2d(43, -30), Math.toRadians(0))
-                .waitSeconds(1)
+                .waitSeconds(0.5)
                 .UNSTABLE_addTemporalMarkerOffset(0, () -> {
                     deposit.clawDrop();
                 })
-                .waitSeconds(1)
+                .waitSeconds(0.5)
                 .forward(2)
                 .UNSTABLE_addTemporalMarkerOffset(0.2, () -> {
                     setPidTarget(0, 0.5);
@@ -122,6 +127,9 @@ public class CRIRedMiddleSide extends LinearOpMode {
                     intake.setIntake(1);
                 })
                 .waitSeconds(0.5)
+                .addTemporalMarker(0, () -> {
+                    intake.setIntake(0);
+                })
                 .UNSTABLE_addTemporalMarkerOffset(0, () -> {
                     extendo.setState(retracted);
                 })
@@ -135,7 +143,7 @@ public class CRIRedMiddleSide extends LinearOpMode {
                 .UNSTABLE_addTemporalMarkerOffset(0.5, () -> {
                 })
                 .splineTo(new Vector2d(43, -35), Math.toRadians(0))
-                .waitSeconds(1)
+                .waitSeconds(0.5)
                 .UNSTABLE_addTemporalMarkerOffset(0, () -> {
                     deposit.clawDrop();
                 })
@@ -156,10 +164,14 @@ public class CRIRedMiddleSide extends LinearOpMode {
                     extendo.setState(midspike);
                 })
                 .turn(Math.toRadians(-25))
+                .waitSeconds(0.5)
                 .addTemporalMarker(0, () -> {
                     intake.setIntake(1);
                 })
                 .waitSeconds(0.5)
+                .addTemporalMarker(0, () -> {
+                    intake.setIntake(0);
+                })
                 .UNSTABLE_addTemporalMarkerOffset(0, () -> {
                     extendo.setState(retracted);
                 })
@@ -170,7 +182,7 @@ public class CRIRedMiddleSide extends LinearOpMode {
                     deposit.setWrist(wrist30degree);
                 })
                 .splineTo(new Vector2d(43, -40), Math.toRadians(0))
-                .waitSeconds(1)
+                .waitSeconds(0.5)
                 .UNSTABLE_addTemporalMarkerOffset(0, () -> {
                     deposit.clawDrop();
                 })
