@@ -79,7 +79,7 @@ public class CRIRedMiddleSide extends LinearOpMode {
         drive.setPoseEstimate(startpose);
 
         TrajectorySequence leftPurple = drive.trajectorySequenceBuilder(startpose)
-                .back(5)
+                .back(4)
                 .turn(Math.toRadians(205))
                 .waitSeconds(1.0)
                 .UNSTABLE_addTemporalMarkerOffset(0.5, () -> {

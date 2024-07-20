@@ -40,10 +40,11 @@ import org.firstinspires.ftc.teamcode.vision.processors.BluePropProcessor;
 import org.firstinspires.ftc.teamcode.vision.processors.PropProcessor;
 import org.firstinspires.ftc.vision.VisionPortal;
 
-@Autonomous(name="blueBackdrop", preselectTeleOp = "TeleCRI")
+@Autonomous(name="BlueBackdrop", preselectTeleOp = "TeleCRI")
 public class CRIBlueBackdropSide extends LinearOpMode {
     private PropProcessor.Location location = MIDDLE;
     private BluePropProcessor bluePropProcessor;
+    private VisionPortal visionPortal;
 
     NewDeposit deposit;
     Slides slides;
@@ -63,7 +64,8 @@ public class CRIBlueBackdropSide extends LinearOpMode {
     public void runOpMode(){
         drive = new SampleMecanumDrive(hardwareMap);
         bluePropProcessor = new BluePropProcessor(telemetry);
-
+        visionPortal = VisionPortal.easyCreateWithDefaults(
+                hardwareMap.get(WebcamName.class, "Webcam 1"), bluePropProcessor);
 
         extendo = new Extendo(hardwareMap);
         slides = new Slides(hardwareMap);
