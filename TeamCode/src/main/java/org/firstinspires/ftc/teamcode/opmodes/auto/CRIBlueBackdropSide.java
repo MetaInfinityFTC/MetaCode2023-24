@@ -136,7 +136,6 @@ public class CRIBlueBackdropSide extends LinearOpMode {
                     intake.setIntake(0);
                 })
                 .UNSTABLE_addTemporalMarkerOffset(0, () -> {
-                    setPidTarget(0, 0.5);
                     extendo.setState(retracted);
                     deposit.setWrist(wristTransfer);
                     deposit.setArm(armPreTransfer);
@@ -146,7 +145,7 @@ public class CRIBlueBackdropSide extends LinearOpMode {
                 .build();
 
         TrajectorySequence rightPurple = drive.trajectorySequenceBuilder(startpose)
-                .lineToSplineHeading(new Pose2d(45, 24, Math.toRadians(-180)))
+                .lineToSplineHeading(new Pose2d(45, 26, Math.toRadians(-180)))
                 .UNSTABLE_addTemporalMarkerOffset(-0.5, () -> {
                     deposit.setArm(armDeposit);
                     deposit.setWrist(wrist30degree);
@@ -164,7 +163,6 @@ public class CRIBlueBackdropSide extends LinearOpMode {
                     intake.setIntake(0);
                 })
                 .UNSTABLE_addTemporalMarkerOffset(0.2, () -> {
-                    setPidTarget(0, 0.5);
                     extendo.setState(retracted);
                     deposit.setWrist(wristTransfer);
                     deposit.setArm(armPreTransfer);
@@ -195,14 +193,5 @@ public class CRIBlueBackdropSide extends LinearOpMode {
             extendo.update();
         }
 
-    }
-    public void setPidTarget(int slidePOS, double motorPower) {
-        //base encoder code
-        left.setTargetPosition(slidePOS);
-        right.setTargetPosition(slidePOS);
-        left.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        right.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        left.setPower(motorPower);
-        right.setPower(motorPower);
     }
 }

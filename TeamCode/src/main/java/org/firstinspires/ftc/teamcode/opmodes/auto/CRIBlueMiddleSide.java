@@ -38,7 +38,6 @@ public class CRIBlueMiddleSide extends LinearOpMode {
 
     Drone drone;
     SampleMecanumDrive drive;
-
     DcMotor left;
     DcMotor right;
 
@@ -64,7 +63,7 @@ public class CRIBlueMiddleSide extends LinearOpMode {
 
         drone.init();
 
-        Pose2d startpose = new Pose2d(-36, 58, Math.toRadians(90));
+        Pose2d startpose = new Pose2d(-3, 58, Math.toRadians(90));
         drive.setPoseEstimate(startpose);
 
         TrajectorySequence leftPurple = drive.trajectorySequenceBuilder(startpose)
@@ -98,7 +97,6 @@ public class CRIBlueMiddleSide extends LinearOpMode {
                 .waitSeconds(0.5)
                 .forward(2)
                 .UNSTABLE_addTemporalMarkerOffset(0.2, () -> {
-                    setPidTarget(0, 0.5);
                     extendo.setState(retracted);
                     deposit.setWrist(wristTransfer);
                     deposit.setArm(armPreTransfer);
@@ -139,7 +137,6 @@ public class CRIBlueMiddleSide extends LinearOpMode {
                 .waitSeconds(0.5)
                 .forward(4)
                 .UNSTABLE_addTemporalMarkerOffset(0.2, () -> {
-                    setPidTarget(0, 0.5);
                     extendo.setState(retracted);
                     deposit.setWrist(wristTransfer);
                     deposit.setArm(armPreTransfer);
@@ -178,7 +175,6 @@ public class CRIBlueMiddleSide extends LinearOpMode {
                 .waitSeconds(0.5)
                 .forward(4)
                 .UNSTABLE_addTemporalMarkerOffset(0.2, () -> {
-                    setPidTarget(0, 0.5);
                     extendo.setState(retracted);
                     deposit.setWrist(wristTransfer);
                     deposit.setArm(armPreTransfer);
@@ -207,13 +203,5 @@ public class CRIBlueMiddleSide extends LinearOpMode {
             drive.update();
         }
     }
-    public void setPidTarget(int slidePOS, double motorPower) {
-        //base encoder code
-        left.setTargetPosition(slidePOS);
-        right.setTargetPosition(slidePOS);
-        left.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        right.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        left.setPower(motorPower);
-        right.setPower(motorPower);
-    }
+
 }

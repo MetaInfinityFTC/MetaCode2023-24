@@ -22,7 +22,7 @@ public class NewDeposit implements Subsystem {
     public static double rGrab = 0.45;
     public static double rDrop = 0.2;
 
-    public static double swivelTransfer = 0.27;
+    public static double swivelTransfer = 0.265;
     public static double swivelFlat = 0;
     public static double swivelVert = 0;
 
