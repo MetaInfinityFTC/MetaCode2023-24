@@ -46,6 +46,7 @@ public class DepositControl implements Control{
             r.d.setArm(NewDeposit.armHighDeposit);
             r.d.setWrist(NewDeposit.wrist90Degree);
         }
+        switchOuttake.update(gp1.a);
         swivelL.update(gp1.left_bumper);
         swivelR.update(gp1.right_bumper);
         drop.update(gp1.x);
