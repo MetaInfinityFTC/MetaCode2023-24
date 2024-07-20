@@ -9,6 +9,7 @@ import static org.firstinspires.ftc.teamcode.subsystem.extendo.Extendo.Extension
 import static org.firstinspires.ftc.teamcode.subsystem.extendo.Extendo.Extension_States.extended;
 import static org.firstinspires.ftc.teamcode.subsystem.extendo.Extendo.Extension_States.midspike;
 import static org.firstinspires.ftc.teamcode.subsystem.extendo.Extendo.Extension_States.retracted;
+import static org.firstinspires.ftc.teamcode.subsystem.extendo.Extendo.Extension_States.second;
 import static org.firstinspires.ftc.teamcode.vision.processors.PropProcessor.Location.MIDDLE;
 
 
@@ -19,6 +20,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
+import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.subsystem.Drone;
 import org.firstinspires.ftc.teamcode.subsystem.Hang;
@@ -29,11 +31,14 @@ import org.firstinspires.ftc.teamcode.subsystem.intake.NewActiveIntake;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 import org.firstinspires.ftc.teamcode.vision.processors.PropProcessor;
 import org.firstinspires.ftc.teamcode.vision.processors.RedPropProcessor;
+import org.firstinspires.ftc.vision.VisionPortal;
 
 @Autonomous(name="RedMiddle", preselectTeleOp = "TeleCRI")
 public class CRIRedMiddleSide extends LinearOpMode {
     private PropProcessor.Location location = MIDDLE;
     private RedPropProcessor redPropProcessor;
+
+    private VisionPortal visionPortal;
     NewDeposit deposit;
     Slides slides;
     Extendo extendo;
@@ -52,12 +57,8 @@ public class CRIRedMiddleSide extends LinearOpMode {
     public void runOpMode() {
         drive = new SampleMecanumDrive(hardwareMap);
         redPropProcessor = new RedPropProcessor(telemetry);
-
-        left = hardwareMap.dcMotor.get("lSlide");
-        right = hardwareMap.dcMotor.get("rSlide");
-        left.setDirection(DcMotorSimple.Direction.REVERSE);
-        left.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        right.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        visionPortal = VisionPortal.easyCreateWithDefaults(
+                hardwareMap.get(WebcamName.class, "Webcam 1"), redPropProcessor);
 
         extendo = new Extendo(hardwareMap);
         slides = new Slides(hardwareMap);
@@ -79,16 +80,17 @@ public class CRIRedMiddleSide extends LinearOpMode {
 
         TrajectorySequence leftPurple = drive.trajectorySequenceBuilder(startpose)
                 .back(5)
+                .turn(Math.toRadians(205))
+                .waitSeconds(1.0)
                 .UNSTABLE_addTemporalMarkerOffset(0.5, () -> {
-                    extendo.setState(extended);
+                    extendo.setState(second);
                 })
-                .turn(Math.toRadians(25))
-                .waitSeconds(0.5)
-                .addTemporalMarker(0, () -> {
+                .waitSeconds(1.5)
+                .addTemporalMarker(() -> {
                     intake.setIntake(1);
                 })
                 .waitSeconds(0.5)
-                .addTemporalMarker(0, () -> {
+                .addTemporalMarker(() -> {
                     intake.setIntake(0);
                 })
                 .UNSTABLE_addTemporalMarkerOffset(0, () -> {
@@ -108,7 +110,6 @@ public class CRIRedMiddleSide extends LinearOpMode {
                 .waitSeconds(0.5)
                 .forward(2)
                 .UNSTABLE_addTemporalMarkerOffset(0.2, () -> {
-                    setPidTarget(0, 0.5);
                     extendo.setState(retracted);
                     deposit.setWrist(wristTransfer);
                     deposit.setArm(armPreTransfer);
@@ -118,31 +119,33 @@ public class CRIRedMiddleSide extends LinearOpMode {
                 .build();
 
         TrajectorySequence middlePurple = drive.trajectorySequenceBuilder(startpose)
-                .back(5)
+                .back(4)
+                .turn(Math.toRadians(180))
+                .strafeLeft(8)
                 .UNSTABLE_addTemporalMarkerOffset(0.5, () -> {
-                    extendo.setState(midspike);
+                    extendo.setState(second);
                 })
-                .waitSeconds(0.5)
-                .addTemporalMarker(0, () -> {
+                .waitSeconds(1.5)
+                .addTemporalMarker(() -> {
                     intake.setIntake(1);
                 })
-                .waitSeconds(0.5)
-                .addTemporalMarker(0, () -> {
+                .waitSeconds(0.3)
+                .addTemporalMarker(() -> {
                     intake.setIntake(0);
                 })
                 .UNSTABLE_addTemporalMarkerOffset(0, () -> {
                     extendo.setState(retracted);
                 })
-                .lineToSplineHeading(new Pose2d(-20, -47, Math.toRadians(180)))
+                .lineToSplineHeading(new Pose2d(-20, -35, Math.toRadians(180)))
                 .lineTo(new Vector2d(10, -47))
                 .UNSTABLE_addTemporalMarkerOffset(0.5, () -> {
                     deposit.setArm(armDeposit);
                     deposit.setWrist(wrist30degree);
                 })
-                .lineToSplineHeading(new Pose2d(20, -47, Math.toRadians(180)))
+                .lineToSplineHeading(new Pose2d(20, -35, Math.toRadians(180)))
                 .UNSTABLE_addTemporalMarkerOffset(0.5, () -> {
                 })
-                .splineTo(new Vector2d(43, -35), Math.toRadians(0))
+                .splineToConstantHeading(new Vector2d(42, -30), Math.toRadians(0))
                 .waitSeconds(0.5)
                 .UNSTABLE_addTemporalMarkerOffset(0, () -> {
                     deposit.clawDrop();
@@ -150,7 +153,6 @@ public class CRIRedMiddleSide extends LinearOpMode {
                 .waitSeconds(0.5)
                 .forward(4)
                 .UNSTABLE_addTemporalMarkerOffset(0.2, () -> {
-                    setPidTarget(0, 0.5);
                     extendo.setState(retracted);
                     deposit.setWrist(wristTransfer);
                     deposit.setArm(armPreTransfer);
@@ -160,16 +162,17 @@ public class CRIRedMiddleSide extends LinearOpMode {
 
         TrajectorySequence rightPurple = drive.trajectorySequenceBuilder(startpose)
                 .back(5)
+                .turn(Math.toRadians(155))
+                .waitSeconds(1.0)
                 .UNSTABLE_addTemporalMarkerOffset(0.5, () -> {
-                    extendo.setState(midspike);
+                    extendo.setState(second);
                 })
-                .turn(Math.toRadians(-25))
-                .waitSeconds(0.5)
-                .addTemporalMarker(0, () -> {
+                .waitSeconds(1.5)
+                .addTemporalMarker(() -> {
                     intake.setIntake(1);
                 })
                 .waitSeconds(0.5)
-                .addTemporalMarker(0, () -> {
+                .addTemporalMarker(() -> {
                     intake.setIntake(0);
                 })
                 .UNSTABLE_addTemporalMarkerOffset(0, () -> {
@@ -189,7 +192,6 @@ public class CRIRedMiddleSide extends LinearOpMode {
                 .waitSeconds(0.5)
                 .forward(4)
                 .UNSTABLE_addTemporalMarkerOffset(0.2, () -> {
-                    setPidTarget(0, 0.5);
                     extendo.setState(retracted);
                     deposit.setWrist(wristTransfer);
                     deposit.setArm(armPreTransfer);
@@ -213,18 +215,11 @@ public class CRIRedMiddleSide extends LinearOpMode {
                 drive.followTrajectorySequenceAsync(rightPurple);
                 break;
         }
-        while(opModeIsActive()){
+        while (opModeIsActive()) {
             drive.update();
+            extendo.update();
+
         }
 
-    }
-    public void setPidTarget(int slidePOS, double motorPower) {
-        //base encoder code
-        left.setTargetPosition(slidePOS);
-        right.setTargetPosition(slidePOS);
-        left.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        right.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        left.setPower(motorPower);
-        right.setPower(motorPower);
     }
 }

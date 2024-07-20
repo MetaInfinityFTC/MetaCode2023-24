@@ -9,7 +9,7 @@ public class Hang implements Subsystem {
 
     public static Servo lHang, rHang;
 
-    public static double down = 0.9;
+    public static double down = 0.85;
     public static double up  = 0.5;
 
     HardwareMap h;
