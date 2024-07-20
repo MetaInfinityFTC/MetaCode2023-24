@@ -1,7 +1,5 @@
 package org.firstinspires.ftc.teamcode.opmodes;
 
-import android.app.VoiceInteractor;
-
 import com.acmerobotics.dashboard.config.Config;
 import com.arcrobotics.ftclib.command.Command;
 import com.arcrobotics.ftclib.command.CommandScheduler;
@@ -9,19 +7,16 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.robotcontroller.external.samples.RobotTeleopPOV_Linear;
 import org.firstinspires.ftc.teamcode.FallingEdge;
 import org.firstinspires.ftc.teamcode.Robot;
-import org.firstinspires.ftc.teamcode.subsystem.Drive;
 import org.firstinspires.ftc.teamcode.subsystem.GlobalCommands;
 import org.firstinspires.ftc.teamcode.subsystem.deposit.NewDeposit;
-import org.firstinspires.ftc.teamcode.subsystem.deposit.Slides;
 import org.firstinspires.ftc.teamcode.telecontrol.DepositControl;
 import org.firstinspires.ftc.teamcode.telecontrol.DriveControl;
 import org.firstinspires.ftc.teamcode.telecontrol.EndgameControl;
 import org.firstinspires.ftc.teamcode.telecontrol.IntakeControl;
 
-enum State{NEUTRAL, INTAKE, DEPOSIT, TRANSFER, ENDGAME}
+enum State{NEUTRAL, INTAKE, DEPOSIT, TRANSFER1, TRANSFER2, ENDGAME}
 
 
 
@@ -62,10 +57,10 @@ public class TeleCRI extends LinearOpMode {
         ElapsedTime t = new ElapsedTime();
 
         CommandScheduler cs = CommandScheduler.getInstance();
-        Command transfer = GlobalCommands.getTransfer(r);
+        Command transfer = GlobalCommands.getTransfer1(r);
 
         FallingEdge endgameTrigger = new FallingEdge(() -> {
-            if (s != State.ENDGAME && s != State.TRANSFER) {
+            if (s != State.ENDGAME && s != State.TRANSFER1) {
                 s = State.ENDGAME;
                 r.d.collapse();
                 r.s.setPidTarget(0);
@@ -82,11 +77,12 @@ public class TeleCRI extends LinearOpMode {
                     r.d.setWrist(NewDeposit.wristTransfer);
                     r.d.setArm(NewDeposit.armPreTransfer);
                     r.d.setSwivel(NewDeposit.swivelTransfer);
+                    r.d.clawDrop();
                     if (gamepad1.right_trigger > 0 || gamepad1.left_trigger > 0) {
                         s = State.INTAKE;
                     }
                     if (gamepad1.x) {
-                        s = State.TRANSFER;
+                        s = State.TRANSFER1;
                     }
                     if (gamepad1.y) {
                         s = State.DEPOSIT;
@@ -95,10 +91,10 @@ public class TeleCRI extends LinearOpMode {
                 case INTAKE:
                     ic.update();
                     if (gamepad1.x) {
-                        s = State.TRANSFER;
+                        s = State.TRANSFER1;
                     }
                     break;
-                case TRANSFER:
+                case TRANSFER1:
                     if (!cs.isScheduled(transfer)) {
                         if (transfering) {
                             transfering = false;
@@ -107,6 +103,14 @@ public class TeleCRI extends LinearOpMode {
                             cs.schedule(transfer);
                             transfering = true;
                         }
+                    }
+                    break;
+                case TRANSFER2:
+                    if(gamepad1.a){
+                        s = State.NEUTRAL;
+                    }
+                    if(gamepad1.x){
+                        s = State.DEPOSIT;
                     }
                     break;
                 case DEPOSIT:
