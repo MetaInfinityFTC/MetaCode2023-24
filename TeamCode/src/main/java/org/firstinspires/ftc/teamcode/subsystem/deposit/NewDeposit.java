@@ -15,19 +15,19 @@ public class NewDeposit implements Subsystem {
 
 
     public static double armTransfer = 0.57, armDeposit = 0.07, armPreTransfer = 0.45;
-    public static double wrist30degree = 0.9, wristTransfer = 0.465;
+    public static double wrist30degree = 0.9, wristTransfer = 0.46;
 
-    public static double lGrab = 0.75;
+    public static double lGrab = 0.55;
     public static double lDrop = 1;
     public static double rGrab = 0.45;
     public static double rDrop = 0.2;
 
-    public static double swivelTransfer = 0.265;
+    public static double swivelTransfer = 0.285;
     public static double swivelFlat = 0;
     public static double swivelVert = 0;
 
-    public static double armHighDeposit = 0;
-    public static double wrist90Degree = 0;
+    public static double armHighDeposit = 0.17;
+    public static double wrist90Degree = 1;
 
     public int swivelPos = 0;
 

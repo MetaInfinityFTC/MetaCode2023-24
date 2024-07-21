@@ -82,7 +82,7 @@ public class CRIBlueBackdropSide extends LinearOpMode {
 
         drone.init();
 
-        Pose2d startpose = new Pose2d(14.75-8.25, 61.5, Math.toRadians(90));
+        Pose2d startpose = new Pose2d(16-8.25, 61.5, Math.toRadians(90));
         drive.setPoseEstimate(startpose);
 
         TrajectorySequence leftPurple = drive.trajectorySequenceBuilder(startpose)
@@ -90,7 +90,7 @@ public class CRIBlueBackdropSide extends LinearOpMode {
                 .UNSTABLE_addTemporalMarkerOffset(-0.5, () -> {
                     deposit.setArm(armDeposit);
                     deposit.setWrist(wrist30degree);
-                    extendo.setState(closespike);
+                    extendo.setState(extended);
                 })
                 .waitSeconds(1.0)
                 .addTemporalMarker(() -> {
@@ -128,6 +128,7 @@ public class CRIBlueBackdropSide extends LinearOpMode {
                 })
                 .waitSeconds(0.5)
                 .strafeLeft(12)
+                .forward(10)
                 .addTemporalMarker(() -> {
                     intake.setIntake(1);
                 })
@@ -149,7 +150,7 @@ public class CRIBlueBackdropSide extends LinearOpMode {
                 .UNSTABLE_addTemporalMarkerOffset(-0.5, () -> {
                     deposit.setArm(armDeposit);
                     deposit.setWrist(wrist30degree);
-                    extendo.setState(extended);
+                    extendo.setState(closespike);
                 })
                 .waitSeconds(0.5)
                 .addTemporalMarker(() -> {
@@ -157,7 +158,7 @@ public class CRIBlueBackdropSide extends LinearOpMode {
                     intake.setIntake(1);
                 })
                 .waitSeconds(0.5)
-                .forward(8)
+                .forward(20)
                 .waitSeconds(0.3)
                 .addTemporalMarker(() -> {
                     intake.setIntake(0);

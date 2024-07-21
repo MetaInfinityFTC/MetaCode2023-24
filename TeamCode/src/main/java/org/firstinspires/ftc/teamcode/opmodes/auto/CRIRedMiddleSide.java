@@ -79,30 +79,31 @@ public class CRIRedMiddleSide extends LinearOpMode {
         drive.setPoseEstimate(startpose);
 
         TrajectorySequence leftPurple = drive.trajectorySequenceBuilder(startpose)
-                .back(4)
-                .turn(Math.toRadians(205))
-                .waitSeconds(1.0)
-                .UNSTABLE_addTemporalMarkerOffset(0.5, () -> {
-                    extendo.setState(second);
+                .back(5)
+                .turn(Math.toRadians(180))
+                .forward(30)
+                /*.UNSTABLE_addTemporalMarkerOffset(0.5, () -> {
+                    extendo.setState(midspike);
                 })
-                .waitSeconds(1.5)
+                .waitSeconds(0.5)*/
+                .turn(Math.toRadians(90))
                 .addTemporalMarker(() -> {
                     intake.setIntake(1);
                 })
                 .waitSeconds(0.5)
-                .addTemporalMarker(() -> {
+                .addTemporalMarker( () -> {
                     intake.setIntake(0);
                 })
-                .UNSTABLE_addTemporalMarkerOffset(0, () -> {
+                /*.UNSTABLE_addTemporalMarkerOffset(0, () -> {
                     extendo.setState(retracted);
                 })
-                .lineToSplineHeading(new Pose2d(-20, -47, Math.toRadians(-180)))
-                .lineTo(new Vector2d(20, -47))
+                .lineToSplineHeading(new Pose2d(-20, 47, Math.toRadians(-180)))
+                .lineTo(new Vector2d(20, 47))
                 .UNSTABLE_addTemporalMarkerOffset(0.5, () -> {
                     deposit.setArm(armDeposit);
                     deposit.setWrist(wrist30degree);
                 })
-                .splineTo(new Vector2d(43, -30), Math.toRadians(0))
+                .splineTo(new Vector2d(43, 40), Math.toRadians(0))
                 .waitSeconds(0.5)
                 .UNSTABLE_addTemporalMarkerOffset(0, () -> {
                     deposit.clawDrop();
@@ -110,93 +111,49 @@ public class CRIRedMiddleSide extends LinearOpMode {
                 .waitSeconds(0.5)
                 .forward(2)
                 .UNSTABLE_addTemporalMarkerOffset(0.2, () -> {
+                    setPidTarget(0, 0.5);
                     extendo.setState(retracted);
                     deposit.setWrist(wristTransfer);
                     deposit.setArm(armPreTransfer);
                 })
                 .forward(4)
-                .lineTo(new Vector2d(42, -10))
+                .lineTo(new Vector2d(42, 10))*/
                 .build();
 
         TrajectorySequence middlePurple = drive.trajectorySequenceBuilder(startpose)
-                .back(4)
+                .back(5)
                 .turn(Math.toRadians(180))
-                .strafeLeft(8)
-                .UNSTABLE_addTemporalMarkerOffset(0.5, () -> {
-                    extendo.setState(second);
+                .strafeLeft(10)
+                .forward(35)
+                /*.UNSTABLE_addTemporalMarkerOffset(0.5, () -> {
+                    extendo.setState(midspike);
                 })
-                .waitSeconds(1.5)
+                .waitSeconds(0.5)*/
                 .addTemporalMarker(() -> {
                     intake.setIntake(1);
                 })
-                .waitSeconds(0.3)
-                .addTemporalMarker(() -> {
+                .waitSeconds(0.5)
+                .addTemporalMarker( () -> {
                     intake.setIntake(0);
                 })
-                .UNSTABLE_addTemporalMarkerOffset(0, () -> {
-                    extendo.setState(retracted);
-                })
-                .lineToSplineHeading(new Pose2d(-20, -35, Math.toRadians(180)))
-                .lineTo(new Vector2d(10, -47))
-                .UNSTABLE_addTemporalMarkerOffset(0.5, () -> {
-                    deposit.setArm(armDeposit);
-                    deposit.setWrist(wrist30degree);
-                })
-                .lineToSplineHeading(new Pose2d(20, -35, Math.toRadians(180)))
-                .UNSTABLE_addTemporalMarkerOffset(0.5, () -> {
-                })
-                .splineToConstantHeading(new Vector2d(42, -30), Math.toRadians(0))
-                .waitSeconds(0.5)
-                .UNSTABLE_addTemporalMarkerOffset(0, () -> {
-                    deposit.clawDrop();
-                })
-                .waitSeconds(0.5)
-                .forward(4)
-                .UNSTABLE_addTemporalMarkerOffset(0.2, () -> {
-                    extendo.setState(retracted);
-                    deposit.setWrist(wristTransfer);
-                    deposit.setArm(armPreTransfer);
-                })
-                .lineTo(new Vector2d(42, -10))
                 .build();
 
         TrajectorySequence rightPurple = drive.trajectorySequenceBuilder(startpose)
                 .back(5)
-                .turn(Math.toRadians(155))
-                .waitSeconds(1.0)
-                .UNSTABLE_addTemporalMarkerOffset(0.5, () -> {
-                    extendo.setState(second);
+                .turn(Math.toRadians(180))
+                .forward(30)
+                /*.UNSTABLE_addTemporalMarkerOffset(0.5, () -> {
+                    extendo.setState(midspike);
                 })
-                .waitSeconds(1.5)
+                .waitSeconds(0.5)*/
+                .turn(Math.toRadians(-90))
                 .addTemporalMarker(() -> {
                     intake.setIntake(1);
                 })
                 .waitSeconds(0.5)
-                .addTemporalMarker(() -> {
+                .addTemporalMarker( () -> {
                     intake.setIntake(0);
                 })
-                .UNSTABLE_addTemporalMarkerOffset(0, () -> {
-                    extendo.setState(retracted);
-                })
-                .lineToSplineHeading(new Pose2d(-20, -47, Math.toRadians(-180)))
-                .lineTo(new Vector2d(20, -47))
-                .UNSTABLE_addTemporalMarkerOffset(0.5, () -> {
-                    deposit.setArm(armDeposit);
-                    deposit.setWrist(wrist30degree);
-                })
-                .splineTo(new Vector2d(43, -40), Math.toRadians(0))
-                .waitSeconds(0.5)
-                .UNSTABLE_addTemporalMarkerOffset(0, () -> {
-                    deposit.clawDrop();
-                })
-                .waitSeconds(0.5)
-                .forward(4)
-                .UNSTABLE_addTemporalMarkerOffset(0.2, () -> {
-                    extendo.setState(retracted);
-                    deposit.setWrist(wristTransfer);
-                    deposit.setArm(armPreTransfer);
-                })
-                .lineTo(new Vector2d(42, -10))
                 .build();
 
         while (!isStarted()) {

@@ -9,6 +9,7 @@ import static org.firstinspires.ftc.teamcode.subsystem.extendo.Extendo.Extension
 import static org.firstinspires.ftc.teamcode.subsystem.extendo.Extendo.Extension_States.farspike;
 import static org.firstinspires.ftc.teamcode.subsystem.extendo.Extendo.Extension_States.midspike;
 import static org.firstinspires.ftc.teamcode.subsystem.extendo.Extendo.Extension_States.retracted;
+import static org.firstinspires.ftc.teamcode.subsystem.extendo.Extendo.Extension_States.second;
 import static org.firstinspires.ftc.teamcode.vision.processors.PropProcessor.Location.MIDDLE;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
@@ -72,7 +73,7 @@ public class CRIRedBackdropSide extends LinearOpMode {
 
         drone.init();
 
-        Pose2d startpose = new Pose2d(14.75, -61.5, Math.toRadians(-90));
+        Pose2d startpose = new Pose2d(12.5, -61.5, Math.toRadians(-90));
         drive.setPoseEstimate(startpose);
 
         TrajectorySequence leftPurple = drive.trajectorySequenceBuilder(startpose)
@@ -87,19 +88,18 @@ public class CRIRedBackdropSide extends LinearOpMode {
                     intake.setIntake(1);
                     deposit.clawDrop();
                 })
-                .waitSeconds(0.5)
-                .forward(7.5)
+                .forward(4)
                 .waitSeconds(0.3)
                 .addTemporalMarker(() -> {
                     intake.setIntake(0);
                 })
                 .UNSTABLE_addTemporalMarkerOffset(0.2, () -> {
-                    extendo.setState(retracted);
                     deposit.setWrist(wristTransfer);
                     deposit.setArm(armPreTransfer);
+                    extendo.setState(retracted);
                 })
                 .strafeLeft(32)
-                .back(18)
+                .back(12)
                 .build();
 
         TrajectorySequence middlePurple = drive.trajectorySequenceBuilder(startpose)
@@ -123,9 +123,9 @@ public class CRIRedBackdropSide extends LinearOpMode {
                     intake.setIntake(0);
                 })
                 .UNSTABLE_addTemporalMarkerOffset(0.2, () -> {
-                    extendo.setState(retracted);
                     deposit.setWrist(wristTransfer);
                     deposit.setArm(armPreTransfer);
+                    extendo.setState(retracted);
                 })
                 .strafeLeft(35)
                 .back(10)
@@ -137,7 +137,8 @@ public class CRIRedBackdropSide extends LinearOpMode {
                     deposit.setArm(armDeposit);
                     deposit.setWrist(wrist30degree);
                     extendo.setState(closespike);
-                }).waitSeconds(1)
+                })
+                .waitSeconds(1)
                 .addTemporalMarker(() -> {
                     deposit.clawDrop();
                 })
@@ -152,9 +153,9 @@ public class CRIRedBackdropSide extends LinearOpMode {
                     intake.setIntake(0);
                 })
                 .UNSTABLE_addTemporalMarkerOffset(0.2, () -> {
-                    extendo.setState(retracted);
                     deposit.setWrist(wristTransfer);
                     deposit.setArm(armPreTransfer);
+                    extendo.setState(retracted);
                 })
                 .strafeLeft(28)
                 .back(12)

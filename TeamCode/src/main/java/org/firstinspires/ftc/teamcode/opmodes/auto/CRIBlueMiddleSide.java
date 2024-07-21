@@ -15,6 +15,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
+import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.subsystem.Drone;
 import org.firstinspires.ftc.teamcode.subsystem.Hang;
@@ -25,6 +26,7 @@ import org.firstinspires.ftc.teamcode.subsystem.intake.NewActiveIntake;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 import org.firstinspires.ftc.teamcode.vision.processors.BluePropProcessor;
 import org.firstinspires.ftc.teamcode.vision.processors.PropProcessor;
+import org.firstinspires.ftc.vision.VisionPortal;
 
 @Autonomous(name="CRIBlueMiddle", preselectTeleOp = "TeleCRI")
 public class CRIBlueMiddleSide extends LinearOpMode {
@@ -38,6 +40,8 @@ public class CRIBlueMiddleSide extends LinearOpMode {
 
     Drone drone;
     SampleMecanumDrive drive;
+    private VisionPortal visionPortal;
+
     DcMotor left;
     DcMotor right;
 
@@ -47,6 +51,8 @@ public class CRIBlueMiddleSide extends LinearOpMode {
     public void runOpMode() {
         drive = new SampleMecanumDrive(hardwareMap);
         bluePropProcessor = new BluePropProcessor(telemetry);
+        visionPortal = VisionPortal.easyCreateWithDefaults(
+                hardwareMap.get(WebcamName.class, "Webcam 1"), bluePropProcessor);
 
         extendo = new Extendo(hardwareMap);
         slides = new Slides(hardwareMap);
@@ -63,24 +69,26 @@ public class CRIBlueMiddleSide extends LinearOpMode {
 
         drone.init();
 
-        Pose2d startpose = new Pose2d(-3, 58, Math.toRadians(90));
+        Pose2d startpose = new Pose2d(-36, 58, Math.toRadians(90));
         drive.setPoseEstimate(startpose);
 
         TrajectorySequence leftPurple = drive.trajectorySequenceBuilder(startpose)
                 .back(5)
-                .UNSTABLE_addTemporalMarkerOffset(0.5, () -> {
+                .turn(Math.toRadians(180))
+                .forward(30)
+                /*.UNSTABLE_addTemporalMarkerOffset(0.5, () -> {
                     extendo.setState(midspike);
                 })
-                .turn(Math.toRadians(25))
-                .waitSeconds(0.5)
-                .addTemporalMarker(0, () -> {
+                .waitSeconds(0.5)*/
+                .turn(Math.toRadians(90))
+                .addTemporalMarker(() -> {
                     intake.setIntake(1);
                 })
                 .waitSeconds(0.5)
-                .addTemporalMarker(0, () -> {
+                .addTemporalMarker( () -> {
                     intake.setIntake(0);
                 })
-                .UNSTABLE_addTemporalMarkerOffset(0, () -> {
+                /*.UNSTABLE_addTemporalMarkerOffset(0, () -> {
                     extendo.setState(retracted);
                 })
                 .lineToSplineHeading(new Pose2d(-20, 47, Math.toRadians(-180)))
@@ -97,89 +105,49 @@ public class CRIBlueMiddleSide extends LinearOpMode {
                 .waitSeconds(0.5)
                 .forward(2)
                 .UNSTABLE_addTemporalMarkerOffset(0.2, () -> {
+                    setPidTarget(0, 0.5);
                     extendo.setState(retracted);
                     deposit.setWrist(wristTransfer);
                     deposit.setArm(armPreTransfer);
                 })
                 .forward(4)
-                .lineTo(new Vector2d(42, 10))
+                .lineTo(new Vector2d(42, 10))*/
                 .build();
 
         TrajectorySequence middlePurple = drive.trajectorySequenceBuilder(startpose)
                 .back(5)
-                .UNSTABLE_addTemporalMarkerOffset(0.5, () -> {
+                .turn(Math.toRadians(180))
+                .strafeLeft(10)
+                .forward(35)
+                /*.UNSTABLE_addTemporalMarkerOffset(0.5, () -> {
                     extendo.setState(midspike);
                 })
-                .waitSeconds(0.5)
-                .addTemporalMarker(0, () -> {
+                .waitSeconds(0.5)*/
+                .addTemporalMarker(() -> {
                     intake.setIntake(1);
                 })
                 .waitSeconds(0.5)
-                .addTemporalMarker(0, () -> {
+                .addTemporalMarker( () -> {
                     intake.setIntake(0);
                 })
-                .lineToSplineHeading(new Pose2d(-20, 47, Math.toRadians(180)))
-                .waitSeconds(0.5)
-                .UNSTABLE_addTemporalMarkerOffset(0, () -> {
-                    extendo.setState(retracted);
-                })
-                .lineTo(new Vector2d(10, 47))
-                .lineToSplineHeading(new Pose2d(20, 47, Math.toRadians(180)))
-                .UNSTABLE_addTemporalMarkerOffset(0.5, () -> {
-                    deposit.setArm(armDeposit);
-                    deposit.setWrist(wrist30degree);
-                })
-                .splineTo(new Vector2d(43, 35), Math.toRadians(0))
-                .waitSeconds(0.5)
-                .UNSTABLE_addTemporalMarkerOffset(0, () -> {
-                    deposit.clawDrop();
-                })
-                .waitSeconds(0.5)
-                .forward(4)
-                .UNSTABLE_addTemporalMarkerOffset(0.2, () -> {
-                    extendo.setState(retracted);
-                    deposit.setWrist(wristTransfer);
-                    deposit.setArm(armPreTransfer);
-                })
-                .lineTo(new Vector2d(42, 10))
                 .build();
 
         TrajectorySequence rightPurple = drive.trajectorySequenceBuilder(startpose)
                 .back(5)
-                .UNSTABLE_addTemporalMarkerOffset(0.5, () -> {
+                .turn(Math.toRadians(180))
+                .forward(30)
+                /*.UNSTABLE_addTemporalMarkerOffset(0.5, () -> {
                     extendo.setState(midspike);
                 })
-                .turn(Math.toRadians(-25))
-                .waitSeconds(0.5)
-                .addTemporalMarker(0, () -> {
+                .waitSeconds(0.5)*/
+                .turn(Math.toRadians(-90))
+                .addTemporalMarker(() -> {
                     intake.setIntake(1);
                 })
                 .waitSeconds(0.5)
-                .addTemporalMarker(0, () -> {
+                .addTemporalMarker( () -> {
                     intake.setIntake(0);
                 })
-                .UNSTABLE_addTemporalMarkerOffset(0, () -> {
-                    extendo.setState(retracted);
-                })
-                .lineToSplineHeading(new Pose2d(-20, 47, Math.toRadians(-180)))
-                .lineTo(new Vector2d(20, 47))
-                .UNSTABLE_addTemporalMarkerOffset(0.5, () -> {
-                    deposit.setArm(armDeposit);
-                    deposit.setWrist(wrist30degree);
-                })
-                .splineTo(new Vector2d(43, 30), Math.toRadians(0))
-                .waitSeconds(0.5)
-                .UNSTABLE_addTemporalMarkerOffset(0, () -> {
-                    deposit.clawDrop();
-                })
-                .waitSeconds(0.5)
-                .forward(4)
-                .UNSTABLE_addTemporalMarkerOffset(0.2, () -> {
-                    extendo.setState(retracted);
-                    deposit.setWrist(wristTransfer);
-                    deposit.setArm(armPreTransfer);
-                })
-                .lineTo(new Vector2d(42, 10))
                 .build();
 
         while(!isStarted()){
@@ -203,5 +171,5 @@ public class CRIBlueMiddleSide extends LinearOpMode {
             drive.update();
         }
     }
-
+    
 }
